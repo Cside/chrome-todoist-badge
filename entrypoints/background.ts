@@ -1,3 +1,3 @@
 export default defineBackground(() => {
-	chrome.runtime.onInstalled.addListener(async () => {});
+  chrome.runtime.onInstalled.addListener(async () => {});
 });
