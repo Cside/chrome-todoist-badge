@@ -1,10 +1,31 @@
 import reactLogo from "@/assets/react.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import wxtLogo from "/wxt.svg";
 import "./App.css";
 
 function App() {
 	const [count, setCount] = useState(0);
+	useEffect(() => {
+		(async () => {
+			const BASE_URL = "https://todoist.com";
+			const CLIENT_ID = "61038a2457974384bf5d1014a03d3685";
+
+			try {
+				const ret = await chrome.identity.launchWebAuthFlow(
+					{
+						url: `${BASE_URL}/oauth/authorize?client_id=${CLIENT_ID}&scope=data:read_write&state=FIXME`,
+						interactive: true,
+					},
+					// (responseUrl) => {
+					// 	console.log(responseUrl);
+					// },
+				);
+				console.log(ret);
+			} catch (error) {
+				console.log(error);
+			}
+		})();
+	}, []);
 
 	return (
 		<>
