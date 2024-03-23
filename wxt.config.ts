@@ -8,6 +8,6 @@ export default defineConfig({
   }),
   manifest: {
     host_permissions: ["https://api.todoist.com/*", "https://app.todoist.com/*"],
-    permissions: ["storage", "unlimitedStorage", "webRequest", "alarms"],
+    permissions: ["storage", "unlimitedStorage", "webRequest", "alarms", "idle"],
   },
 });
