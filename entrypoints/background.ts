@@ -1,10 +1,12 @@
-import { start as setBadgeColor } from "@/src/background/setBadgeColor";
-import { start as updateCount } from "@/src/background/updateCount";
+import { setBadgeColor } from "@/src/background/setBadgeColor";
+import { updateBadgeCountOnTaskUpdated } from "@/src/background/updateBadge/updateBadgeCountOnTaskUpdated";
+import { updateBadgeCountRegularly } from "@/src/background/updateBadge/updateBadgeCountRegularly";
 
 export default defineBackground(
   // async にすると警告が出る
   () => {
     Promise.all([setBadgeColor()]);
-    updateCount();
+    updateBadgeCountRegularly();
+    updateBadgeCountOnTaskUpdated();
   },
 );

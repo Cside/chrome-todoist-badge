@@ -1,8 +1,8 @@
 {
-  "name": "wxt-starter",
-  "description": "manifest.json description",
-  "private": true,
+  "name": "Todoist Badge",
   "version": "0.0.0",
+  "description": "Display the count of Todoist tasks as a badg",
+  "private": true,
   "type": "module",
   "scripts": {
     "dev": "wxt",
@@ -20,7 +20,7 @@
     "format": "run-p -c format:*",
     "format-fix": "run-p -c format-fix:*",
     "lint": "biome lint ./entrypoints",
-    "lint-fix": "biome check --apply ./entrypoints",
+    "lint-fix": "biome check --apply-unsafe ./entrypoints",
     "check": "pnpm run compile && pnpm run lint && pnpm run format",
     "check-fix": "pnpm run lint-fix && pnpm run format-fix"
   },
