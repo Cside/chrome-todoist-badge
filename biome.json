@@ -15,7 +15,9 @@
       "correctness": {
         "noUnusedImports": "error"
       },
-      "suspicious": { "useAwait": "error" }
+      "suspicious": {
+        "useAwait": "error"
+      }
     }
   }
 }

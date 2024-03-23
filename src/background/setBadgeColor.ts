@@ -1,7 +1,7 @@
 const BADGE_TEXT_COLOR = "#ffffff";
 const BADGE_BACKGROUND_COLOR = "#c5100b";
 
-export const start = async () => {
+export const setBadgeColor = async () => {
   await chrome.action.setBadgeBackgroundColor({ color: BADGE_BACKGROUND_COLOR });
   await chrome.action.setBadgeTextColor({ color: BADGE_TEXT_COLOR });
 };

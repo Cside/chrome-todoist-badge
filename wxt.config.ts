@@ -7,7 +7,7 @@ export default defineConfig({
     plugins: [react()],
   }),
   manifest: {
-    host_permissions: ["*://api.todoist.com/*"],
+    host_permissions: ["https://api.todoist.com/*", "https://app.todoist.com/*"],
     permissions: ["storage", "unlimitedStorage", "webRequest", "alarms"],
   },
 });
