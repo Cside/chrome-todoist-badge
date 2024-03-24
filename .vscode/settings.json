@@ -1,4 +1,13 @@
 {
+  "cSpell.words": [
+    "extpay",
+    "hookz",
+    "uidotdev",
+    "usehooks",
+    "knip",
+    "tanstack",
+    "noreferrer"
+  ],
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[javascript]": {
