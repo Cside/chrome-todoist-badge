@@ -1,3 +1,4 @@
-let cnt = 0;
+import { getTasksCount } from "@/src/api";
+
 export const updateBadgeCount = async () =>
-  await chrome.action.setBadgeText({ text: String(++cnt) });
+  chrome.action.setBadgeText({ text: String(await getTasksCount()) });

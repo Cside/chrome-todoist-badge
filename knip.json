@@ -1,0 +1,27 @@
+{
+  "entry": [
+    "./wxt.config.ts",
+    "./entrypoints/background.ts",
+    "./entrypoints/popup/main.tsx"
+  ],
+  "project": ["./{endpoints,src}/**/*.{ts,tsx}"],
+  "ignore": [],
+  "include": [
+    "files",
+    "dependencies",
+    "unlisted",
+    "binaries",
+    "unresolved",
+    "exports",
+    "nsExports",
+    "types",
+    "nsTypes",
+    "enumMembers",
+    "classMembers",
+    "duplicates"
+  ],
+  "paths": {
+    "@/*": ["./*"]
+  },
+  "ignoreDependencies": ["@types/chrome"]
+}
