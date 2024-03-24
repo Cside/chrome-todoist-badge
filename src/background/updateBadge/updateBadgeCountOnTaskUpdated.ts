@@ -1,6 +1,5 @@
+import { SYNC_API_URL_MATCH_PATTERN } from "@/src/constants/urls";
 import { updateBadgeCount } from "./updateBadgeCount";
-
-const API_URL_MATCH_PATTERN = "https://app.todoist.com/API/v*/sync*";
 
 export const updateBadgeCountOnTaskUpdated = () => {
   chrome.webRequest.onCompleted.addListener(
@@ -9,7 +8,7 @@ export const updateBadgeCountOnTaskUpdated = () => {
       await updateBadgeCount();
     },
     {
-      urls: [API_URL_MATCH_PATTERN],
+      urls: [SYNC_API_URL_MATCH_PATTERN],
     },
   );
 };

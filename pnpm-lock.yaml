@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@tanstack/react-query':
+    specifier: ^5.28.6
+    version: 5.28.6(react@18.2.0)
   ky:
     specifier: ^1.2.2
     version: 1.2.2
@@ -1071,6 +1074,19 @@ packages:
       defer-to-connect: 2.0.1
     dev: true
 
+  /@tanstack/query-core@5.28.6:
+    resolution: {integrity: sha512-hnhotV+DnQtvtR3jPvbQMPNMW4KEK0J4k7c609zJ8muiNknm+yoDyMHmxTWM5ZnlZpsz0zOxYFr+mzRJNHWJsA==}
+    dev: false
+
+  /@tanstack/react-query@5.28.6(react@18.2.0):
+    resolution: {integrity: sha512-/DdYuDBSsA21Qbcder1R8Cr/3Nx0ZnA2lgtqKsLMvov8wL4+g0HBz/gWYZPlIsof7iyfQafyhg4wUVUsS3vWZw==}
+    peerDependencies:
+      react: ^18.0.0
+    dependencies:
+      '@tanstack/query-core': 5.28.6
+      react: 18.2.0
+    dev: false
+
   /@types/babel__core@7.20.5:
     resolution: {integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==}
     dependencies:
@@ -1687,6 +1703,7 @@ packages:
   /clone@1.0.4:
     resolution: {integrity: sha512-JQHZ2QMW6l3aH/j6xCqQThY/9OH4D/9ls34cgkUBiEeocRTU04tHfKPBsUK1PqZCUQM7GiA0IIXJSuXHI64Kbg==}
     engines: {node: '>=0.8'}
+    requiresBuild: true
     dev: true
 
   /color-convert@1.9.3:
@@ -1936,6 +1953,7 @@ packages:
 
   /defaults@1.0.4:
     resolution: {integrity: sha512-eFuaLoy/Rxalv2kr+lqMlUnrDWV+3j4pljOIJgLIhI058IQfWJ7vXhyEIHu+HtC738klGALYxOKDO0bQP3tg8A==}
+    requiresBuild: true
     dependencies:
       clone: 1.0.4
     dev: true
