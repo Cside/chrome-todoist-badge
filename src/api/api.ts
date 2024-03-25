@@ -7,6 +7,7 @@ const MAX_RETRY = 3;
 // for BG worker
 // ========================================
 export const getTasksCountWithRetry = async () => {
+  // FIXME: 条件を取得
   const tasks: unknown[] = await ky
     .get(`${API_BASE_URL}/rest/v2/tasks?project_id=660066260`, {
       // タイムアウトはデフォルト 10 秒
@@ -22,6 +23,8 @@ export const getTasksCountWithRetry = async () => {
 // ========================================
 // for Popup ( TQ で呼ぶの前提)
 // ========================================
+export const getTasksCount = async ({ projectId }: { projectId: string }) => {};
+
 type Project = {
   id: string;
   name: string;

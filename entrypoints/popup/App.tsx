@@ -1,12 +1,11 @@
-import { getProjects } from "@/src/api/api";
 import {
-  QueryClient,
-  QueryClientProvider,
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
-import { storage } from "wxt/storage";
+  useFilterByDueByTodayMutation,
+  useFilteringProjectIdMutation,
+  useSuspenseFilterByDueByToday,
+  useSuspenseFilteringProjectId,
+  useSuspenseProjects,
+} from "@/src/api/useApi";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./App.css";
 
 const queryClient = new QueryClient({
@@ -22,25 +21,13 @@ const queryClient = new QueryClient({
   },
 });
 
-const filteringProjectFn = storage.defineItem<string>("local:config:filtering:project");
-
+const PROJECT_ID_NOT_SELECTED = "__notSelected";
 function App() {
-  const queryClient = useQueryClient();
-  const { data: projects } = useSuspenseQuery({
-    queryKey: ["projects"],
-    queryFn: getProjects,
-  });
-  const { data: filteringProjectId } = useSuspenseQuery({
-    queryKey: ["config:filtering:project"],
-    queryFn: async () => filteringProjectFn.getValue(),
-  });
-  const { mutate } = useMutation({
-    mutationFn: async (projectId: string) => filteringProjectFn.setValue(projectId),
-    onSuccess: () =>
-      queryClient.invalidateQueries({
-        queryKey: ["config:filtering:project"],
-      }),
-  });
+  const { data: projects } = useSuspenseProjects();
+  const { data: projectId } = useSuspenseFilteringProjectId();
+  const { data: filterByDueByToday } = useSuspenseFilterByDueByToday();
+  const { mutate: setProjectId } = useFilteringProjectIdMutation();
+  const { mutate: setFilterByDueByToday } = useFilterByDueByTodayMutation();
 
   return (
     <div>
@@ -49,10 +36,10 @@ function App() {
         <div>
           Project:{" "}
           <select
-            value={filteringProjectId ?? "__notSelected"}
-            onChange={(event) => mutate(event.target.value)}
+            value={projectId ?? PROJECT_ID_NOT_SELECTED}
+            onChange={(event) => setProjectId(event.target.value)}
           >
-            <option value={"__notSelected"} disabled>
+            <option value={PROJECT_ID_NOT_SELECTED} disabled>
               Not selected
             </option>
             {projects.map((project) => (
@@ -63,7 +50,13 @@ function App() {
           </select>
         </div>
         <div>
-          <input type="checkbox" name="" /> <label htmlFor="">Due Today</label>
+          <input
+            type="checkbox"
+            checked={filterByDueByToday ?? false}
+            onChange={(event) => setFilterByDueByToday(event.target.checked)}
+            id="filterByDueByToday"
+          />{" "}
+          <label htmlFor="filterByDueByToday">Tasks due by today</label>
         </div>
         <div>
           <input type="submit" value="Submit" />
