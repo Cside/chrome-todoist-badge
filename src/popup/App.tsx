@@ -6,7 +6,6 @@ import {
   useSuspenseProjects,
 } from "@/src/api/useApi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import "./App.css";
 
 const queryClient = new QueryClient({
   // https://tanstack.com/query/latest/docs/reference/QueryClient
