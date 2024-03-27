@@ -6,6 +6,18 @@ import { API_BASE_URL } from "../constants/urls";
 const MAX_RETRY = 3;
 const BASE_URL = `${API_BASE_URL}/rest/v2`;
 
+const kyInstance = ky.create({
+  retry: {
+    limit: 3,
+    statusCodes: [404],
+  },
+  hooks: {
+    beforeRequest: [() => console.log("beforeRequest")],
+    beforeRetry: [() => console.log("beforeRetry")],
+    afterResponse: [() => console.log("afterResponse")],
+  },
+});
+
 // ==================================================
 // for Popup ( TQ で呼ぶの前提)
 // ==================================================
@@ -16,7 +28,9 @@ export const getTasksCount = async ({
   projectId?: string;
   filterByDueByToday?: boolean;
 }) => {
-  const tasks: unknown[] = await ky.get(buildTasksApiUrl({ projectId, filterByDueByToday })).json(); // タイムアウト(10秒)はデフォルトのまま
+  const tasks: unknown[] = await kyInstance
+    .get(buildTasksApiUrl({ projectId, filterByDueByToday }))
+    .json(); // タイムアウト(10秒)はデフォルトのまま
   console.log(tasks);
   return tasks.length;
 };
@@ -27,7 +41,7 @@ type Project = {
 };
 
 export const getProjects = async () => {
-  const projects: Project[] = await ky.get(`${BASE_URL}/projects`).json();
+  const projects: Project[] = await kyInstance.get(`${BASE_URL}/projects`).json();
   return projects;
 };
 
@@ -50,7 +64,7 @@ export const getTasksCountByParamsWithRetry = async ({
   projectId?: string;
   filterByDueByToday?: boolean;
 }) => {
-  const tasks: unknown[] = await ky
+  const tasks: unknown[] = await kyInstance
     .get(buildTasksApiUrl({ projectId, filterByDueByToday }), {
       // タイムアウトはデフォルト 10 秒
       retry: {
@@ -73,7 +87,7 @@ const buildTasksApiUrl = ({
   projectId?: string;
   filterByDueByToday?: boolean;
 }) => {
-  let url = `${BASE_URL}/tasks`;
+  let url = `${BASE_URL}/_tasks`;
   const params = {
     ...(projectId !== undefined && { project_id: projectId }),
     ...(filterByDueByToday === true && { filter: ["today", "overdue"].join("|") }),

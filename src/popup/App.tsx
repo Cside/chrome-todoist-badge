@@ -20,6 +20,7 @@ function App() {
   const filterByDueByToday = useSuspenseFilterByDueByToday();
   const { mutate: setProjectId } = useFilteringProjectIdMutation();
   const { mutate: setFilterByDueByToday } = useFilterByDueByTodayMutation();
+  // FIXME isPending の方がいいんだっけ？
   const { data: tasksCount, isLoading: isTaskCountLoading } = useTaskCount({
     projectId,
     filterByDueByToday,
