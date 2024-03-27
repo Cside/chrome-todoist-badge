@@ -4,7 +4,7 @@ const setBadgeText = (count: number) => chrome.action.setBadgeText({ text: Strin
 
 // for bg worker
 export const updateBadgeCountWithRetry = async ({ via }: { via: string }) => {
-  console.info(`via: ${via}`);
+  console.info(`(via: ${via}) update badge count`);
   const count = await getTasksCountWithRetry();
   return setBadgeText(count);
 };
@@ -19,7 +19,7 @@ export const updateBadgeCountByParamsWithRetry = async ({
   filterByDueByToday?: boolean;
   via: string;
 }) => {
-  console.info(`via: ${via}`);
+  console.info(`(via: ${via}) update badge count`);
   const count = await getTasksCountByParamsWithRetry({ projectId, filterByDueByToday });
   return setBadgeText(count);
 };

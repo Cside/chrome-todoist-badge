@@ -20,8 +20,7 @@ function App() {
   const filterByDueByToday = useSuspenseFilterByDueByToday();
   const { mutate: setProjectId } = useFilteringProjectIdMutation();
   const { mutate: setFilterByDueByToday } = useFilterByDueByTodayMutation();
-  // FIXME isPending の方がいいんだっけ？
-  const { data: tasksCount, isLoading: isTaskCountLoading } = useTaskCount({
+  const { data: tasksCount, isPending: isTaskCountPending } = useTaskCount({
     projectId,
     filterByDueByToday,
   });
@@ -59,10 +58,12 @@ function App() {
           />{" "}
           <label htmlFor="filterByDueByToday">Tasks due by today</label>
         </div>
+        <div style={{ ...(isTaskCountPending && { visibility: "hidden" }) }}>
+          {tasksCount} Tasks
+        </div>
         <div>
           <input type="submit" value="Submit" />
         </div>
-        {isTaskCountLoading || <div>{tasksCount} Tasks</div>}
       </div>
     </div>
   );

@@ -6,15 +6,32 @@ import { API_BASE_URL } from "../constants/urls";
 const MAX_RETRY = 3;
 const BASE_URL = `${API_BASE_URL}/rest/v2`;
 
+// これだとリクエストがパラで飛んだ時駄目。
+// req id があれば一番楽だが...
+const requestStartedAt: Map<string, number | undefined> = new Map();
 const kyInstance = ky.create({
   retry: {
     limit: 3,
     statusCodes: [404],
   },
   hooks: {
-    beforeRequest: [() => console.log("beforeRequest")],
-    beforeRetry: [() => console.log("beforeRetry")],
-    afterResponse: [() => console.log("afterResponse")],
+    beforeRequest: [
+      (req) => {
+        requestStartedAt.set(req.url, Date.now());
+      },
+    ],
+    afterResponse: [
+      (req) => {
+        const startedAt = requestStartedAt.get(req.url);
+        if (startedAt === undefined) {
+          console.warn(`startedAt (url: ${req.url}) is undefined`);
+          return;
+        }
+        console.info(
+          `(${((Date.now() - startedAt) / 1_000).toFixed(2)}ms) ${req.method} ${req.url}`,
+        );
+      },
+    ],
   },
 });
 
@@ -87,7 +104,7 @@ const buildTasksApiUrl = ({
   projectId?: string;
   filterByDueByToday?: boolean;
 }) => {
-  let url = `${BASE_URL}/_tasks`;
+  let url = `${BASE_URL}/tasks`;
   const params = {
     ...(projectId !== undefined && { project_id: projectId }),
     ...(filterByDueByToday === true && { filter: ["today", "overdue"].join("|") }),
