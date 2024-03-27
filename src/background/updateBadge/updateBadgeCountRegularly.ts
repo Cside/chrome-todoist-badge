@@ -1,4 +1,4 @@
-import { updateBadgeCountWithRetry } from "./updateBadgeCountWithRetry";
+import { updateBadgeCountWithRetry } from "./updateBadgeCount";
 
 const ALARM_NAME = "update-count";
 const INTERVAL_MINUTES = 15;
@@ -7,7 +7,7 @@ export const updateBadgeCountRegularly = () => {
   chrome.alarms.onAlarm.addListener(async (alarm) => {
     switch (alarm.name) {
       case ALARM_NAME: {
-        await updateBadgeCountWithRetry({ via: "by alarm" });
+        await updateBadgeCountWithRetry({ via: "alarm" });
         console.info(
           `Executed the alarm at ${new Date().toLocaleTimeString("ja-JP")}.\n` +
             `Next execution is at ${await getNextAlarmTime()}.`,
@@ -20,7 +20,8 @@ export const updateBadgeCountRegularly = () => {
   });
 
   chrome.runtime.onInstalled.addListener(async ({ reason }) => {
-    await updateBadgeCountWithRetry({ via: "by alarm" }); // FIXME あるいは dev だけ毎回実行…？
+    if (import.meta.env.DEV) await updateBadgeCountWithRetry({ via: "reloading the extension" });
+
     console.info(`Next execution is at ${await getNextAlarmTime()}.`);
 
     if (reason !== chrome.runtime.OnInstalledReason.INSTALL) return;

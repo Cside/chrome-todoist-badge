@@ -1,4 +1,4 @@
-import { updateBadgeCountWithRetry } from "./updateBadgeCountWithRetry";
+import { updateBadgeCountWithRetry } from "./updateBadgeCount";
 
 export const updateBadgeCountOnActive = () => {
   chrome.idle.onStateChanged.addListener(async (idleState) => {

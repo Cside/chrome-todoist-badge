@@ -1,5 +1,5 @@
 import { SYNC_API_URL_MATCH_PATTERN } from "@/src/constants/urls";
-import { updateBadgeCountWithRetry } from "./updateBadgeCountWithRetry";
+import { updateBadgeCountWithRetry } from "./updateBadgeCount";
 
 export const updateBadgeCountOnTaskUpdated = () => {
   chrome.webRequest.onCompleted.addListener(
