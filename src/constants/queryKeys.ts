@@ -1,0 +1,7 @@
+// biome-ignore format: for aligning
+export const QUERY_KEY_OF = {
+  TASKS:                  "tasks",
+  PROJECTS:               "projects",
+  FILTERING_PROJECT_ID:   "filter:projectId",
+  FILTER_BY_DUE_BY_TODAY: "filter:dueByToday",
+};

@@ -25,17 +25,21 @@
     "lint-fix:unused-code": "knip --fix-type exports",
     "lint": "run-p -c lint:*",
     "lint-fix": "run-p -c lint-fix:*",
-    "check": "pnpm run compile && pnpm run lint && pnpm run format",
+    "check": "pnpm run compile && pnpm run lint && pnpm run format && ./scripts/check-ng-words.sh",
     "check-fix": "pnpm run lint-fix && pnpm run format-fix"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.28.6",
     "ky": "^1.2.2",
+    "lodash-es": "^4.17.21",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "use-async-effect": "^2.2.7"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.6.1",
     "@types/chrome": "^0.0.263",
+    "@types/lodash-es": "^4.17.12",
     "@types/react": "^18.2.46",
     "@types/react-dom": "^18.2.18",
     "@vitejs/plugin-react": "^4.2.1",
