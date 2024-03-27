@@ -26,7 +26,7 @@ function App() {
   });
 
   useAsyncEffect(async () => {
-    await updateBadgeCountByParamsWithRetry({ projectId, filterByDueByToday });
+    await updateBadgeCountByParamsWithRetry({ projectId, filterByDueByToday, via: "popup" });
   }, [projectId, filterByDueByToday]);
 
   return (
