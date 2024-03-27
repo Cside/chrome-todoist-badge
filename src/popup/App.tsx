@@ -1,32 +1,33 @@
+import { useSuspenseProjects, useTaskCount } from "@/src/api/useApi";
+import { Suspense } from "react";
+import useAsyncEffect from "use-async-effect";
+import { updateBadgeCountByParamsWithRetry } from "../background/updateBadge/updateBadgeCountWithRetry";
+import { ErrorBoundary } from "../components/ErrorBoundary";
+import { QueryClientProvider } from "../components/QueryClientProvider";
 import {
   useFilterByDueByTodayMutation,
   useFilteringProjectIdMutation,
   useSuspenseFilterByDueByToday,
   useSuspenseFilteringProjectId,
-  useSuspenseProjects,
-} from "@/src/api/useApi";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
-const queryClient = new QueryClient({
-  // https://tanstack.com/query/latest/docs/reference/QueryClient
-  defaultOptions: {
-    queries: {
-      retry: 3,
-      staleTime: Number.POSITIVE_INFINITY,
-      gcTime: Number.POSITIVE_INFINITY,
-      throwOnError: true,
-      networkMode: "always", // ネットワークに繋がってないとき用の案内を出すのもだるいので
-    },
-  },
-});
+} from "../useStorage";
+import "./../globalUtils";
 
 const PROJECT_ID_NOT_SELECTED = "__notSelected";
+
 function App() {
   const { data: projects } = useSuspenseProjects();
-  const { data: projectId } = useSuspenseFilteringProjectId();
-  const { data: filterByDueByToday } = useSuspenseFilterByDueByToday();
+  const projectId = useSuspenseFilteringProjectId();
+  const filterByDueByToday = useSuspenseFilterByDueByToday();
   const { mutate: setProjectId } = useFilteringProjectIdMutation();
   const { mutate: setFilterByDueByToday } = useFilterByDueByTodayMutation();
+  const { data: tasksCount, isLoading: isTaskCountLoading } = useTaskCount({
+    projectId,
+    filterByDueByToday,
+  });
+
+  useAsyncEffect(async () => {
+    await updateBadgeCountByParamsWithRetry({ projectId, filterByDueByToday });
+  }, [projectId, filterByDueByToday]);
 
   return (
     <div>
@@ -60,13 +61,18 @@ function App() {
         <div>
           <input type="submit" value="Submit" />
         </div>
+        {isTaskCountLoading || <div>{tasksCount} Tasks</div>}
       </div>
     </div>
   );
 }
 
 export default () => (
-  <QueryClientProvider client={queryClient}>
-    <App />
-  </QueryClientProvider>
+  <ErrorBoundary>
+    <QueryClientProvider>
+      <Suspense fallback={<div>Loading...</div>}>
+        <App />
+      </Suspense>
+    </QueryClientProvider>
+  </ErrorBoundary>
 );
