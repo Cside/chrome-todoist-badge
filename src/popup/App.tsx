@@ -1,6 +1,6 @@
-import { useSuspenseProjects, useTaskCount } from "@/src/api/useApi";
 import { Suspense } from "react";
 import useAsyncEffect from "use-async-effect";
+import { useSuspenseProjects, useTaskCount } from "../api/useApi";
 import { updateBadgeCountByParamsWithRetry } from "../background/updateBadge/updateBadgeCount";
 import { DEFAULT_FILTER_BY_DUE_BY_TODAY } from "../constants/options";
 import {

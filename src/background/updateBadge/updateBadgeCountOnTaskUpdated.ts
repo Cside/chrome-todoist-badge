@@ -1,4 +1,4 @@
-import { SYNC_API_URL_MATCH_PATTERN } from "@/src/constants/urls";
+import { SYNC_API_URL_MATCH_PATTERN } from "../../constants/urls";
 import { updateBadgeCountWithRetry } from "./updateBadgeCount";
 
 export const updateBadgeCountOnTaskUpdated = () => {

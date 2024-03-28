@@ -3,6 +3,7 @@ import { isEmpty } from "lodash-es";
 import { DEFAULT_FILTER_BY_DUE_BY_TODAY } from "../constants/options";
 import { STORAGE_KEY_OF } from "../constants/storageKeys";
 import { API_BASE_URL } from "../constants/urls";
+import type { GetTasksParams } from "../types";
 
 const MAX_RETRY = 3;
 const BASE_URL = `${API_BASE_URL}/rest/v2`;
@@ -41,10 +42,7 @@ const kyInstance = ky.create({
 export const getTasksCount = async ({
   projectId,
   filterByDueByToday = DEFAULT_FILTER_BY_DUE_BY_TODAY,
-}: {
-  projectId?: string;
-  filterByDueByToday?: boolean;
-}) => {
+}: GetTasksParams) => {
   const tasks: unknown[] = await kyInstance
     .get(buildTasksApiUrl({ projectId, filterByDueByToday }))
     .json(); // タイムアウト(10秒)はデフォルトのまま
@@ -78,10 +76,7 @@ export const getTasksCountByParamsWithRetry = async ({
   projectId,
   // ここでまとめて default 値を set する。updateBadge*() だと、かなりの箇所になるため。。
   filterByDueByToday = DEFAULT_FILTER_BY_DUE_BY_TODAY,
-}: {
-  projectId?: string;
-  filterByDueByToday?: boolean;
-}) => {
+}: GetTasksParams) => {
   const tasks: unknown[] = await kyInstance
     .get(buildTasksApiUrl({ projectId, filterByDueByToday }), {
       // タイムアウトはデフォルト 10 秒
