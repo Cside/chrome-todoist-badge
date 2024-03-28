@@ -15,8 +15,10 @@ export const useSuspenseFilteringProjectId = () =>
 export const useFilteringProjectIdMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (projectId: string) =>
-      storage.setItem<string>(STORAGE_KEY_OF.FILTERING_PROJECT_ID, projectId),
+    mutationFn: async (projectId: string | undefined) =>
+      projectId === undefined
+        ? storage.removeItem(STORAGE_KEY_OF.FILTERING_PROJECT_ID)
+        : storage.setItem<string>(STORAGE_KEY_OF.FILTERING_PROJECT_ID, projectId),
     onSuccess: () =>
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEY_OF.FILTERING_PROJECT_ID],

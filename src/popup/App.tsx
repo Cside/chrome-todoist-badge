@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import useAsyncEffect from "use-async-effect";
-import { useSuspenseProjects, useTaskCount } from "../api/useApi";
+import { useSuspenseProjects, useTasksCount } from "../api/useApi";
 import { updateBadgeCountByParamsWithRetry } from "../background/updateBadge/updateBadgeCount";
 import { DEFAULT_FILTER_BY_DUE_BY_TODAY } from "../constants/options";
 import {
@@ -13,7 +13,8 @@ import "./../globalUtils";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { QueryClientProvider } from "./components/QueryClientProvider";
 
-const PROJECT_ID_NOT_SELECTED = "__notSelected";
+const PROJECT_ID_ALL = "__all";
+const DEFAULT_PROJECT_ID = PROJECT_ID_ALL;
 
 function App() {
   const { data: projects } = useSuspenseProjects();
@@ -21,7 +22,7 @@ function App() {
   const filterByDueByToday = useSuspenseFilterByDueByToday();
   const { mutate: setProjectId } = useFilteringProjectIdMutation();
   const { mutate: setFilterByDueByToday } = useFilterByDueByTodayMutation();
-  const { data: tasksCount, isPending: isTaskCountPending } = useTaskCount({
+  const { data: tasksCount, isPending: isTaskCountPending } = useTasksCount({
     projectId,
     filterByDueByToday,
   });
@@ -37,12 +38,12 @@ function App() {
         <div>
           Project:{" "}
           <select
-            value={projectId ?? PROJECT_ID_NOT_SELECTED}
-            onChange={(event) => setProjectId(event.target.value)}
+            value={projectId ?? DEFAULT_PROJECT_ID}
+            onChange={(event) =>
+              setProjectId(event.target.value === PROJECT_ID_ALL ? undefined : event.target.value)
+            }
           >
-            <option value={PROJECT_ID_NOT_SELECTED} disabled>
-              Not selected
-            </option>
+            <option value={PROJECT_ID_ALL}>All projects</option>
             {projects.map((project) => (
               <option key={project.id} value={project.id}>
                 {project.name}

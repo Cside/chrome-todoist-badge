@@ -12,7 +12,7 @@ export const useSuspenseProjects = () =>
 // ========================================
 // Tasks Count
 // ========================================
-export const useTaskCount = ({ projectId, filterByDueByToday }: GetTasksParams) =>
+export const useTasksCount = ({ projectId, filterByDueByToday }: GetTasksParams) =>
   useQuery({
     queryKey: [QUERY_KEY_OF.TASKS, projectId, filterByDueByToday],
     queryFn: async () => getTasksCount({ projectId, filterByDueByToday }),
