@@ -1,3 +1,4 @@
+import { formatDistance } from "date-fns";
 import { updateBadgeCountWithRetry } from "./updateBadgeCount";
 
 const ALARM_NAME = "update-count";
@@ -10,7 +11,7 @@ export const updateBadgeCountRegularly = () => {
         await updateBadgeCountWithRetry({ via: "alarm" });
         console.info(
           `Executed the alarm at ${new Date().toLocaleTimeString("ja-JP")}.\n` +
-            `Next execution is at ${await getNextAlarmTime()}.`,
+            `Next execution is at ${(await getNextAlarmDate()).toLocaleTimeString("ja-JP")}.`,
         );
         break;
       }
@@ -22,7 +23,8 @@ export const updateBadgeCountRegularly = () => {
   chrome.runtime.onInstalled.addListener(async ({ reason }) => {
     if (import.meta.env.DEV) await updateBadgeCountWithRetry({ via: "reloading the extension" });
 
-    console.info(`Next execution is at ${await getNextAlarmTime()}.`);
+    const nextTime = formatDistance(await getNextAlarmDate(), new Date(), { addSuffix: true });
+    console.info(`Next execution is ${nextTime}.`);
 
     if (reason !== chrome.runtime.OnInstalledReason.INSTALL) return;
 
@@ -38,5 +40,4 @@ export const updateBadgeCountRegularly = () => {
 // Utils
 //================================================================
 
-const getNextAlarmTime = async () =>
-  new Date((await chrome.alarms.get(ALARM_NAME)).scheduledTime).toLocaleTimeString("ja-JP");
+const getNextAlarmDate = async () => new Date((await chrome.alarms.get(ALARM_NAME)).scheduledTime);
