@@ -1,5 +1,6 @@
 import ky from "ky";
 import { isEmpty } from "lodash-es";
+import { MAX_RETRY } from "../constants/httpClient";
 import {
   DEFAULT_FILTER_BY_DUE_BY_TODAY,
   DEFAULT_PROJECT_ID,
@@ -9,17 +10,12 @@ import { STORAGE_KEY_OF } from "../constants/storageKeys";
 import { API_BASE_URL } from "../constants/urls";
 import type { GetTasksParams } from "../types";
 
-const MAX_RETRY = 3; // FIXME
 const BASE_URL = `${API_BASE_URL}/rest/v2`;
 
 // これだとリクエストがパラで飛んだ時駄目。
 // req id があれば一番楽だが...
 const requestStartedAt: Map<string, number | undefined> = new Map();
 const kyInstance = ky.create({
-  retry: {
-    limit: 3,
-    statusCodes: [404],
-  },
   hooks: {
     beforeRequest: [
       (req) => {

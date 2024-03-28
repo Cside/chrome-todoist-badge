@@ -1,3 +1,4 @@
+import { MAX_RETRY } from "@/src/constants/httpClient";
 import { QueryClient, QueryClientProvider as _QueryClientProvider } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 
@@ -5,7 +6,7 @@ const queryClient = new QueryClient({
   // https://tanstack.com/query/latest/docs/reference/QueryClient
   defaultOptions: {
     queries: {
-      retry: 3,
+      retry: MAX_RETRY,
       staleTime: Number.POSITIVE_INFINITY,
       gcTime: Number.POSITIVE_INFINITY,
       throwOnError: true,
