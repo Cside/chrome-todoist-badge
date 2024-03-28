@@ -17,8 +17,7 @@
     "types",
     "nsTypes",
     "enumMembers",
-    "classMembers",
-    "duplicates"
+    "classMembers"
   ],
   "paths": {
     "@/*": ["./*"]

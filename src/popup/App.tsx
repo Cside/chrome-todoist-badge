@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import useAsyncEffect from "use-async-effect";
 import { useSuspenseProjects, useTasksCount } from "../api/useApi";
 import { updateBadgeCountByParamsWithRetry } from "../background/updateBadge/updateBadgeCount";
-import { DEFAULT_FILTER_BY_DUE_BY_TODAY } from "../constants/options";
+import { PROJECT_ID_ALL } from "../constants/options";
 import {
   useFilterByDueByTodayMutation,
   useFilteringProjectIdMutation,
@@ -12,9 +12,6 @@ import {
 import "./../globalUtils";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { QueryClientProvider } from "./components/QueryClientProvider";
-
-const PROJECT_ID_ALL = "__all";
-const DEFAULT_PROJECT_ID = PROJECT_ID_ALL;
 
 function App() {
   const { data: projects } = useSuspenseProjects();
@@ -38,7 +35,7 @@ function App() {
         <div>
           Project:{" "}
           <select
-            value={projectId ?? DEFAULT_PROJECT_ID}
+            value={projectId}
             onChange={(event) =>
               setProjectId(event.target.value === PROJECT_ID_ALL ? undefined : event.target.value)
             }
@@ -54,7 +51,7 @@ function App() {
         <div>
           <input
             type="checkbox"
-            checked={filterByDueByToday ?? DEFAULT_FILTER_BY_DUE_BY_TODAY}
+            checked={filterByDueByToday}
             onChange={(event) => setFilterByDueByToday(event.target.checked)}
             id="filterByDueByToday"
           />{" "}

@@ -1,4 +1,4 @@
 export type GetTasksParams = {
-  projectId?: string;
-  filterByDueByToday?: boolean;
+  projectId: string;
+  filterByDueByToday: boolean;
 };

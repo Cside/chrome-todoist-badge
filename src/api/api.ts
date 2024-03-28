@@ -1,11 +1,15 @@
 import ky from "ky";
 import { isEmpty } from "lodash-es";
-import { DEFAULT_FILTER_BY_DUE_BY_TODAY } from "../constants/options";
+import {
+  DEFAULT_FILTER_BY_DUE_BY_TODAY,
+  DEFAULT_PROJECT_ID,
+  PROJECT_ID_ALL,
+} from "../constants/options";
 import { STORAGE_KEY_OF } from "../constants/storageKeys";
 import { API_BASE_URL } from "../constants/urls";
 import type { GetTasksParams } from "../types";
 
-const MAX_RETRY = 3;
+const MAX_RETRY = 3; // FIXME
 const BASE_URL = `${API_BASE_URL}/rest/v2`;
 
 // これだとリクエストがパラで飛んだ時駄目。
@@ -39,10 +43,7 @@ const kyInstance = ky.create({
 // ==================================================
 // for Popup ( TQ で呼ぶの前提)
 // ==================================================
-export const getTasksCount = async ({
-  projectId,
-  filterByDueByToday = DEFAULT_FILTER_BY_DUE_BY_TODAY,
-}: GetTasksParams) => {
+export const getTasksCount = async ({ projectId, filterByDueByToday }: GetTasksParams) => {
   const tasks: unknown[] = await kyInstance
     .get(buildTasksApiUrl({ projectId, filterByDueByToday }))
     .json(); // タイムアウト(10秒)はデフォルトのまま
@@ -65,17 +66,17 @@ export const getProjects = async () => {
 // ==================================================
 export const getTasksCountWithRetry = async () => {
   const projectId =
-    (await storage.getItem<string>(STORAGE_KEY_OF.FILTER_BY.PROJECT_ID)) ?? undefined;
+    (await storage.getItem<string>(STORAGE_KEY_OF.FILTER_BY.PROJECT_ID)) ?? DEFAULT_PROJECT_ID;
   const filterByDueByToday =
-    (await storage.getItem<boolean>(STORAGE_KEY_OF.FILTER_BY.DUE_BY_TODAY)) ?? undefined;
+    (await storage.getItem<boolean>(STORAGE_KEY_OF.FILTER_BY.DUE_BY_TODAY)) ??
+    DEFAULT_FILTER_BY_DUE_BY_TODAY;
 
   return getTasksCountByParamsWithRetry({ projectId, filterByDueByToday });
 };
 
 export const getTasksCountByParamsWithRetry = async ({
   projectId,
-  // ここでまとめて default 値を set する。updateBadge*() だと、かなりの箇所になるため。。
-  filterByDueByToday = DEFAULT_FILTER_BY_DUE_BY_TODAY,
+  filterByDueByToday,
 }: GetTasksParams) => {
   const tasks: unknown[] = await kyInstance
     .get(buildTasksApiUrl({ projectId, filterByDueByToday }), {
@@ -97,12 +98,12 @@ const buildTasksApiUrl = ({
   projectId,
   filterByDueByToday,
 }: {
-  projectId?: string;
+  projectId: string;
   filterByDueByToday: boolean;
 }) => {
   let url = `${BASE_URL}/tasks`;
   const params = {
-    ...(projectId !== undefined && { project_id: projectId }),
+    ...(projectId !== PROJECT_ID_ALL && { project_id: projectId }),
     ...(filterByDueByToday === true && { filter: ["today", "overdue"].join("|") }),
   };
   if (!isEmpty(params)) url += `?${new URLSearchParams(params)}`;

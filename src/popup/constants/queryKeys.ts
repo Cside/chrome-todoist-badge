@@ -1,4 +1,4 @@
-// biome-ignore format: for aligning
+// biome-ignore format: for alignment
 export const QUERY_KEY_OF = {
   TASKS:                  "tasks",
   PROJECTS:               "projects",
