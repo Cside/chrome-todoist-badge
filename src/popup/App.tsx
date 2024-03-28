@@ -2,8 +2,6 @@ import { useSuspenseProjects, useTaskCount } from "@/src/api/useApi";
 import { Suspense } from "react";
 import useAsyncEffect from "use-async-effect";
 import { updateBadgeCountByParamsWithRetry } from "../background/updateBadge/updateBadgeCount";
-import { ErrorBoundary } from "../components/ErrorBoundary";
-import { QueryClientProvider } from "../components/QueryClientProvider";
 import { DEFAULT_FILTER_BY_DUE_BY_TODAY } from "../constants/options";
 import {
   useFilterByDueByTodayMutation,
@@ -12,6 +10,8 @@ import {
   useSuspenseFilteringProjectId,
 } from "../useStorage";
 import "./../globalUtils";
+import { ErrorBoundary } from "./components/ErrorBoundary";
+import { QueryClientProvider } from "./components/QueryClientProvider";
 
 const PROJECT_ID_NOT_SELECTED = "__notSelected";
 

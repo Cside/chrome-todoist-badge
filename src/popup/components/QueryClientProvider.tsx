@@ -5,8 +5,7 @@ const queryClient = new QueryClient({
   // https://tanstack.com/query/latest/docs/reference/QueryClient
   defaultOptions: {
     queries: {
-      // retry: 3,
-      retry: 1, // FIXME
+      retry: 3,
       staleTime: Number.POSITIVE_INFINITY,
       gcTime: Number.POSITIVE_INFINITY,
       throwOnError: true,

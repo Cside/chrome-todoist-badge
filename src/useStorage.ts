@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { storage } from "wxt/storage";
-import { QUERY_KEY_OF } from "./constants/queryKeys";
 import { STORAGE_KEY_OF } from "./constants/storageKeys";
+import { QUERY_KEY_OF } from "./popup/constantas/queryKeys";
 
 // ========================================
 // FilteringProjectId

@@ -22,15 +22,14 @@ const kyInstance = ky.create({
       },
     ],
     afterResponse: [
-      (req) => {
+      (req, _options, res) => {
         const startedAt = requestStartedAt.get(req.url);
         if (startedAt === undefined) {
           console.warn(`startedAt (url: ${req.url}) is undefined`);
           return;
         }
-        console.info(
-          `(${((Date.now() - startedAt) / 1_000).toFixed(2)}ms) ${req.method} ${req.url}`,
-        );
+        const elapsed = `${((Date.now() - startedAt) / 1_000).toFixed(2)}ms`;
+        console.info(`(${elapsed}) ${res.status} ${req.method} ${req.url}`);
       },
     ],
   },
@@ -49,7 +48,7 @@ export const getTasksCount = async ({
   const tasks: unknown[] = await kyInstance
     .get(buildTasksApiUrl({ projectId, filterByDueByToday }))
     .json(); // タイムアウト(10秒)はデフォルトのまま
-  console.log(tasks);
+  console.info(tasks);
   return tasks.length;
 };
 
@@ -83,7 +82,6 @@ export const getTasksCountByParamsWithRetry = async ({
   projectId?: string;
   filterByDueByToday?: boolean;
 }) => {
-  console.log(filterByDueByToday);
   const tasks: unknown[] = await kyInstance
     .get(buildTasksApiUrl({ projectId, filterByDueByToday }), {
       // タイムアウトはデフォルト 10 秒
@@ -92,7 +90,7 @@ export const getTasksCountByParamsWithRetry = async ({
       },
     })
     .json();
-  console.log(tasks);
+  console.info(tasks);
   return tasks.length;
 };
 
