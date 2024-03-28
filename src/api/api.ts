@@ -65,9 +65,9 @@ export const getProjects = async () => {
 // ==================================================
 export const getTasksCountWithRetry = async () => {
   const projectId =
-    (await storage.getItem<string>(STORAGE_KEY_OF.FILTERING_PROJECT_ID)) ?? undefined;
+    (await storage.getItem<string>(STORAGE_KEY_OF.FILTER_BY.PROJECT_ID)) ?? undefined;
   const filterByDueByToday =
-    (await storage.getItem<boolean>(STORAGE_KEY_OF.FILTER_BY_DUE_BY_TODAY)) ?? undefined;
+    (await storage.getItem<boolean>(STORAGE_KEY_OF.FILTER_BY.DUE_BY_TODAY)) ?? undefined;
 
   return getTasksCountByParamsWithRetry({ projectId, filterByDueByToday });
 };

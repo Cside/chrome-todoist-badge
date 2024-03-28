@@ -6,7 +6,7 @@ import { QUERY_KEY_OF } from "./popup/constantas/queryKeys";
 // ========================================
 // FilteringProjectId
 // ========================================
-const projectIdFn = storage.defineItem<string>(STORAGE_KEY_OF.FILTERING_PROJECT_ID);
+const projectIdFn = storage.defineItem<string>(STORAGE_KEY_OF.FILTER_BY.PROJECT_ID);
 
 export const useSuspenseFilteringProjectId = () =>
   useSuspenseQuery({
@@ -29,7 +29,7 @@ export const useFilteringProjectIdMutation = () => {
 // ========================================
 // FilterByDueByToday
 // ========================================
-const filterByDueByTodayFn = storage.defineItem<boolean>(STORAGE_KEY_OF.FILTER_BY_DUE_BY_TODAY);
+const filterByDueByTodayFn = storage.defineItem<boolean>(STORAGE_KEY_OF.FILTER_BY.DUE_BY_TODAY);
 
 export const useSuspenseFilterByDueByToday = () =>
   useSuspenseQuery({
