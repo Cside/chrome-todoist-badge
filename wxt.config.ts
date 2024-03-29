@@ -12,5 +12,6 @@ export default defineConfig({
       `${APP_BASE_URL}/*`, // Sync API
     ],
     permissions: ["storage", "unlimitedStorage", "webRequest", "alarms", "idle"],
+    action: {},
   },
 });
