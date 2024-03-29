@@ -10,5 +10,11 @@ export default defineBackground(
     updateBadgeCountRegularly();
     updateBadgeCountOnTaskUpdated();
     updateBadgeCountOnActive();
+
+    chrome.action.onClicked.addListener(async () => await chrome.runtime.openOptionsPage());
+    chrome.runtime.onInstalled.addListener(async ({ reason }) => {
+      if (reason === chrome.runtime.OnInstalledReason.INSTALL)
+        await chrome.runtime.openOptionsPage();
+    });
   },
 );
