@@ -10,6 +10,8 @@ declare module "wxt/browser" {
     | "/icon/48.png"
     | "/icon/96.png"
     | "/options.html"
+    | "/pin-extention-to-toolbar.html"
+    | "/welcome.html"
   type HtmlPublicPath = Extract<PublicPath, `${string}.html`>
   export interface WxtRuntime extends Runtime.Static {
     getURL(path: PublicPath): string;
