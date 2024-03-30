@@ -1,5 +1,6 @@
 import { storage } from "wxt/storage";
 import { STORAGE_KEY_OF } from "../constants/storageKeys";
+import { getTasksFilters } from "../utils";
 
 export const handleActionClick = () => {
   chrome.action.onClicked.addListener(async () => {
@@ -10,4 +11,6 @@ export const handleActionClick = () => {
   });
 };
 
-const openWebApp = async () => {};
+const openWebApp = async () => {
+  const { projectId, filterByDueByToday } = await getTasksFilters();
+};

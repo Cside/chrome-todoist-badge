@@ -80,18 +80,14 @@ export const getTasksCountByParamsWithRetry = async ({
 // Utils
 // ==================================================
 
-const buildTasksApiUrl = ({
-  projectId,
-  filterByDueByToday,
-}: {
-  projectId: string;
-  filterByDueByToday: boolean;
-}) => {
-  let url = `${BASE_URL}/tasks`;
+const buildTasksApiUrl = (params: TasksFilters) => {
+  return `${BASE_URL}/tasks${_buildTasksApiQueryString(params)}`;
+};
+
+export const _buildTasksApiQueryString = ({ projectId, filterByDueByToday }: TasksFilters) => {
   const params = {
     ...(projectId !== PROJECT_ID_ALL && { project_id: projectId }),
     ...(filterByDueByToday === true && { filter: ["today", "overdue"].join("|") }),
   };
-  if (!isEmpty(params)) url += `?${new URLSearchParams(params)}`;
-  return url;
+  return isEmpty(params) ? `?${new URLSearchParams(params)}` : "";
 };

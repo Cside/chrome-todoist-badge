@@ -2,7 +2,6 @@ import { Suspense } from "react";
 import useAsyncEffect from "use-async-effect";
 import { useSuspenseProjects, useTasksCount } from "../api/useApi";
 import { updateBadgeCountByParamsWithRetry } from "../background/updateBadge/updateBadgeCount";
-import { PROJECT_ID_ALL } from "../constants/options";
 import {
   useFilterByDueByTodayMutation,
   useFilteringProjectIdMutation,
@@ -12,6 +11,8 @@ import {
 import "./../globalUtils";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { QueryClientProvider } from "./components/QueryClientProvider";
+
+export const PROJECT_ID_ALL = "__all";
 
 function App() {
   const { data: projects } = useSuspenseProjects();
