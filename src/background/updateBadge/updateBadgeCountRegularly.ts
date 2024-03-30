@@ -11,7 +11,7 @@ export const updateBadgeCountRegularly = () => {
         await updateBadgeCountWithRetry({ via: "alarm" });
         console.info(
           `Executed the alarm at ${new Date().toLocaleTimeString("ja-JP")}.\n` +
-            `Next execution is at ${(await getNextAlarmDate()).toLocaleTimeString("ja-JP")}.`,
+            `Next execution is at ${new Date(alarm.scheduledTime).toLocaleTimeString("ja-JP")}.`,
         );
         break;
       }
@@ -23,8 +23,13 @@ export const updateBadgeCountRegularly = () => {
   chrome.runtime.onInstalled.addListener(async ({ reason }) => {
     if (import.meta.env.DEV) await updateBadgeCountWithRetry({ via: "reloading the extension" });
 
-    const nextTime = formatDistance(await getNextAlarmDate(), new Date(), { addSuffix: true });
-    console.info(`Next execution is ${nextTime}.`);
+    const alarm = await chrome.alarms.get(ALARM_NAME);
+    if (alarm) {
+      const nextTime = formatDistance(new Date(alarm.scheduledTime), new Date(), {
+        addSuffix: true,
+      });
+      console.info(`Next execution is ${nextTime}.`);
+    }
 
     if (reason !== chrome.runtime.OnInstalledReason.INSTALL) return;
 
@@ -35,9 +40,3 @@ export const updateBadgeCountRegularly = () => {
     console.info("Created alarm");
   });
 };
-
-//================================================================
-// Utils
-//================================================================
-
-const getNextAlarmDate = async () => new Date((await chrome.alarms.get(ALARM_NAME)).scheduledTime);
