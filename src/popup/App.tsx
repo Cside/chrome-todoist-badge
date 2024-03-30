@@ -16,6 +16,8 @@ import { QueryClientProvider } from "./components/QueryClientProvider";
 function App() {
   const { data: projects } = useSuspenseProjects();
   const projectId = useSuspenseFilteringProjectId();
+  // TODO: projectId が projects に含まれているかチェックする
+  // (project がアーカイブ/削除されていれば、含まれない)
   const filterByDueByToday = useSuspenseFilterByDueByToday();
   const { mutate: setProjectId } = useFilteringProjectIdMutation();
   const { mutate: setFilterByDueByToday } = useFilterByDueByTodayMutation();
