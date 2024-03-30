@@ -99,7 +99,7 @@ const buildTasksApiUrl = ({
 }) => {
   let url = `${BASE_URL}/tasks`;
   const params = {
-    ...(projectId !== PROJECT_ID_ALL && { project_id: projectId }),
+    ...(projectId !== PROJECT_ID_ALL && { project_id: projectId + "11" }),
     ...(filterByDueByToday === true && { filter: ["today", "overdue"].join("|") }),
   };
   if (!isEmpty(params)) url += `?${new URLSearchParams(params)}`;
