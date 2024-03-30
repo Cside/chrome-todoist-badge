@@ -1,14 +1,10 @@
 import ky from "ky";
 import { isEmpty } from "lodash-es";
 import { MAX_RETRY } from "../constants/httpClient";
-import {
-  DEFAULT_FILTER_BY_DUE_BY_TODAY,
-  DEFAULT_PROJECT_ID,
-  PROJECT_ID_ALL,
-} from "../constants/options";
-import { STORAGE_KEY_OF } from "../constants/storageKeys";
+import { PROJECT_ID_ALL } from "../constants/options";
 import { API_BASE_URL } from "../constants/urls";
-import type { GetTasksParams } from "../types";
+import type { TasksFilters } from "../types";
+import { getTasksFilters } from "../utils";
 
 const BASE_URL = `${API_BASE_URL}/rest/v2`;
 
@@ -39,7 +35,7 @@ const kyInstance = ky.create({
 // ==================================================
 // for Popup ( TQ で呼ぶの前提)
 // ==================================================
-export const getTasksCount = async ({ projectId, filterByDueByToday }: GetTasksParams) => {
+export const getTasksCount = async ({ projectId, filterByDueByToday }: TasksFilters) => {
   const tasks: unknown[] = await kyInstance
     .get(buildTasksApiUrl({ projectId, filterByDueByToday }))
     .json(); // タイムアウト(10秒)はデフォルトのまま
@@ -61,20 +57,13 @@ export const getProjects = async () => {
 // for BG worker
 // ==================================================
 export const getTasksCountWithRetry = async () => {
-  const projectId =
-    (await storage.getItem<string>(STORAGE_KEY_OF.CONFIG.FILTER_BY.PROJECT_ID)) ??
-    DEFAULT_PROJECT_ID;
-  const filterByDueByToday =
-    (await storage.getItem<boolean>(STORAGE_KEY_OF.CONFIG.FILTER_BY.DUE_BY_TODAY)) ??
-    DEFAULT_FILTER_BY_DUE_BY_TODAY;
-
-  return getTasksCountByParamsWithRetry({ projectId, filterByDueByToday });
+  return getTasksCountByParamsWithRetry(await getTasksFilters());
 };
 
 export const getTasksCountByParamsWithRetry = async ({
   projectId,
   filterByDueByToday,
-}: GetTasksParams) => {
+}: TasksFilters) => {
   const tasks: unknown[] = await kyInstance
     .get(buildTasksApiUrl({ projectId, filterByDueByToday }), {
       // タイムアウトはデフォルト 10 秒

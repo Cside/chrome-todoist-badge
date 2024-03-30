@@ -1,5 +1,5 @@
 import { getTasksCountByParamsWithRetry, getTasksCountWithRetry } from "../../api/api";
-import type { GetTasksParams } from "../../types";
+import type { TasksFilters } from "../../types";
 
 const setBadgeText = (count: number) =>
   chrome.action.setBadgeText({ text: count === 0 ? "" : String(count) });
@@ -16,7 +16,7 @@ export const updateBadgeCountByParamsWithRetry = async ({
   projectId,
   filterByDueByToday,
   via,
-}: GetTasksParams & {
+}: TasksFilters & {
   via: string;
 }) => {
   console.info(`(via: ${via}) update badge count`);
