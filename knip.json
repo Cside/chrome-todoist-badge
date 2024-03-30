@@ -10,7 +10,6 @@
     "files",
     "dependencies",
     "unlisted",
-    "binaries",
     "unresolved",
     "exports",
     "nsExports",

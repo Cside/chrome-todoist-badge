@@ -7,7 +7,7 @@ import { QUERY_KEY_OF } from "./popup/constants/queryKeys";
 // ========================================
 // FilteringProjectId
 // ========================================
-const projectIdFn = storage.defineItem<string>(STORAGE_KEY_OF.FILTER_BY.PROJECT_ID, {
+const projectIdFn = storage.defineItem<string>(STORAGE_KEY_OF.CONFIG.FILTER_BY.PROJECT_ID, {
   defaultValue: DEFAULT_PROJECT_ID,
 });
 
@@ -32,9 +32,12 @@ export const useFilteringProjectIdMutation = () => {
 // ========================================
 // FilterByDueByToday
 // ========================================
-const filterByDueByTodayFn = storage.defineItem<boolean>(STORAGE_KEY_OF.FILTER_BY.DUE_BY_TODAY, {
-  defaultValue: DEFAULT_FILTER_BY_DUE_BY_TODAY,
-});
+const filterByDueByTodayFn = storage.defineItem<boolean>(
+  STORAGE_KEY_OF.CONFIG.FILTER_BY.DUE_BY_TODAY,
+  {
+    defaultValue: DEFAULT_FILTER_BY_DUE_BY_TODAY,
+  },
+);
 
 export const useSuspenseFilterByDueByToday = () =>
   useSuspenseQuery({

@@ -62,9 +62,10 @@ export const getProjects = async () => {
 // ==================================================
 export const getTasksCountWithRetry = async () => {
   const projectId =
-    (await storage.getItem<string>(STORAGE_KEY_OF.FILTER_BY.PROJECT_ID)) ?? DEFAULT_PROJECT_ID;
+    (await storage.getItem<string>(STORAGE_KEY_OF.CONFIG.FILTER_BY.PROJECT_ID)) ??
+    DEFAULT_PROJECT_ID;
   const filterByDueByToday =
-    (await storage.getItem<boolean>(STORAGE_KEY_OF.FILTER_BY.DUE_BY_TODAY)) ??
+    (await storage.getItem<boolean>(STORAGE_KEY_OF.CONFIG.FILTER_BY.DUE_BY_TODAY)) ??
     DEFAULT_FILTER_BY_DUE_BY_TODAY;
 
   return getTasksCountByParamsWithRetry({ projectId, filterByDueByToday });
@@ -99,7 +100,7 @@ const buildTasksApiUrl = ({
 }) => {
   let url = `${BASE_URL}/tasks`;
   const params = {
-    ...(projectId !== PROJECT_ID_ALL && { project_id: projectId + "11" }),
+    ...(projectId !== PROJECT_ID_ALL && { project_id: projectId }),
     ...(filterByDueByToday === true && { filter: ["today", "overdue"].join("|") }),
   };
   if (!isEmpty(params)) url += `?${new URLSearchParams(params)}`;
