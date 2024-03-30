@@ -1,7 +1,8 @@
 import { getTasksCountByParamsWithRetry, getTasksCountWithRetry } from "../../api/api";
 import type { GetTasksParams } from "../../types";
 
-const setBadgeText = (count: number) => chrome.action.setBadgeText({ text: String(count) });
+const setBadgeText = (count: number) =>
+  chrome.action.setBadgeText({ text: count === 0 ? "" : String(count) });
 
 // for bg worker
 export const updateBadgeCountWithRetry = async ({ via }: { via: string }) => {
