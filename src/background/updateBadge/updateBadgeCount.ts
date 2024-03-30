@@ -11,7 +11,7 @@ export const updateBadgeCountWithRetry = async ({ via }: { via: string }) => {
   return setBadgeText(count);
 };
 
-// for popup
+// for options
 export const updateBadgeCountByParamsWithRetry = async ({
   projectId,
   filterByDueByToday,
