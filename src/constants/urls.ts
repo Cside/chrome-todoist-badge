@@ -19,5 +19,5 @@ export const API_URL_MATCH_PATTERN_OF = {
 // ==================================================
 export const WEB_APP_URL_OF = {
   HOME: `${WEB_APP_BASE_URL}/app/`,
-  PROJECT_OF: (projectId: string) => `${WEB_APP_BASE_URL}/app/project/${projectId}`,
+  PROJECT: (projectId: string) => `${WEB_APP_BASE_URL}/app/project/${projectId}`,
 };

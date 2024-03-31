@@ -6,9 +6,7 @@ declare global {
     ssd: (key: string) => Promise<void>;
   }
 }
-// console オブジェクトに json()=> string という関数を拡張する型を書いて
 
-/* TODO: background worker で使えない */
 const global = typeof window !== "undefined" ? window : self;
 
 // sl = storage local

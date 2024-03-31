@@ -20,5 +20,5 @@ const openWebApp = async () => {
 
 const getWebAppUrl = async () => {
   const { projectId } = await getTasksFilters();
-  return projectId === undefined ? WEB_APP_URL_OF.HOME : WEB_APP_URL_OF.PROJECT_OF(projectId);
+  return projectId === undefined ? WEB_APP_URL_OF.HOME : WEB_APP_URL_OF.PROJECT(projectId);
 };
