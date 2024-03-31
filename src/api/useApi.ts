@@ -7,11 +7,8 @@ export const useSuspenseProjects = () =>
   useSuspenseQuery({
     queryKey: [QUERY_KEY_OF.API.GET_PROJECTS],
     queryFn: getProjects,
-  });
+  }).data;
 
-// ========================================
-// Tasks Count
-// ========================================
 export const useTasksCount = ({ projectId, filterByDueByToday }: TasksFilters) =>
   useQuery({
     queryKey: [QUERY_KEY_OF.API.GET_TASKS, projectId, filterByDueByToday],
