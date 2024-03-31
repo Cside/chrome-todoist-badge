@@ -1,5 +1,5 @@
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
-import { QUERY_KEY_OF } from "../popup/constants/queryKeys";
+import { QUERY_KEY_OF } from "../options/constants/queryKeys";
 import type { TasksFilters } from "../types";
 import { getProjects, getTasksCount } from "./api";
 

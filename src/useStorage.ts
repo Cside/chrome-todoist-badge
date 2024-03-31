@@ -7,7 +7,7 @@ import {
 import { storage } from "wxt/storage";
 import { DEFAULT_FILTER_BY_DUE_BY_TODAY } from "./constants/options";
 import { STORAGE_KEY_OF } from "./constants/storageKeys";
-import { QUERY_KEY_OF } from "./popup/constants/queryKeys";
+import { QUERY_KEY_OF } from "./options/constants/queryKeys";
 
 export const useSuspenseFilteringProjectId = () =>
   useStorage<string, string | undefined>({

@@ -2,7 +2,7 @@
   "entry": [
     "./wxt.config.ts",
     "./entrypoints/background.ts",
-    "./src/popup/main.tsx"
+    "./src/options/main.tsx"
   ],
   "project": ["./{endpoints,src}/**/*.{ts,tsx}"],
   "ignore": [],

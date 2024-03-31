@@ -31,7 +31,7 @@ function App() {
   useAsyncEffect(async () => {
     // TODO: 中で fetch しなくても、count だけ渡せばいい説。
     // count をいつまで使い続けるか分からんのでアレだが。。
-    await updateBadgeCountByParamsWithRetry({ projectId, filterByDueByToday, via: "popup" });
+    await updateBadgeCountByParamsWithRetry({ projectId, filterByDueByToday, via: "options page" });
   }, [projectId, filterByDueByToday]);
 
   return (
