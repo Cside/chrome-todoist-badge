@@ -1,15 +1,12 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { storage } from "wxt/storage";
-import { DEFAULT_FILTER_BY_DUE_BY_TODAY, DEFAULT_PROJECT_ID } from "./constants/options";
 import { STORAGE_KEY_OF } from "./constants/storageKeys";
 import { QUERY_KEY_OF } from "./popup/constants/queryKeys";
 
 // ========================================
 // FilteringProjectId
 // ========================================
-const projectIdFn = storage.defineItem<string>(STORAGE_KEY_OF.CONFIG.FILTER_BY.PROJECT_ID, {
-  defaultValue: DEFAULT_PROJECT_ID,
-});
+const projectIdFn = storage.defineItem<string>(STORAGE_KEY_OF.CONFIG.FILTER_BY.PROJECT_ID);
 
 export const useSuspenseFilteringProjectId = () =>
   useSuspenseQuery({
@@ -34,9 +31,6 @@ export const useFilteringProjectIdMutation = () => {
 // ========================================
 const filterByDueByTodayFn = storage.defineItem<boolean>(
   STORAGE_KEY_OF.CONFIG.FILTER_BY.DUE_BY_TODAY,
-  {
-    defaultValue: DEFAULT_FILTER_BY_DUE_BY_TODAY,
-  },
 );
 
 export const useSuspenseFilterByDueByToday = () =>

@@ -6,6 +6,9 @@ export default defineConfig({
     globals: true,
     mockReset: true,
     restoreMocks: true,
+    chaiConfig: {
+      truncateThreshold: 100,
+    },
   },
   plugins: [WxtVitest()],
 });

@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import useAsyncEffect from "use-async-effect";
 import { useSuspenseProjects, useTasksCount } from "../api/useApi";
 import { updateBadgeCountByParamsWithRetry } from "../background/updateBadge/updateBadgeCount";
+import { DEFAULT_FILTER_BY_DUE_BY_TODAY } from "../constants/options";
 import {
   useFilterByDueByTodayMutation,
   useFilteringProjectIdMutation,
@@ -12,14 +13,15 @@ import "./../globalUtils";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { QueryClientProvider } from "./components/QueryClientProvider";
 
-export const PROJECT_ID_ALL = "__all";
+const PROJECT_ID_ALL = "__all";
+const DEFAULT_PROJECT_ID = PROJECT_ID_ALL;
 
 function App() {
   const { data: projects } = useSuspenseProjects();
   const projectId = useSuspenseFilteringProjectId();
   // TODO: projectId が projects に含まれているかチェックする
   // (project がアーカイブ/削除されていれば、含まれない)
-  const filterByDueByToday = useSuspenseFilterByDueByToday();
+  const filterByDueByToday = useSuspenseFilterByDueByToday() ?? DEFAULT_FILTER_BY_DUE_BY_TODAY;
   const { mutate: setProjectId } = useFilteringProjectIdMutation();
   const { mutate: setFilterByDueByToday } = useFilterByDueByTodayMutation();
   const { data: tasksCount, isPending: isTaskCountPending } = useTasksCount({
@@ -28,6 +30,8 @@ function App() {
   });
 
   useAsyncEffect(async () => {
+    // TODO: 中で fetch しなくても、count だけ渡せばいい説。
+    // count をいつまで使い続けるか分からんのでアレだが。。
     await updateBadgeCountByParamsWithRetry({ projectId, filterByDueByToday, via: "popup" });
   }, [projectId, filterByDueByToday]);
 
@@ -38,7 +42,7 @@ function App() {
         <div>
           Project:{" "}
           <select
-            value={projectId}
+            value={projectId ?? DEFAULT_PROJECT_ID}
             onChange={(event) =>
               setProjectId(event.target.value === PROJECT_ID_ALL ? undefined : event.target.value)
             }

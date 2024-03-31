@@ -1,10 +1,9 @@
 import ky from "ky";
 import { isEmpty } from "lodash-es";
 import { MAX_RETRY } from "../constants/httpClient";
-import { PROJECT_ID_ALL } from "../constants/options";
 import { API_BASE_URL } from "../constants/urls";
+import { getTasksFilters } from "../fn/getTasksFilters";
 import type { TasksFilters } from "../types";
-import { getTasksFilters } from "../utils";
 
 const BASE_URL = `${API_BASE_URL}/rest/v2`;
 
@@ -33,7 +32,7 @@ const kyInstance = ky.create({
 });
 
 // ==================================================
-// for Popup ( TQ で呼ぶの前提)
+// for Web Page ( TQ で呼ぶの前提)
 // ==================================================
 export const getTasksCount = async ({ projectId, filterByDueByToday }: TasksFilters) => {
   const tasks: unknown[] = await kyInstance
@@ -86,8 +85,8 @@ const buildTasksApiUrl = (params: TasksFilters) => {
 
 export const _buildTasksApiQueryString = ({ projectId, filterByDueByToday }: TasksFilters) => {
   const params = {
-    ...(projectId !== PROJECT_ID_ALL && { project_id: projectId }),
+    ...(projectId !== undefined && { project_id: projectId }),
     ...(filterByDueByToday === true && { filter: ["today", "overdue"].join("|") }),
   };
-  return isEmpty(params) ? `?${new URLSearchParams(params)}` : "";
+  return isEmpty(params) ? "" : `?${new URLSearchParams(params)}`;
 };
