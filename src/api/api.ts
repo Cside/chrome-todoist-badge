@@ -1,11 +1,9 @@
 import ky from "ky";
 import { isEmpty } from "lodash-es";
 import { MAX_RETRY } from "../constants/httpClient";
-import { API_BASE_URL } from "../constants/urls";
+import { API_URL_OF } from "../constants/urls";
 import { getTasksFilters } from "../fn/getTasksFilters";
 import type { TasksFilters } from "../types";
-
-const BASE_URL = `${API_BASE_URL}/rest/v2`;
 
 // これだとリクエストがパラで飛んだ時駄目。
 // req id があれば一番楽だが...
@@ -48,7 +46,7 @@ type Project = {
 };
 
 export const getProjects = async () => {
-  const projects: Project[] = await kyInstance.get(`${BASE_URL}/projects`).json();
+  const projects: Project[] = await kyInstance.get(API_URL_OF.GET_PROJECTS).json();
   return projects;
 };
 
@@ -80,7 +78,7 @@ export const getTasksCountByParamsWithRetry = async ({
 // ==================================================
 
 const buildTasksApiUrl = (params: TasksFilters) => {
-  return `${BASE_URL}/tasks${_buildTasksApiQueryString(params)}`;
+  return `${API_URL_OF.GET_TASKS}${_buildTasksApiQueryString(params)}`;
 };
 
 export const _buildTasksApiQueryString = ({ projectId, filterByDueByToday }: TasksFilters) => {

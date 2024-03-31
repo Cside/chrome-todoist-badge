@@ -1,6 +1,6 @@
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "wxt";
-import { API_BASE_URL, APP_BASE_URL } from "./src/constants/urls";
+import { API_BASE_URL, WEB_APP_BASE_URL } from "./src/constants/urls";
 
 export default defineConfig({
   vite: () => ({
@@ -14,7 +14,7 @@ export default defineConfig({
   manifest: {
     host_permissions: [
       `${API_BASE_URL}/*`, // Tasks API, Projects API, etc...
-      `${APP_BASE_URL}/*`, // Sync API
+      `${WEB_APP_BASE_URL}/*`, // Sync API
     ],
     permissions: ["storage", "unlimitedStorage", "webRequest", "alarms", "idle"],
     action: {},

@@ -10,7 +10,7 @@ const projectIdFn = storage.defineItem<string>(STORAGE_KEY_OF.CONFIG.FILTER_BY.P
 
 export const useSuspenseFilteringProjectId = () =>
   useSuspenseQuery({
-    queryKey: [QUERY_KEY_OF.FILTERING_PROJECT_ID],
+    queryKey: [QUERY_KEY_OF.STORAGE.CONFIG.FILTER_BY.DUE_BY_TODAY],
     queryFn: async () => projectIdFn.getValue(),
   }).data ?? undefined;
 
@@ -21,7 +21,7 @@ export const useFilteringProjectIdMutation = () => {
       projectId === undefined ? projectIdFn.removeValue() : projectIdFn.setValue(projectId),
     onSuccess: () =>
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEY_OF.FILTERING_PROJECT_ID],
+        queryKey: [QUERY_KEY_OF.STORAGE.CONFIG.FILTER_BY.DUE_BY_TODAY],
       }),
   });
 };
@@ -35,7 +35,7 @@ const filterByDueByTodayFn = storage.defineItem<boolean>(
 
 export const useSuspenseFilterByDueByToday = () =>
   useSuspenseQuery({
-    queryKey: [QUERY_KEY_OF.FILTER_BY_DUE_BY_TODAY],
+    queryKey: [QUERY_KEY_OF.STORAGE],
     queryFn: async () => filterByDueByTodayFn.getValue(),
   }).data ?? undefined;
 
@@ -46,7 +46,29 @@ export const useFilterByDueByTodayMutation = () => {
       filterByDueByTodayFn.setValue(filterByDueByToday),
     onSuccess: () =>
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEY_OF.FILTER_BY_DUE_BY_TODAY],
+        queryKey: [QUERY_KEY_OF.STORAGE.CONFIG.FILTER_BY.DUE_BY_TODAY],
+      }),
+  });
+};
+
+// ========================================
+// isInitialized
+// ========================================
+const isInitializedFn = storage.defineItem<boolean>(STORAGE_KEY_OF.CONFIG.IS_INITIALIZED);
+
+export const useSuspenseIsInitialized = () =>
+  useSuspenseQuery({
+    queryKey: [QUERY_KEY_OF.STORAGE.CONFIG.IS_INITIALIZED],
+    queryFn: async () => isInitializedFn.getValue(),
+  }).data ?? undefined;
+
+export const useIsInitializedMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (isInitialized: boolean) => isInitializedFn.setValue(isInitialized),
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEY_OF.STORAGE.CONFIG.IS_INITIALIZED],
       }),
   });
 };

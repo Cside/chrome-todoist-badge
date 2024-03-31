@@ -5,7 +5,7 @@ import { getProjects, getTasksCount } from "./api";
 
 export const useSuspenseProjects = () =>
   useSuspenseQuery({
-    queryKey: [QUERY_KEY_OF.PROJECTS],
+    queryKey: [QUERY_KEY_OF.API.GET_PROJECTS],
     queryFn: getProjects,
   });
 
@@ -14,6 +14,6 @@ export const useSuspenseProjects = () =>
 // ========================================
 export const useTasksCount = ({ projectId, filterByDueByToday }: TasksFilters) =>
   useQuery({
-    queryKey: [QUERY_KEY_OF.TASKS, projectId, filterByDueByToday],
+    queryKey: [QUERY_KEY_OF.API.GET_TASKS, projectId, filterByDueByToday],
     queryFn: async () => getTasksCount({ projectId, filterByDueByToday }),
   });
