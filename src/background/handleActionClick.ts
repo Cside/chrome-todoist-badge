@@ -5,7 +5,7 @@ import { getTasksFilters } from "../fn/getTasksFilters";
 
 export const addActionClickListener = () => {
   chrome.action.onClicked.addListener(async () => {
-    if (await storage.getItem<boolean>(STORAGE_KEY_OF.CONFIG.INITIALIZED)) {
+    if (await storage.getItem<boolean>(STORAGE_KEY_OF.CONFIG.IS_INITIALIZED)) {
       await openWebApp();
       return;
     }
