@@ -2,31 +2,35 @@ import { Suspense } from "react";
 import useAsyncEffect from "use-async-effect";
 import { useSuspenseProjects, useTasksCount } from "../api/useApi";
 import { updateBadgeCountByParamsWithRetry } from "../background/updateBadge/updateBadgeCount";
-import { PROJECT_ID_ALL } from "../constants/options";
+import { DEFAULT_FILTER_BY_DUE_BY_TODAY } from "../constants/options";
+import "../globalUtils";
 import {
-  useFilterByDueByTodayMutation,
-  useFilteringProjectIdMutation,
   useSuspenseFilterByDueByToday,
   useSuspenseFilteringProjectId,
+  useSuspenseIsInitialized,
 } from "../useStorage";
-import "./../globalUtils";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { QueryClientProvider } from "./components/QueryClientProvider";
 
+const PROJECT_ID_ALL = "__all";
+const DEFAULT_PROJECT_ID = PROJECT_ID_ALL;
+
 function App() {
-  const { data: projects } = useSuspenseProjects();
-  const projectId = useSuspenseFilteringProjectId();
   // TODO: projectId が projects に含まれているかチェックする
   // (project がアーカイブ/削除されていれば、含まれない)
-  const filterByDueByToday = useSuspenseFilterByDueByToday();
-  const { mutate: setProjectId } = useFilteringProjectIdMutation();
-  const { mutate: setFilterByDueByToday } = useFilterByDueByTodayMutation();
+  const [projectId, setProjectId] = useSuspenseFilteringProjectId();
+  const [filterByDueByToday = DEFAULT_FILTER_BY_DUE_BY_TODAY, setFilterByDueByToday] =
+    useSuspenseFilterByDueByToday();
+  const [isInitialized, setIsInitialized] = useSuspenseIsInitialized();
+  const projects = useSuspenseProjects();
   const { data: tasksCount, isPending: isTaskCountPending } = useTasksCount({
     projectId,
     filterByDueByToday,
   });
 
   useAsyncEffect(async () => {
+    // TODO: 中で fetch しなくても、count だけ渡せばいい説。
+    // count をいつまで使い続けるか分からんのでアレだが。。
     await updateBadgeCountByParamsWithRetry({ projectId, filterByDueByToday, via: "popup" });
   }, [projectId, filterByDueByToday]);
 
@@ -37,10 +41,12 @@ function App() {
         <div>
           Project:{" "}
           <select
-            value={projectId}
-            onChange={(event) =>
-              setProjectId(event.target.value === PROJECT_ID_ALL ? undefined : event.target.value)
-            }
+            value={projectId ?? DEFAULT_PROJECT_ID}
+            onChange={(event) => {
+              const newValue =
+                event.target.value === PROJECT_ID_ALL ? undefined : event.target.value;
+              setProjectId(newValue);
+            }}
           >
             <option value={PROJECT_ID_ALL}>All projects</option>
             {projects.map((project) => (
@@ -62,9 +68,13 @@ function App() {
         <div style={{ ...(isTaskCountPending && { visibility: "hidden" }) }}>
           {tasksCount} Tasks
         </div>
-        <div>
-          <input type="submit" value="Submit" />
-        </div>
+        {isInitialized || (
+          <div>
+            <button type="submit" onClick={() => setIsInitialized(true)}>
+              Submit
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

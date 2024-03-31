@@ -1,4 +1,4 @@
-export type GetTasksParams = {
-  projectId: string;
+export type TasksFilters = {
+  projectId?: string;
   filterByDueByToday: boolean;
 };
