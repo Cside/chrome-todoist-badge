@@ -4,6 +4,10 @@ import type { ReactNode } from "react";
 
 const queryClient = new QueryClient({
   // https://tanstack.com/query/latest/docs/reference/QueryClient
+  mutations: {
+    throwOnError: true,
+    retry: MAX_RETRIES,
+  },
   defaultOptions: {
     queries: {
       retry: MAX_RETRY,
