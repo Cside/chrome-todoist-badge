@@ -9,6 +9,10 @@ const queryClient = new QueryClient({
     retry: MAX_RETRIES,
   },
   defaultOptions: {
+    mutations: {
+      throwOnError: true,
+      retry: MAX_RETRY,
+    },
     queries: {
       retry: MAX_RETRY,
       staleTime: Number.POSITIVE_INFINITY,
