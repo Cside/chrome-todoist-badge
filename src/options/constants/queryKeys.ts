@@ -1,5 +1,5 @@
 // biome-ignore format: for alignment
-export const QUERY_KEY_OF = {
+export const QUERY_KEY_FOR = {
   API: {
     GET_TASKS:    "api:getTasks",
     GET_PROJECTS: "api:getProjects",
