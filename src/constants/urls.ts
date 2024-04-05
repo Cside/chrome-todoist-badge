@@ -1,4 +1,4 @@
-export const API_BASE_URL = "https://api.todoist.com";
+const API_BASE_URL = "https://api.todoist.com";
 export const WEB_APP_BASE_URL = "https://app.todoist.com";
 
 // ==================================================
