@@ -1,5 +1,4 @@
 import type { ContentScriptContext } from "wxt/client";
-import "./styles.css";
 
 const NAVIGATION_SELECTOR = '[role="navigation"]';
 
@@ -14,7 +13,10 @@ export const mount = async (ctx: ContentScriptContext) => {
       const a = document.createElement("a");
       a.href = "#";
       a.textContent = "🌳 Todoist Badge";
-      a.addEventListener("click", async () => await chrome.runtime.openOptionsPage());
+      a.addEventListener(
+        "click",
+        async () => await chrome.runtime.sendMessage({ action: "open-options-page" }),
+      );
       container.append(a);
     },
   });
@@ -25,7 +27,7 @@ export const mount = async (ctx: ContentScriptContext) => {
 const GET_ELEMENT_INTERVAL = 100;
 const TIMEOUT = 15 * 1_000;
 
-export const waitFor = (selector: string): Promise<HTMLElement> => {
+const waitFor = (selector: string): Promise<HTMLElement> => {
   return new Promise((resolve) => {
     const getElement = (fn?: () => void) => {
       const $elem = document.querySelector<HTMLElement>(selector);

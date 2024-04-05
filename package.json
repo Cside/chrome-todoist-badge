@@ -26,8 +26,9 @@
     "lint-fix:unused-code": "knip --fix-type exports",
     "lint": "pnpm run '/^lint:.+/'",
     "lint-fix": "pnpm run '/^lint-fix:.+/'",
-    "check": "pnpm run compile && pnpm run lint && pnpm run format && ./scripts/check-ng-words.sh",
-    "check-fix": "pnpm run lint-fix && pnpm run format-fix"
+    "check:ng-word": "./scripts/check-ng-words.sh",
+    "check": "pnpm run '/^(compile$|lint$|format$|check:)/'",
+    "fix": "pnpm run lint-fix && pnpm run format-fix"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.28.6",

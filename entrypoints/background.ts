@@ -1,3 +1,4 @@
+import { addMessageListeners } from "@/src/background/addMessageListeners";
 import { addActionClickListener } from "@/src/background/handleActionClick";
 import { openWelcomePageOnInstalled } from "@/src/background/openWelcomePage";
 import { setBadgeColor } from "@/src/background/setBadgeColor";
@@ -15,5 +16,6 @@ export default defineBackground(
     updateBadgeCountOnActive();
     openWelcomePageOnInstalled();
     addActionClickListener();
+    addMessageListeners();
   },
 );
