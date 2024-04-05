@@ -1,11 +1,11 @@
 import { storage } from "wxt/storage";
-import { STORAGE_KEY_OF } from "../constants/storageKeys";
-import { WEB_APP_URL_OF } from "../constants/urls";
+import { STORAGE_KEY_FOR } from "../constants/storageKeys";
+import { WEB_APP_URL_FOR } from "../constants/urls";
 import { getTasksFilters } from "../fn/getTasksFilters";
 
 export const addActionClickListener = () => {
   chrome.action.onClicked.addListener(async () => {
-    if (await storage.getItem<boolean>(STORAGE_KEY_OF.CONFIG.IS_INITIALIZED)) {
+    if (await storage.getItem<boolean>(STORAGE_KEY_FOR.CONFIG.IS_INITIALIZED)) {
       await openWebApp();
       return;
     }
@@ -20,5 +20,5 @@ const openWebApp = async () => {
 
 const getWebAppUrl = async () => {
   const { projectId } = await getTasksFilters();
-  return projectId === undefined ? WEB_APP_URL_OF.HOME : WEB_APP_URL_OF.PROJECT(projectId);
+  return projectId === undefined ? WEB_APP_URL_FOR.HOME : WEB_APP_URL_FOR.PROJECT(projectId);
 };

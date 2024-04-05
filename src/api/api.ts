@@ -1,7 +1,7 @@
 import ky from "ky";
 import { isEmpty } from "lodash-es";
 import { MAX_RETRY } from "../constants/httpClient";
-import { API_URL_OF } from "../constants/urls";
+import { API_URL_FOR } from "../constants/urls";
 import { getTasksFilters } from "../fn/getTasksFilters";
 import type { TasksFilters } from "../types";
 
@@ -46,7 +46,7 @@ type Project = {
 };
 
 export const getProjects = async () => {
-  const projects: Project[] = await kyInstance.get(API_URL_OF.GET_PROJECTS).json();
+  const projects: Project[] = await kyInstance.get(API_URL_FOR.GET_PROJECTS).json();
   return projects;
 };
 
@@ -78,7 +78,7 @@ export const getTasksCountByParamsWithRetry = async ({
 // ==================================================
 
 const buildTasksApiUrl = (params: TasksFilters) => {
-  return `${API_URL_OF.GET_TASKS}${_buildTasksApiQueryString(params)}`;
+  return `${API_URL_FOR.GET_TASKS}${_buildTasksApiQueryString(params)}`;
 };
 
 export const _buildTasksApiQueryString = ({ projectId, filterByDueByToday }: TasksFilters) => {

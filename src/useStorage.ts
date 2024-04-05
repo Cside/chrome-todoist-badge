@@ -6,30 +6,30 @@ import {
 } from "@tanstack/react-query";
 import { storage } from "wxt/storage";
 import { DEFAULT_FILTER_BY_DUE_BY_TODAY } from "./constants/options";
-import { STORAGE_KEY_OF } from "./constants/storageKeys";
-import { QUERY_KEY_OF } from "./options/constants/queryKeys";
+import { STORAGE_KEY_FOR } from "./constants/storageKeys";
+import { QUERY_KEY_FOR } from "./options/constants/queryKeys";
 
 export const useSuspenseFilteringProjectId = () =>
   useStorage<string, string | undefined>({
-    queryKey: QUERY_KEY_OF.STORAGE.CONFIG.FILTER_BY.PROJECT_ID,
-    storageKey: STORAGE_KEY_OF.CONFIG.FILTER_BY.PROJECT_ID,
+    queryKey: QUERY_KEY_FOR.STORAGE.CONFIG.FILTER_BY.PROJECT_ID,
+    storageKey: STORAGE_KEY_FOR.CONFIG.FILTER_BY.PROJECT_ID,
     mutationFn: async (projectId: string | undefined) =>
       projectId === undefined
-        ? storage.removeItem(STORAGE_KEY_OF.CONFIG.FILTER_BY.PROJECT_ID)
-        : storage.setItem<string>(STORAGE_KEY_OF.CONFIG.FILTER_BY.PROJECT_ID, projectId),
+        ? storage.removeItem(STORAGE_KEY_FOR.CONFIG.FILTER_BY.PROJECT_ID)
+        : storage.setItem<string>(STORAGE_KEY_FOR.CONFIG.FILTER_BY.PROJECT_ID, projectId),
   });
 
 export const useSuspenseFilterByDueByToday = () =>
   useStorage<boolean>({
-    queryKey: QUERY_KEY_OF.STORAGE.CONFIG.FILTER_BY.DUE_BY_TODAY,
-    storageKey: STORAGE_KEY_OF.CONFIG.FILTER_BY.DUE_BY_TODAY,
+    queryKey: QUERY_KEY_FOR.STORAGE.CONFIG.FILTER_BY.DUE_BY_TODAY,
+    storageKey: STORAGE_KEY_FOR.CONFIG.FILTER_BY.DUE_BY_TODAY,
     defaultValue: DEFAULT_FILTER_BY_DUE_BY_TODAY,
   });
 
 export const useSuspenseIsInitialized = () =>
   useStorage<boolean>({
-    queryKey: QUERY_KEY_OF.STORAGE.CONFIG.IS_INITIALIZED,
-    storageKey: STORAGE_KEY_OF.CONFIG.IS_INITIALIZED,
+    queryKey: QUERY_KEY_FOR.STORAGE.CONFIG.IS_INITIALIZED,
+    storageKey: STORAGE_KEY_FOR.CONFIG.IS_INITIALIZED,
     defaultValue: false,
   });
 

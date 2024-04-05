@@ -1,4 +1,4 @@
-export const STORAGE_KEY_OF = {
+export const STORAGE_KEY_FOR = {
   CONFIG: {
     // biome-ignore format: for alignment
     FILTER_BY: {

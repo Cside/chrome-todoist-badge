@@ -12,6 +12,7 @@ node_modules
 stats.html
 stats-*.json
 web-ext.config.ts
+.wxt
 
 # Editor directories and files
 #.vscode/*
