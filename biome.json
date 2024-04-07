@@ -22,5 +22,8 @@
         "useSortedClasses": "error"
       }
     }
+  },
+  "files": {
+    "ignore": [".output/**/*", ".wxt/**/*"]
   }
 }

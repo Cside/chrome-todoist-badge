@@ -4,17 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Welcome</title>
-    <link href="~/assets/main.css" rel="stylesheet" /> <!-- TODO @/ は駄目なんだっけ -->
+    <link href="@/assets/main.css" rel="stylesheet" />
   </head>
-  <body>
-    <h1>Pin extension to menu bar</h1>
-    <ol>
-      <li>Click the puzzle piece in the browser menu</li>
-      <li>
-        <!-- TODO: Edge 用の画像… -->
-        Click the pin beside the extensions to keep it on the menu bar (Edge
-        users will see an eye icon)
-      </li>
-    </ol>
+  <body class="pl-10 pt-10">
+    <div class="prose-md prose">
+      <h1>Pin extension to menu bar</h1>
+      <ol>
+        <li>Click the puzzle piece in the browser menu</li>
+        <li>
+          <!-- TODO: Edge 用の画像… -->
+          Click the pin beside the extensions to keep it on the menu bar (Edge users will see an eye
+          icon)
+        </li>
+      </ol>
+    </div>
   </body>
 </html>

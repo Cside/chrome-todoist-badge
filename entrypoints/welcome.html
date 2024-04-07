@@ -8,13 +8,19 @@
     <script type="module" src="@/src/globalUtils.ts"></script>
     <link href="@/assets/main.css" rel="stylesheet" />
   </head>
-  <body>
-    <h1>Thank you for installing Todoist Badge</h1>
-    <p>
-      <a href="/pin-extention-to-toolbar.html" target="_blank"
-        >Pin extension to toolbar</a
-      >
-    </p>
-    <p><a href="/options.html">Configure extension</a></p>
+  <body class="pl-10 pt-10">
+    <div class="prose-md prose">
+      <h1>Thank you for installing Todoist Badge</h1>
+      <div class="flex flex-col gap-y-3">
+        <div>
+          <a href="/pin-extention-to-toolbar.html" target="_blank" class="btn btn-primary"
+            >Pin extension to toolbar</a
+          >
+        </div>
+        <div>
+          <a href="/options.html" class="btn btn-primary">Configure extension</a>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
