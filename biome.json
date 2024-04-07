@@ -17,6 +17,9 @@
       },
       "suspicious": {
         "useAwait": "error"
+      },
+      "nursery": {
+        "useSortedClasses": "error"
       }
     }
   }
