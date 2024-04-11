@@ -37,45 +37,43 @@ function App() {
   return (
     <div>
       <h1>Filtering Tasks</h1>
-      <div>
-        <div>
-          Project:{" "}
-          <select
-            value={projectId ?? DEFAULT_PROJECT_ID}
-            onChange={(event) => {
-              const newValue =
-                event.target.value === PROJECT_ID_ALL ? undefined : event.target.value;
-              setProjectId(newValue);
-            }}
-          >
-            <option value={PROJECT_ID_ALL}>All projects</option>
-            {projects.map((project) => (
-              <option key={project.id} value={project.id}>
-                {project.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
+      <div className="form-control">
+        Project:{" "}
+        <select
+          value={projectId ?? DEFAULT_PROJECT_ID}
+          onChange={(event) => {
+            const newValue = event.target.value === PROJECT_ID_ALL ? undefined : event.target.value;
+            setProjectId(newValue);
+          }}
+        >
+          <option value={PROJECT_ID_ALL}>All projects</option>
+          {projects.map((project) => (
+            <option key={project.id} value={project.id}>
+              {project.name}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className="form-control w-50">
+        <label htmlFor="filterByDueByToday" className="label cursor-pointer">
           <input
             type="checkbox"
             checked={filterByDueByToday}
             onChange={(event) => setFilterByDueByToday(event.target.checked)}
             id="filterByDueByToday"
+            className="toggle toggle-primary"
           />{" "}
-          <label htmlFor="filterByDueByToday">Tasks due by today</label>
-        </div>
-        <div style={{ ...(isTaskCountPending && { visibility: "hidden" }) }}>
-          {tasksCount} Tasks
-        </div>
-        {isInitialized || (
-          <div>
-            <button type="submit" onClick={() => setIsInitialized(true)}>
-              Submit
-            </button>
-          </div>
-        )}
+          <span className="label-text">Tasks due by today</span>
+        </label>
       </div>
+      <div style={{ ...(isTaskCountPending && { visibility: "hidden" }) }}>{tasksCount} Tasks</div>
+      {isInitialized || (
+        <div>
+          <button type="submit" onClick={() => setIsInitialized(true)}>
+            Submit
+          </button>
+        </div>
+      )}
     </div>
   );
 }
