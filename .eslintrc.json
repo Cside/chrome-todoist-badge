@@ -1,0 +1,19 @@
+{
+  "root": true,
+  "env": {
+    "browser": true
+  },
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "project": "./tsconfig.json"
+  },
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "react-refresh"],
+  "rules": {
+    "object-shorthand": "error",
+    "@typescript-eslint/prefer-includes": "error",
+    "@typescript-eslint/no-unnecessary-condition": "error",
+    "@typescript-eslint/unbound-method": "error",
+    "react-refresh/only-export-components": ["error", { "allowConstantExport": true }]
+  }
+}

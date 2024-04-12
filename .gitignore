@@ -13,6 +13,7 @@ stats.html
 stats-*.json
 web-ext.config.ts
 .wxt
+.eslintcache
 
 # Editor directories and files
 #.vscode/*
