@@ -10,6 +10,14 @@
     "tailwindcss",
     "daisyui"
   ],
+  "emeraldwalk.runonsave": {
+    "commands": [
+      {
+        "match": "\\.tsx$",
+        "cmd": "npx biome check --apply-unsafe ${file}"
+      }
+    ]
+  },
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[javascript]": {
