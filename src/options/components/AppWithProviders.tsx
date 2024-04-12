@@ -7,7 +7,7 @@ export function AppWithProviders() {
   return (
     <ErrorBoundary>
       <QueryClientProvider>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<span className="loading loading-spinner loading-sm mt-12 ml-16" />}>
           <App />
         </Suspense>
       </QueryClientProvider>
