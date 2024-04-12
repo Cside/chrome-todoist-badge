@@ -13,11 +13,3 @@ export const API_URL_FOR = {
 export const API_URL_MATCH_PATTERN_FOR = {
   SYNC: `${WEB_APP_BASE_URL}/API/v*/sync*`,
 };
-
-// ==================================================
-// Web App
-// ==================================================
-export const WEB_APP_URL_FOR = {
-  HOME: `${WEB_APP_BASE_URL}/app/`,
-  PROJECT: (projectId: string) => `${WEB_APP_BASE_URL}/app/project/${projectId}`,
-};
