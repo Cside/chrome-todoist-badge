@@ -1,7 +1,7 @@
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { QUERY_KEY_FOR } from "../options/constants/queryKeys";
 import type { TasksFilters } from "../types";
-import { getProjects, getTasksCount } from "./api";
+import { getProjects, getTasks } from "./api";
 
 export const useSuspenseProjects = () =>
   useSuspenseQuery({
@@ -9,8 +9,8 @@ export const useSuspenseProjects = () =>
     queryFn: getProjects,
   }).data;
 
-export const useTasksCount = ({ projectId, filterByDueByToday }: TasksFilters) =>
+export const useTasks = ({ projectId, filterByDueByToday }: TasksFilters) =>
   useQuery({
     queryKey: [QUERY_KEY_FOR.API.GET_TASKS, projectId, filterByDueByToday],
-    queryFn: async () => getTasksCount({ projectId, filterByDueByToday }),
+    queryFn: async () => getTasks({ projectId, filterByDueByToday }),
   });
