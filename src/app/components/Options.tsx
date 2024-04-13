@@ -12,7 +12,7 @@ import {
 const PROJECT_ID_ALL = "__all";
 const DEFAULT_PROJECT_ID = PROJECT_ID_ALL;
 
-export const App = () => {
+export default function Options() {
   // TODO: projectId が projects に含まれているかチェックする
   // (project がアーカイブ/削除されていれば、含まれない)
   const [projectId, setProjectId] = useSuspenseFilteringProjectId();
@@ -96,4 +96,4 @@ export const App = () => {
       </div>
     </div>
   );
-};
+}
