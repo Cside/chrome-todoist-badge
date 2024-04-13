@@ -5,9 +5,9 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import { storage } from "wxt/storage";
+import { QUERY_KEY_FOR } from "./app/constants/queryKeys";
 import { DEFAULT_FILTER_BY_DUE_BY_TODAY } from "./constants/options";
 import { STORAGE_KEY_FOR } from "./constants/storageKeys";
-import { QUERY_KEY_FOR } from "./options/constants/queryKeys";
 
 export const useSuspenseFilteringProjectId = () =>
   useStorage<string, string | undefined>({

@@ -3,7 +3,7 @@ import { isEmpty } from "lodash-es";
 import { MAX_RETRY } from "../constants/httpClient";
 import { API_URL_FOR } from "../constants/urls";
 import { getTasksFilters } from "../fn/getTasksFilters";
-import type { TasksFilters } from "../types";
+import type { Task, TasksFilters } from "../types";
 
 // これだとリクエストがパラで飛んだ時駄目。
 // req id があれば一番楽だが...
@@ -32,12 +32,12 @@ const kyInstance = ky.create({
 // ==================================================
 // for Web Page ( TQ で呼ぶの前提)
 // ==================================================
-export const getTasksCount = async ({ projectId, filterByDueByToday }: TasksFilters) => {
-  const tasks: unknown[] = await kyInstance
+export const getTasks = async ({ projectId, filterByDueByToday }: TasksFilters) => {
+  const tasks: Task[] = await kyInstance
     .get(buildTasksApiUrl({ projectId, filterByDueByToday }))
     .json(); // タイムアウト(10秒)はデフォルトのまま
   console.info(tasks);
-  return tasks.length;
+  return tasks;
 };
 
 type Project = {

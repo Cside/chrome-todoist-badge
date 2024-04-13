@@ -1,5 +1,5 @@
 import useAsyncEffect from "use-async-effect";
-import { useSuspenseProjects, useTasksCount } from "../../api/useApi";
+import { useSuspenseProjects, useTasks } from "../../api/useApi";
 import { updateBadgeCountByParamsWithRetry } from "../../background/updateBadge/updateBadgeCount";
 import { DEFAULT_FILTER_BY_DUE_BY_TODAY } from "../../constants/options";
 import "../../globalUtils";
@@ -12,7 +12,7 @@ import {
 const PROJECT_ID_ALL = "__all";
 const DEFAULT_PROJECT_ID = PROJECT_ID_ALL;
 
-export default function App() {
+export default function Options() {
   // TODO: projectId が projects に含まれているかチェックする
   // (project がアーカイブ/削除されていれば、含まれない)
   const [projectId, setProjectId] = useSuspenseFilteringProjectId();
@@ -20,7 +20,7 @@ export default function App() {
     useSuspenseFilterByDueByToday();
   const [isInitialized, setIsInitialized] = useSuspenseIsInitialized();
   const projects = useSuspenseProjects();
-  const { data: tasksCount, isPending: isTaskCountPending } = useTasksCount({
+  const { data: tasks, isSuccess: areTasksFetched } = useTasks({
     projectId,
     filterByDueByToday,
   });
@@ -76,10 +76,10 @@ export default function App() {
         </div>
 
         <div>
-          {isTaskCountPending ? (
-            <span className="loading loading-spinner loading-sm" />
+          {areTasksFetched ? (
+            <>{tasks.length} Tasks</>
           ) : (
-            <>{tasksCount} Tasks</>
+            <span className="loading loading-spinner loading-sm" />
           )}
         </div>
         {isInitialized || (
