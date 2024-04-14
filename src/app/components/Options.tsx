@@ -1,29 +1,26 @@
 import { Suspense } from "react";
 import useAsyncEffect from "use-async-effect";
-import { useSuspenseProjects, useTasks } from "../../api/useApi";
+import * as api from "../../api/useApi";
 import { updateBadgeCountByParamsWithRetry } from "../../background/updateBadge/updateBadgeCount";
 import { DEFAULT_FILTER_BY_DUE_BY_TODAY } from "../../constants/options";
 import "../../globalUtils";
-import {
-  useSuspenseFilterByDueByToday,
-  useSuspenseFilteringProjectId,
-  useSuspenseIsInitialized,
-} from "../../useStorage";
+import * as storage from "../../useStorage";
 import { Spinner } from "./Spinner";
 
 const PROJECT_ID_ALL = "__all";
 const DEFAULT_PROJECT_ID = PROJECT_ID_ALL;
 
-const Main = () => {
-  const [isInitialized, setIsInitialized] = useSuspenseIsInitialized();
-  const projects = useSuspenseProjects();
+const Main_Suspended = () => {
+  const [isInitialized, setIsInitialized] = storage.useIsInitialized_Suspended();
+  const projects = api.useProjects_Suspended();
 
   // TODO: projectId が projects に含まれているかチェックする
   // (project がアーカイブ/削除されていれば、含まれない)
-  const [projectId, setProjectId] = useSuspenseFilteringProjectId();
+  const [projectId, setProjectId] = storage.useFilteringProjectId_Suspended();
   const [filterByDueByToday = DEFAULT_FILTER_BY_DUE_BY_TODAY, setFilterByDueByToday] =
-    useSuspenseFilterByDueByToday();
-  const { data: tasks, isSuccess: areTasksFetched } = useTasks({
+    storage.useFilterByDueByToday_Suspended();
+
+  const { data: tasks, isSuccess: areTasksFetched } = api.useTasks({
     projectId,
     filterByDueByToday,
   });
@@ -88,12 +85,12 @@ const Main = () => {
   );
 };
 
-export default function Options() {
+export default function Options_Suspended() {
   return (
     <div>
       <h1>Filtering Tasks</h1>
       <Suspense fallback={<Spinner className="ml-16" />}>
-        <Main />
+        <Main_Suspended />
       </Suspense>
     </div>
   );

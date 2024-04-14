@@ -3,7 +3,8 @@ import { isEmpty } from "lodash-es";
 import { MAX_RETRY } from "../constants/httpClient";
 import { API_URL_FOR } from "../constants/urls";
 import { getTasksFilters } from "../fn/getTasksFilters";
-import type { Task, TasksFilters } from "../types";
+import type { TasksFilters } from "../types";
+import type { Project, Task } from "./types";
 
 // これだとリクエストがパラで飛んだ時駄目。
 // req id があれば一番楽だが...
@@ -38,11 +39,6 @@ export const getTasks = async ({ projectId, filterByDueByToday }: TasksFilters) 
     .json(); // タイムアウト(10秒)はデフォルトのまま
   console.info(tasks);
   return tasks;
-};
-
-type Project = {
-  id: string;
-  name: string;
 };
 
 export const getProjects = async () => {

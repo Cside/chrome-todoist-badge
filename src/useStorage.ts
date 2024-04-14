@@ -9,8 +9,8 @@ import { QUERY_KEY_FOR } from "./app/constants/queryKeys";
 import { DEFAULT_FILTER_BY_DUE_BY_TODAY } from "./constants/options";
 import { STORAGE_KEY_FOR } from "./constants/storageKeys";
 
-export const useSuspenseFilteringProjectId = () =>
-  useStorage<string, string | undefined>({
+export const useFilteringProjectId_Suspended = () =>
+  useStorage_Suspended<string, string | undefined>({
     queryKey: QUERY_KEY_FOR.STORAGE.CONFIG.FILTER_BY.PROJECT_ID,
     storageKey: STORAGE_KEY_FOR.CONFIG.FILTER_BY.PROJECT_ID,
     mutationFn: async (projectId: string | undefined) =>
@@ -19,22 +19,25 @@ export const useSuspenseFilteringProjectId = () =>
         : storage.setItem<string>(STORAGE_KEY_FOR.CONFIG.FILTER_BY.PROJECT_ID, projectId),
   });
 
-export const useSuspenseFilterByDueByToday = () =>
-  useStorage<boolean>({
+export const useFilterByDueByToday_Suspended = () =>
+  useStorage_Suspended<boolean>({
     queryKey: QUERY_KEY_FOR.STORAGE.CONFIG.FILTER_BY.DUE_BY_TODAY,
     storageKey: STORAGE_KEY_FOR.CONFIG.FILTER_BY.DUE_BY_TODAY,
     defaultValue: DEFAULT_FILTER_BY_DUE_BY_TODAY,
   });
 
-export const useSuspenseIsInitialized = () =>
-  useStorage<boolean>({
+export const useIsInitialized_Suspended = () =>
+  useStorage_Suspended<boolean>({
     queryKey: QUERY_KEY_FOR.STORAGE.CONFIG.IS_INITIALIZED,
     storageKey: STORAGE_KEY_FOR.CONFIG.IS_INITIALIZED,
     defaultValue: false,
   });
 
 // storage への insert は一瞬なので、useMutation の isLoading とかは今は扱わない
-const useStorage = <StorageType extends MutationType = never, MutationType = StorageType>({
+const useStorage_Suspended = <
+  StorageType extends MutationType = never,
+  MutationType = StorageType,
+>({
   queryKey,
   storageKey,
   mutationFn = (async (value: StorageType) =>

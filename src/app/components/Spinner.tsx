@@ -1,4 +1,6 @@
+import { twMerge } from "tailwind-merge";
+
 export const Spinner = ({ className }: { className?: string }) => (
-  // biome-ignore lint/nursery/useSortedClasses:
-  <span className={`loading loading-spinner loading-sm ${className ?? ""}`} />
+  // FIXME undefined 変えるときも大丈夫なんかや
+  <div className={twMerge("loading loading-spinner loading-sm block", className)} />
 );
