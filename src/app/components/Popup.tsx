@@ -1,20 +1,25 @@
-import { DEFAULT_FILTER_BY_DUE_BY_TODAY } from "@/src/constants/options";
+import { setBadgeText } from "@/src/fn/setBadgeText";
 import Markdown from "markdown-to-jsx";
 import { NavLink } from "react-router-dom";
+import useAsyncEffect from "use-async-effect";
 import * as api from "../../api/useApi";
 import * as storage from "../../useStorage";
 import { Spinner } from "./Spinner";
 
 export default function Popup_Suspended() {
   const [projectId] = storage.useFilteringProjectId_Suspended();
-  const [filterByDueByToday = DEFAULT_FILTER_BY_DUE_BY_TODAY] =
-    storage.useFilterByDueByToday_Suspended();
+  const [filterByDueByToday] = storage.useFilterByDueByToday_Suspended();
 
   const { data: tasks, isSuccess: areTasksFetched } = api.useTasks({
     projectId,
     filterByDueByToday,
   });
   console.log(tasks);
+
+  useAsyncEffect(async () => {
+    if (areTasksFetched) await setBadgeText(tasks.length);
+  }, [tasks, areTasksFetched]);
+
   return (
     <div>
       {areTasksFetched ? (

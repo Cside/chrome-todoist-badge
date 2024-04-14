@@ -1,8 +1,5 @@
 import { Suspense } from "react";
-import useAsyncEffect from "use-async-effect";
 import * as api from "../../api/useApi";
-import { setBadgeText } from "../../background/updateBadge/updateBadgeCount";
-import { DEFAULT_FILTER_BY_DUE_BY_TODAY } from "../../constants/options";
 import "../../globalUtils";
 import * as storage from "../../useStorage";
 import { Spinner } from "./Spinner";
@@ -17,17 +14,12 @@ const Main_Suspended = () => {
   // TODO: projectId が projects に含まれているかチェックする
   // (project がアーカイブ/削除されていれば、含まれない)
   const [projectId, setProjectId] = storage.useFilteringProjectId_Suspended();
-  const [filterByDueByToday = DEFAULT_FILTER_BY_DUE_BY_TODAY, setFilterByDueByToday] =
-    storage.useFilterByDueByToday_Suspended();
+  const [filterByDueByToday, setFilterByDueByToday] = storage.useFilterByDueByToday_Suspended();
 
   const { data: tasks, isSuccess: areTasksFetched } = api.useTasks({
     projectId,
     filterByDueByToday,
   });
-
-  useAsyncEffect(async () => {
-    if (areTasksFetched) await setBadgeText(tasks.length);
-  }, [tasks, areTasksFetched]);
 
   return (
     <div className="flex flex-col gap-y-3">

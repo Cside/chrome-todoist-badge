@@ -19,12 +19,15 @@ export const useFilteringProjectId_Suspended = () =>
         : storage.setItem<string>(STORAGE_KEY_FOR.CONFIG.FILTER_BY.PROJECT_ID, projectId),
   });
 
-export const useFilterByDueByToday_Suspended = () =>
-  useStorage_Suspended<boolean>({
-    queryKey: QUERY_KEY_FOR.STORAGE.CONFIG.FILTER_BY.DUE_BY_TODAY,
-    storageKey: STORAGE_KEY_FOR.CONFIG.FILTER_BY.DUE_BY_TODAY,
-    defaultValue: DEFAULT_FILTER_BY_DUE_BY_TODAY,
-  });
+export const useFilterByDueByToday_Suspended = () => {
+  const [filterByDueByToday = DEFAULT_FILTER_BY_DUE_BY_TODAY, setFilterByDueByToday] =
+    useStorage_Suspended<boolean>({
+      queryKey: QUERY_KEY_FOR.STORAGE.CONFIG.FILTER_BY.DUE_BY_TODAY,
+      storageKey: STORAGE_KEY_FOR.CONFIG.FILTER_BY.DUE_BY_TODAY,
+      defaultValue: DEFAULT_FILTER_BY_DUE_BY_TODAY,
+    });
+  return [filterByDueByToday, setFilterByDueByToday] as const;
+};
 
 export const useIsInitialized_Suspended = () =>
   useStorage_Suspended<boolean>({

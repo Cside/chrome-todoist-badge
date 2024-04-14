@@ -1,7 +1,5 @@
-import * as api from "../../api/api";
-
-export const setBadgeText = (count: number) =>
-  chrome.action.setBadgeText({ text: count === 0 ? "" : String(count) });
+import * as api from "../../../api/api";
+import { setBadgeText } from "../../../fn/setBadgeText";
 
 // for bg worker
 export const updateBadgeCountWithRetry = async ({ via }: { via: string }) => {
