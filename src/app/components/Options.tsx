@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import useAsyncEffect from "use-async-effect";
 import * as api from "../../api/useApi";
-import { updateBadgeCountByParamsWithRetry } from "../../background/updateBadge/updateBadgeCount";
+import { setBadgeText } from "../../background/updateBadge/updateBadgeCount";
 import { DEFAULT_FILTER_BY_DUE_BY_TODAY } from "../../constants/options";
 import "../../globalUtils";
 import * as storage from "../../useStorage";
@@ -26,14 +26,8 @@ const Main_Suspended = () => {
   });
 
   useAsyncEffect(async () => {
-    // TODO: 中で fetch しなくても、count だけ渡せばいい説。
-    // count をいつまで使い続けるか分からんのでアレだが。。
-    await updateBadgeCountByParamsWithRetry({
-      projectId,
-      filterByDueByToday,
-      via: "options page",
-    });
-  }, [projectId, filterByDueByToday]);
+    if (areTasksFetched) await setBadgeText(tasks.length);
+  }, [tasks, areTasksFetched]);
 
   return (
     <div className="flex flex-col gap-y-3">

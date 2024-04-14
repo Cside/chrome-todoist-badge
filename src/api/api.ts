@@ -33,7 +33,10 @@ const kyInstance = ky.create({
 // ==================================================
 // for Web Page ( TQ で呼ぶの前提)
 // ==================================================
-export const getTasks = async ({ projectId, filterByDueByToday }: TasksFilters) => {
+export const getTasks = async ({
+  projectId,
+  filterByDueByToday,
+}: TasksFilters): Promise<Task[]> => {
   const tasks: Task[] = await kyInstance
     .get(buildTasksApiUrl({ projectId, filterByDueByToday }))
     .json(); // タイムアウト(10秒)はデフォルトのまま
@@ -49,16 +52,9 @@ export const getProjects = async () => {
 // ==================================================
 // for BG worker
 // ==================================================
-export const getTasksCountWithRetry = async () => {
-  return getTasksCountByParamsWithRetry(await getTasksFilters());
-};
-
-export const getTasksCountByParamsWithRetry = async ({
-  projectId,
-  filterByDueByToday,
-}: TasksFilters) => {
-  const tasks: unknown[] = await kyInstance
-    .get(buildTasksApiUrl({ projectId, filterByDueByToday }), {
+export const getTasksWithRetry = async (): Promise<Task[]> => {
+  const tasks: Task[] = await kyInstance
+    .get(buildTasksApiUrl(await getTasksFilters()), {
       // タイムアウトはデフォルト 10 秒
       retry: {
         limit: MAX_RETRY,
@@ -66,7 +62,7 @@ export const getTasksCountByParamsWithRetry = async ({
     })
     .json();
   console.info(tasks);
-  return tasks.length;
+  return tasks;
 };
 
 // ==================================================
