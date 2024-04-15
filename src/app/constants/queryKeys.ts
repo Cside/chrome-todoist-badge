@@ -12,5 +12,8 @@ export const QUERY_KEY_FOR = {
       },
       IS_INITIALIZED: "config:isInitialized",
     },
+    CACHE: {
+      TASKS: "cache:tasks",
+    },
   },
 };

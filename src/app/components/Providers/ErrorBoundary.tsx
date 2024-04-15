@@ -2,6 +2,7 @@ import { useRouteError } from "react-router-dom";
 export const ErrorBoundary = (): JSX.Element => {
   const error = useRouteError();
   return (
+    // TODO: 画像、インラインでええんかな
     <div role="alert" className="alert alert-error">
       <svg
         xmlns="http://www.w3.org/2000/svg"

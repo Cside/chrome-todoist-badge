@@ -1,4 +1,9 @@
+import { STORAGE_KEY_FOR } from "@/src/constants/storageKeys";
+import { setBadgeText } from "@/src/fn/setBadgeText";
 import { Suspense } from "react";
+import useAsyncEffect from "use-async-effect";
+import { storage as wxtStorage } from "wxt/storage";
+import type { Task } from "../../api/types";
 import * as api from "../../api/useApi";
 import "../../globalUtils";
 import * as storage from "../../useStorage";
@@ -20,6 +25,13 @@ const Main_Suspended = () => {
     projectId,
     filterByDueByToday,
   });
+
+  useAsyncEffect(async () => {
+    if (areTasksFetched) {
+      await setBadgeText(tasks.length);
+      await wxtStorage.setItem<Task[]>(STORAGE_KEY_FOR.CACHE.TASKS, tasks);
+    }
+  }, [tasks, areTasksFetched]);
 
   return (
     <div className="flex flex-col gap-y-3">

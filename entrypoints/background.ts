@@ -9,7 +9,9 @@ import "@/src/globalUtils";
 export default defineBackground(
   // async にすると警告が出る
   () => {
-    Promise.all([setBadgeColor()]);
+    (async () => {
+      await Promise.all([setBadgeColor()]);
+    })();
     updateBadgeCountRegularly();
     updateBadgeCountOnTaskUpdated();
     updateBadgeCountOnActive();

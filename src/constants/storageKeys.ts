@@ -7,4 +7,7 @@ export const STORAGE_KEY_FOR = {
     },
     IS_INITIALIZED: "local:config:isInitialized",
   },
+  CACHE: {
+    TASKS: "local:cache:tasks",
+  },
 };

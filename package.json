@@ -38,6 +38,7 @@
     "ky": "^1.2.2",
     "lodash-es": "^4.17.21",
     "markdown-to-jsx": "^7.4.7",
+    "p-retry": "^6.2.0",
     "react": "19.0.0-canary-adb717393-20240411",
     "react-dom": "19.0.0-canary-adb717393-20240411",
     "react-router-dom": "^6.22.3",
