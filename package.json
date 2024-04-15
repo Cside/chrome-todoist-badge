@@ -33,7 +33,7 @@
     "fix": "pnpm run lint-fix && pnpm run format-fix"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.28.6",
+    "@tanstack/react-query": "^5.29.2",
     "date-fns": "^3.6.0",
     "ky": "^1.2.2",
     "lodash-es": "^4.17.21",
