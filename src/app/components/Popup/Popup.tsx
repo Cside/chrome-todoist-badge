@@ -28,7 +28,7 @@ export default function Popup_Suspended() {
   }, [tasks, areTasksFetched]);
 
   return (
-    <div>
+    <>
       {areTasksFetched ? (
         <ul>
           {tasks.map((task) => (
@@ -53,7 +53,7 @@ export default function Popup_Suspended() {
         </NavLink>
       </div>
       {areTasksFetching && <Spinner className="fixed top-7 right-7" />}
-    </div>
+    </>
   );
 }
 

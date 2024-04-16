@@ -90,11 +90,11 @@ const Main_Suspended = () => {
 
 export default function Options() {
   return (
-    <div>
+    <>
       <h1>Filtering Tasks</h1>
       <Suspense fallback={<Spinner className="ml-16" />}>
         <Main_Suspended />
       </Suspense>
-    </div>
+    </>
   );
 }
