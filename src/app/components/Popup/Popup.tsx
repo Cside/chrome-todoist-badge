@@ -20,6 +20,7 @@ export default function Popup_Suspended() {
   const webAppUrl = useWebAppUrl();
 
   useAsyncEffect(async () => {
+    // あえて共通化してない
     if (areTasksFetched) {
       await setBadgeText(tasks.length);
       await wxtStorage.setItem<Task[]>(STORAGE_KEY_FOR.CACHE.TASKS, tasks);

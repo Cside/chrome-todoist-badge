@@ -13,13 +13,13 @@ const PROJECT_ID_ALL = "__all";
 const DEFAULT_PROJECT_ID = PROJECT_ID_ALL;
 
 const Main_Suspended = () => {
-  const [isInitialized, setIsInitialized] = storage.useIsInitialized_Suspended();
+  const [isInitialized, mutateIsInitialized] = storage.useIsInitialized_Suspended();
   const projects = api.useProjects_Suspended();
 
   // TODO: projectId が projects に含まれているかチェックする
   // (project がアーカイブ/削除されていれば、含まれない)
-  const [projectId, setProjectId] = storage.useFilteringProjectId_Suspended();
-  const [filterByDueByToday, setFilterByDueByToday] = storage.useFilterByDueByToday_Suspended();
+  const [projectId, mutateProjectId] = storage.useFilteringProjectId_Suspended();
+  const [filterByDueByToday, mutateFilterByDueByToday] = storage.useFilterByDueByToday_Suspended();
 
   const { data: tasks, isSuccess: areTasksFetched } = api.useTasks({
     projectId,
@@ -27,6 +27,7 @@ const Main_Suspended = () => {
   });
 
   useAsyncEffect(async () => {
+    // あえて共通化してない
     if (areTasksFetched) {
       await setBadgeText(tasks.length);
       await wxtStorage.setItem<Task[]>(STORAGE_KEY_FOR.CACHE.TASKS, tasks);
@@ -45,7 +46,7 @@ const Main_Suspended = () => {
             onChange={(event) => {
               const newValue =
                 event.target.value === PROJECT_ID_ALL ? undefined : event.target.value;
-              setProjectId(newValue);
+              mutateProjectId(newValue);
             }}
             className="select select-bordered"
           >
@@ -61,7 +62,7 @@ const Main_Suspended = () => {
           <input
             type="checkbox"
             checked={filterByDueByToday}
-            onChange={(event) => setFilterByDueByToday(event.target.checked)}
+            onChange={(event) => mutateFilterByDueByToday(event.target.checked)}
             id="filter-by-due-by-today"
             className="toggle toggle-primary"
           />
@@ -74,7 +75,11 @@ const Main_Suspended = () => {
       <div>{areTasksFetched ? <>{tasks.length} Tasks</> : <Spinner className="ml-16" />}</div>
       {isInitialized || (
         <div>
-          <button type="submit" className="btn btn-primary" onClick={() => setIsInitialized(true)}>
+          <button
+            type="submit"
+            className="btn btn-primary"
+            onClick={async () => mutateIsInitialized(true)}
+          >
             Save
           </button>
         </div>

@@ -21,9 +21,6 @@ export const updateBadgeCountRegularly = () => {
   });
 
   chrome.runtime.onInstalled.addListener(async ({ reason }) => {
-    if (import.meta.env.DEV)
-      await api.updateBadgeCountWithRetry({ via: "reloading the extension" });
-
     const alarm = await chrome.alarms.get(ALARM_NAME);
     if (alarm) {
       const nextTime = formatDistance(new Date(alarm.scheduledTime), new Date(), {
