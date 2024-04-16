@@ -40,15 +40,17 @@ export default function Popup_Suspended() {
         <Spinner className="m-5" />
       )}
 
-      <div>
-        <a href={webAppUrl} className="btn btn-primary" target="_blank" rel="noreferrer">
-          <img src={todoistIcon} width="35" height="35" className="m-0" />
-          Open Todoist on Web
-        </a>
+      <div className="flex flex-col items-start gap-y-2">
+        <div>
+          <a href={webAppUrl} className="btn btn-primary" target="_blank" rel="noreferrer">
+            <img src={todoistIcon} width="35" height="35" className="m-0" />
+            Open Todoist on Web
+          </a>
+        </div>
+        <NavLink to="/options" className="btn btn-primary">
+          Change task filters
+        </NavLink>
       </div>
-      <NavLink to="/options" className="btn btn-primary">
-        Change task filters
-      </NavLink>
       {areTasksFetching && <Spinner className="fixed top-7 right-7" />}
     </div>
   );

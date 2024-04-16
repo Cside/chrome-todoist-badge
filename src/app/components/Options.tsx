@@ -83,7 +83,7 @@ const Main_Suspended = () => {
   );
 };
 
-export default function Options_Suspended() {
+export default function Options() {
   return (
     <div>
       <h1>Filtering Tasks</h1>
