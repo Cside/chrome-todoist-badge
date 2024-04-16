@@ -1,5 +1,5 @@
 import { formatDistance } from "date-fns";
-import { updateBadgeCountWithRetry } from "./updateBadgeCount";
+import * as api from "./fn/updateBadgeCount";
 
 const ALARM_NAME = "update-count";
 const INTERVAL_MINUTES = 15;
@@ -8,7 +8,7 @@ export const updateBadgeCountRegularly = () => {
   chrome.alarms.onAlarm.addListener(async (alarm) => {
     switch (alarm.name) {
       case ALARM_NAME: {
-        await updateBadgeCountWithRetry({ via: "alarm" });
+        await api.updateBadgeCountWithRetry({ via: "alarm" });
         console.info(
           `Executed the alarm at ${new Date().toLocaleTimeString("ja-JP")}.\n` +
             `Next execution is at ${new Date(alarm.scheduledTime).toLocaleTimeString("ja-JP")}.`,
@@ -21,7 +21,8 @@ export const updateBadgeCountRegularly = () => {
   });
 
   chrome.runtime.onInstalled.addListener(async ({ reason }) => {
-    if (import.meta.env.DEV) await updateBadgeCountWithRetry({ via: "reloading the extension" });
+    if (import.meta.env.DEV)
+      await api.updateBadgeCountWithRetry({ via: "reloading the extension" });
 
     const alarm = await chrome.alarms.get(ALARM_NAME);
     if (alarm) {

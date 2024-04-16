@@ -9,7 +9,11 @@ import "@/src/globalUtils";
 export default defineBackground(
   // async にすると警告が出る
   () => {
-    Promise.all([setBadgeColor()]);
+    // FIXME isInitialized 問題をなんとかする
+    (async () => {
+      await Promise.all([setBadgeColor()]);
+    })();
+    // FIXME これ、isInitialized が true になってからじゃないとまずくね？
     updateBadgeCountRegularly();
     updateBadgeCountOnTaskUpdated();
     updateBadgeCountOnActive();

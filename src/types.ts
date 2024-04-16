@@ -1,8 +1,4 @@
-export type TasksFilters = {
+export type TaskFilters = {
   projectId?: string;
   filterByDueByToday: boolean;
-};
-
-export type Task = {
-  content: string;
 };
