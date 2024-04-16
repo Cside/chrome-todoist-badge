@@ -6,10 +6,10 @@ import Markdown from "markdown-to-jsx";
 import { NavLink } from "react-router-dom";
 import useAsyncEffect from "use-async-effect";
 import { storage as wxtStorage } from "wxt/storage";
-import type { Task } from "../../api/types";
-import * as api from "../../api/useApi";
-import * as storage from "../../useStorage";
-import { Spinner } from "./Spinner";
+import type { Task } from "../../../api/types";
+import * as api from "../../../api/useApi";
+import * as storage from "../../../useStorage";
+import { Spinner } from "../Spinner";
 
 export default function Popup_Suspended() {
   const {

@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { Outlet, RouterProvider, createHashRouter } from "react-router-dom";
+import { Outlet, RouterProvider, createHashRouter, redirect } from "react-router-dom";
 import { ErrorBoundary } from "./Providers/ErrorBoundary";
 import { QueryClientProvider } from "./Providers/QueryClientProvider";
 import { Spinner } from "./Spinner";
@@ -7,7 +7,8 @@ import { Spinner } from "./Spinner";
 // sync import にしても初期描画速度遅くならないので。
 // 逆に、dynamic import にすると、Spinner がしばらく表示されて体験が悪くなる。
 import Options from "./Options";
-import Popup_Suspended from "./Popup";
+import Popup_Suspended from "./Popup/Popup";
+import { PopupLoader } from "./Popup/PopupLoader";
 
 export const Router = () => (
   <RouterProvider
@@ -15,6 +16,10 @@ export const Router = () => (
       {
         path: "/",
         element: (
+          // これはどうなんだろ...？
+          // TQ 使わないなら無駄なわけだし…
+          // かといって、Popup.tsx, Options.tsx それぞれで Provider で囲むのは
+          // DRY じゃないし…( TQ 以外にも Provider が増えたら地獄)
           <QueryClientProvider>
             <Suspense fallback={<Spinner className="mt-12 ml-16" />}>
               <Outlet />
@@ -24,16 +29,17 @@ export const Router = () => (
         children: [
           {
             index: true,
-            element: (() => {
+            loader: () => {
               switch (location.pathname) {
                 case "/options.html":
-                  return <Options />;
+                  // コンポーネントを直接 return すると、loader が実行されないため
+                  return redirect("/options");
                 case "/popup.html":
-                  return <Popup_Suspended />;
+                  return redirect("/popup");
                 default:
                   throw new Error(`Unknown pathname: ${location.pathname}`);
               }
-            })(),
+            },
           },
           {
             path: "/options",
@@ -41,6 +47,7 @@ export const Router = () => (
           },
           {
             path: "/popup",
+            loader: PopupLoader,
             element: <Popup_Suspended />,
           },
           {
