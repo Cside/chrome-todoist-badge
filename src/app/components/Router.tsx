@@ -1,12 +1,13 @@
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 import { Outlet, RouterProvider, createHashRouter } from "react-router-dom";
 import { ErrorBoundary } from "./Providers/ErrorBoundary";
 import { QueryClientProvider } from "./Providers/QueryClientProvider";
 import { Spinner } from "./Spinner";
 
-// const Popup_Suspended = React.lazy(() => import("./Popup"));
+// sync import にしても初期描画速度遅くならないので。
+// 逆に、dynamic import にすると、Spinner がしばらく表示されて体験が悪くなる。
+import Options from "./Options";
 import Popup_Suspended from "./Popup";
-const Options = React.lazy(() => import("./Options"));
 
 export const Router = () => (
   <RouterProvider
