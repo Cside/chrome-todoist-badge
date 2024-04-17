@@ -1,8 +1,6 @@
 import { HASH_TO, PATH_TO } from "@/src/constants/paths";
 import { Suspense } from "react";
 import { Outlet, RouterProvider, createHashRouter, redirect } from "react-router-dom";
-// sync import にしても初期描画速度遅くならないので。
-// 逆に、dynamic import にすると、Spinner がしばらく表示されて体験が悪くなる。
 import Options from "./Options";
 import PinExtensionToToolbar from "./PinExtensionToToolbar";
 import Popup_Suspended from "./Popup/Popup";
@@ -11,6 +9,9 @@ import { ErrorBoundary } from "./Providers/ErrorBoundary";
 import { QueryClientProvider } from "./Providers/QueryClientProvider";
 import { Spinner } from "./Spinner";
 import Welcome from "./Welcome";
+
+// sync import にしても初期描画速度遅くならないので。
+// 逆に、dynamic import にすると、Spinner がしばらく表示されて体験が悪くなる。
 
 export const Router = () => (
   <RouterProvider

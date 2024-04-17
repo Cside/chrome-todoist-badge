@@ -1,8 +1,8 @@
 import { type UseQueryResult, useQuery, useSuspenseQuery } from "@tanstack/react-query";
-import { QUERY_KEY_FOR } from "../app/constants/queryKeys";
+import * as storage from "../storage/useStorage";
 import type { TaskFilters } from "../types";
-import * as storage from "../useStorage";
 import { getProjects, getTasksByParams } from "./api";
+import { QUERY_KEY_FOR } from "./queryKeys";
 import type { Task } from "./types";
 
 export const useProjects_Suspended = () =>

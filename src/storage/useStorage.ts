@@ -5,10 +5,10 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import { storage } from "wxt/storage";
-import type { Task } from "./api/types";
-import { QUERY_KEY_FOR } from "./app/constants/queryKeys";
-import { DEFAULT_FILTER_BY_DUE_BY_TODAY } from "./constants/options";
-import { STORAGE_KEY_FOR } from "./constants/storageKeys";
+import { QUERY_KEY_FOR } from "../api/queryKeys";
+import type { Task } from "../api/types";
+import { DEFAULT_FILTER_BY_DUE_BY_TODAY } from "../constants/options";
+import { STORAGE_KEY_FOR } from "./queryKeys";
 
 export const useFilteringProjectId_Suspended = () =>
   useStorage_Suspended<string, string | undefined>({
@@ -30,7 +30,7 @@ export const useFilterByDueByToday_Suspended = () => {
   return [filterByDueByToday, mutateFilterByDueByToday] as const;
 };
 
-export const useIsInitialized_Suspended = () =>
+export const useIsConfigInitialized_Suspended = () =>
   useStorage_Suspended<boolean>({
     queryKey: QUERY_KEY_FOR.STORAGE.CONFIG.IS_INITIALIZED,
     storageKey: STORAGE_KEY_FOR.CONFIG.IS_INITIALIZED,

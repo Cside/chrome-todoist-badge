@@ -1,19 +1,19 @@
-import { STORAGE_KEY_FOR } from "@/src/constants/storageKeys";
 import { setBadgeText } from "@/src/fn/setBadgeText";
+import { STORAGE_KEY_FOR } from "@/src/storage/queryKeys";
 import { Suspense } from "react";
 import useAsyncEffect from "use-async-effect";
 import { storage as wxtStorage } from "wxt/storage";
 import type { Task } from "../../api/types";
 import * as api from "../../api/useApi";
 import "../../globalUtils";
-import * as storage from "../../useStorage";
+import * as storage from "../../storage/useStorage";
 import { Spinner } from "./Spinner";
 
 const PROJECT_ID_ALL = "__all";
 const DEFAULT_PROJECT_ID = PROJECT_ID_ALL;
 
 const Main_Suspended = () => {
-  const [isInitialized, mutateIsInitialized] = storage.useIsInitialized_Suspended();
+  const [isInitialized, mutateIsInitialized] = storage.useIsConfigInitialized_Suspended();
   const projects = api.useProjects_Suspended();
 
   // TODO: projectId が projects に含まれているかチェックする

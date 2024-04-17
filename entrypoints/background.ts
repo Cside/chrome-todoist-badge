@@ -1,9 +1,9 @@
 import { addMessageListeners } from "@/src/background/addMessageListeners";
 import { openWelcomePageOnInstalled } from "@/src/background/openWelcomePage";
 import { setBadgeColor } from "@/src/background/setBadgeColor";
-import { STORAGE_KEY_FOR } from "@/src/constants/storageKeys";
 import { activateBadgeCountUpdates } from "@/src/fn/activateBadgeCountUpdates";
 import "@/src/globalUtils";
+import { STORAGE_KEY_FOR } from "@/src/storage/queryKeys";
 
 export default defineBackground(
   // async にすると警告が出る
