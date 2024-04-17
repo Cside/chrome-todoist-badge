@@ -1,4 +1,12 @@
+import { HASH_TO } from "@/src/constants/paths";
+import { useToolbarPinEvent } from "@/src/hooks/useToolbarPinEvent";
+import { NavLink, useNavigate } from "react-router-dom";
+
 export default function PinExtensionToToolbar() {
+  const navigate = useNavigate();
+
+  useToolbarPinEvent(() => navigate(HASH_TO.WELCOME));
+
   return (
     <>
       <h1>Pin extension to menu bar</h1>
@@ -10,6 +18,9 @@ export default function PinExtensionToToolbar() {
           icon)
         </li>
       </ol>
+      <NavLink to={HASH_TO.WELCOME} className="btn btn-secondary">
+        Back
+      </NavLink>
     </>
   );
 }
