@@ -2,6 +2,7 @@ import { HASH_TO } from "@/src/constants/paths";
 import * as storage from "@/src/storage/useStorage";
 import { Suspense } from "react";
 import { NavLink } from "react-router-dom";
+import { name as TITLE } from "../../../package.json";
 import { Spinner } from "./Spinner";
 
 const Main_Suspended = () => {
@@ -33,7 +34,7 @@ const Main_Suspended = () => {
 export default function Welcome() {
   return (
     <>
-      <h1>Let's set up Todoist Badge!</h1>
+      <h1>Let's set up {TITLE}!</h1>
       <Suspense fallback={<Spinner className="ml-16" />}>
         <Main_Suspended />
       </Suspense>

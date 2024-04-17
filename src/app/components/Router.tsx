@@ -1,6 +1,7 @@
 import { HASH_TO, PATH_TO } from "@/src/constants/paths";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import { Outlet, RouterProvider, createHashRouter, redirect } from "react-router-dom";
+import { name as TITLE } from "../../../package.json";
 import Options from "./Options";
 import PinExtensionToToolbar from "./PinExtensionToToolbar";
 import Popup_Suspended from "./Popup/Popup";
@@ -13,6 +14,20 @@ import Welcome from "./Welcome";
 // sync import にしても初期描画速度遅くならないので。
 // 逆に、dynamic import にすると、Spinner がしばらく表示されて体験が悪くなる。
 
+const Container = () => {
+  useEffect(() => {
+    document.title = TITLE;
+  }, []);
+
+  return (
+    <QueryClientProvider>
+      <Suspense fallback={<Spinner className="mt-12 ml-16" />}>
+        <Outlet />
+      </Suspense>
+    </QueryClientProvider>
+  );
+};
+
 export const Router = () => (
   <RouterProvider
     router={createHashRouter([
@@ -23,11 +38,7 @@ export const Router = () => (
           // TQ 使わないなら無駄なわけだし…
           // かといって、Popup.tsx, Options.tsx それぞれで Provider で囲むのは
           // DRY じゃないし…( TQ 以外にも Provider が増えたら地獄)
-          <QueryClientProvider>
-            <Suspense fallback={<Spinner className="mt-12 ml-16" />}>
-              <Outlet />
-            </Suspense>
-          </QueryClientProvider>
+          <Container />
         ),
         children: [
           {
