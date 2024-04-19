@@ -2,7 +2,7 @@ import { formatDistance } from "date-fns";
 import * as api from "./fn/updateBadgeCount";
 
 const ALARM_NAME = "update-count";
-const INTERVAL_MINUTES = 15;
+export const INTERVAL_MINUTES = 15; // 別の場所に移してもいいかも…
 
 export const updateBadgeCountRegularly = () => {
   chrome.alarms.onAlarm.addListener(async (alarm) => {

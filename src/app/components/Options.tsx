@@ -1,3 +1,4 @@
+import { INTERVAL_MINUTES } from "@/src/background/updateBadgeCount/updateBadgeCountRegularly";
 import { setBadgeText } from "@/src/fn/setBadgeText";
 import { STORAGE_KEY_FOR } from "@/src/storage/queryKeys";
 import { Suspense } from "react";
@@ -84,6 +85,11 @@ const Main_Suspended = () => {
           </button>
         </div>
       )}
+
+      <hr className="my-1" />
+      <div className="text-neutral-400">
+        * Badge number are updated every {INTERVAL_MINUTES} minutes.
+      </div>
     </div>
   );
 };
