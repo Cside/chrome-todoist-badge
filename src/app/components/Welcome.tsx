@@ -1,12 +1,22 @@
 import { HASH_TO } from "@/src/constants/paths";
+import { useIsOnToolbar_Suspended } from "@/src/hooks/useIsOnToolbar";
 import * as storage from "@/src/storage/useStorage";
 import { Suspense } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
 import { name as TITLE } from "../../../package.json";
 import { Spinner } from "./Spinner";
 
+const Checked = React.memo(({ children }: { children: string }) => (
+  <div>
+    ✅ <span className="text-neutral-400 line-through">{children}</span>
+  </div>
+));
+
 const Main_Suspended = () => {
   const [isConfigInitialized] = storage.useIsConfigInitialized_Suspended();
+  const isOnToolbar = useIsOnToolbar_Suspended();
+
   const MESSAGE_FOR = {
     PIN: "Pin extension to toolbar",
     CONFIGURE: "Configure extension",
@@ -14,13 +24,15 @@ const Main_Suspended = () => {
   return (
     <>
       <div className="flex flex-col items-start gap-y-3">
-        <NavLink to={HASH_TO.PIN_EXTENSION_TO_TOOLBAR} className="btn btn-primary">
-          {MESSAGE_FOR.PIN}
-        </NavLink>
+        {isOnToolbar ? (
+          <Checked>{MESSAGE_FOR.PIN}</Checked>
+        ) : (
+          <NavLink to={HASH_TO.OPTIONS} className="btn btn-primary">
+            {MESSAGE_FOR.PIN}
+          </NavLink>
+        )}
         {isConfigInitialized ? (
-          <div>
-            ✅ <span className="text-neutral-400 line-through">{MESSAGE_FOR.CONFIGURE}</span>
-          </div>
+          <Checked>{MESSAGE_FOR.CONFIGURE}</Checked>
         ) : (
           <NavLink to={HASH_TO.OPTIONS} className="btn btn-primary">
             {MESSAGE_FOR.CONFIGURE}
