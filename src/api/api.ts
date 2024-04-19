@@ -1,8 +1,8 @@
 import ky from "ky";
 import { isEmpty } from "lodash-es";
 import { DEFAULT_FILTER_BY_DUE_BY_TODAY } from "../constants/options";
-import { STORAGE_KEY_FOR } from "../constants/storageKeys";
 import { API_URL_FOR } from "../constants/urls";
+import { STORAGE_KEY_FOR } from "../storage/queryKeys";
 import type { TaskFilters } from "../types";
 import type { Project, Task } from "./types";
 

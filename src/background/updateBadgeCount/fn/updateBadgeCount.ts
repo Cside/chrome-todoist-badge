@@ -1,5 +1,5 @@
 import { MAX_RETRY } from "@/src/constants/maxRetry";
-import { STORAGE_KEY_FOR } from "@/src/constants/storageKeys";
+import { STORAGE_KEY_FOR } from "@/src/storage/queryKeys";
 import pRetry from "p-retry";
 import * as api from "../../../api/api";
 import type { Task } from "../../../api/types";

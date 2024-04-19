@@ -1,14 +1,14 @@
 import todoistIcon from "@/assets/images/todoist.webp";
-import { STORAGE_KEY_FOR } from "@/src/constants/storageKeys";
 import { WEB_APP_URL_FOR } from "@/src/constants/urls";
 import { setBadgeText } from "@/src/fn/setBadgeText";
+import { STORAGE_KEY_FOR } from "@/src/storage/queryKeys";
 import Markdown from "markdown-to-jsx";
 import { NavLink } from "react-router-dom";
 import useAsyncEffect from "use-async-effect";
 import { storage as wxtStorage } from "wxt/storage";
 import type { Task } from "../../../api/types";
 import * as api from "../../../api/useApi";
-import * as storage from "../../../useStorage";
+import * as storage from "../../../storage/useStorage";
 import { Spinner } from "../Spinner";
 
 export default function Popup_Suspended() {
@@ -20,6 +20,7 @@ export default function Popup_Suspended() {
   const webAppUrl = useWebAppUrl();
 
   useAsyncEffect(async () => {
+    // あえて共通化してない
     if (areTasksFetched) {
       await setBadgeText(tasks.length);
       await wxtStorage.setItem<Task[]>(STORAGE_KEY_FOR.CACHE.TASKS, tasks);
@@ -27,7 +28,7 @@ export default function Popup_Suspended() {
   }, [tasks, areTasksFetched]);
 
   return (
-    <div>
+    <>
       {areTasksFetched ? (
         <ul>
           {tasks.map((task) => (
@@ -52,7 +53,7 @@ export default function Popup_Suspended() {
         </NavLink>
       </div>
       {areTasksFetching && <Spinner className="fixed top-7 right-7" />}
-    </div>
+    </>
   );
 }
 

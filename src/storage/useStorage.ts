@@ -5,10 +5,10 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import { storage } from "wxt/storage";
-import type { Task } from "./api/types";
-import { QUERY_KEY_FOR } from "./app/constants/queryKeys";
-import { DEFAULT_FILTER_BY_DUE_BY_TODAY } from "./constants/options";
-import { STORAGE_KEY_FOR } from "./constants/storageKeys";
+import { QUERY_KEY_FOR } from "../api/queryKeys";
+import type { Task } from "../api/types";
+import { DEFAULT_FILTER_BY_DUE_BY_TODAY } from "../constants/options";
+import { STORAGE_KEY_FOR } from "./queryKeys";
 
 export const useFilteringProjectId_Suspended = () =>
   useStorage_Suspended<string, string | undefined>({
@@ -21,20 +21,22 @@ export const useFilteringProjectId_Suspended = () =>
   });
 
 export const useFilterByDueByToday_Suspended = () => {
-  const [filterByDueByToday = DEFAULT_FILTER_BY_DUE_BY_TODAY, setFilterByDueByToday] =
+  const [filterByDueByToday = DEFAULT_FILTER_BY_DUE_BY_TODAY, mutateFilterByDueByToday] =
     useStorage_Suspended<boolean>({
       queryKey: QUERY_KEY_FOR.STORAGE.CONFIG.FILTER_BY.DUE_BY_TODAY,
       storageKey: STORAGE_KEY_FOR.CONFIG.FILTER_BY.DUE_BY_TODAY,
       defaultValue: DEFAULT_FILTER_BY_DUE_BY_TODAY,
     });
-  return [filterByDueByToday, setFilterByDueByToday] as const;
+  return [filterByDueByToday, mutateFilterByDueByToday] as const;
 };
 
-export const useIsInitialized_Suspended = () =>
+export const useIsConfigInitialized_Suspended = () =>
   useStorage_Suspended<boolean>({
     queryKey: QUERY_KEY_FOR.STORAGE.CONFIG.IS_INITIALIZED,
     storageKey: STORAGE_KEY_FOR.CONFIG.IS_INITIALIZED,
     defaultValue: false,
+    onSuccess: async () =>
+      await chrome.runtime.sendMessage({ action: "activate-badge-count-updates" }),
   });
 
 export const useCachedTasks_Suspended = () =>
@@ -57,11 +59,13 @@ const useStorage_Suspended = <
   mutationFn = (async (value: StorageType) =>
     storage.setItem<StorageType>(storageKey, value)) as MutationFunction<void, MutationType>,
   defaultValue,
+  onSuccess,
 }: {
   queryKey: string;
   storageKey: string;
   mutationFn?: MutationFunction<void, MutationType>;
   defaultValue?: StorageType;
+  onSuccess?: () => Promise<void>;
 }) => {
   const queryClient = useQueryClient();
 
@@ -74,7 +78,10 @@ const useStorage_Suspended = <
       undefined,
     useMutation({
       mutationFn,
-      onSuccess: () => queryClient.invalidateQueries({ queryKey: [queryKey] }),
+      onSuccess: async () => {
+        await queryClient.invalidateQueries({ queryKey: [queryKey] });
+        if (onSuccess) await onSuccess();
+      },
     }).mutate,
   ] as const;
 };

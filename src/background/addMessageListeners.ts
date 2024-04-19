@@ -1,8 +1,10 @@
+import { activateBadgeCountUpdates } from "../fn/activateBadgeCountUpdates";
+
 export const addMessageListeners = () => {
-  chrome.runtime.onMessage.addListener(async (req) => {
+  chrome.runtime.onMessage.addListener((req) => {
     switch (req.action) {
-      case "open-options-page":
-        await chrome.runtime.openOptionsPage();
+      case "activate-badge-count-updates":
+        activateBadgeCountUpdates();
         break;
       default:
         throw new Error(`Unknown action: ${JSON.stringify(req)}`);
