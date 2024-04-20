@@ -5,7 +5,7 @@ const decoder = new TextDecoder("utf-8");
 export const updateBadgeCountOnTaskUpdated = () => {
   chrome.webRequest.onBeforeRequest.addListener(
     (details) => {
-      const requestBody = details.requestBody?.raw?.[0].bytes;
+      const requestBody = details.requestBody?.raw?.[0]?.bytes;
       if (requestBody) {
         try {
           const parsed = JSON.parse(decoder.decode(requestBody)) as {
