@@ -1,15 +1,15 @@
 import todoistIcon from "@/assets/images/todoist.webp";
-import { WEB_APP_URL_FOR } from "@/src/constants/urls";
 import { setBadgeText } from "@/src/fn/setBadgeText";
 import { STORAGE_KEY_FOR } from "@/src/storage/queryKeys";
 import Markdown from "markdown-to-jsx";
+import React from "react";
 import { NavLink } from "react-router-dom";
 import useAsyncEffect from "use-async-effect";
 import { storage as wxtStorage } from "wxt/storage";
 import type { Task } from "../../../api/types";
 import * as api from "../../../api/useApi";
-import * as storage from "../../../storage/useStorage";
 import { Spinner } from "../Spinner";
+import { groupTasksBySectionId, useWebAppUrl } from "./fn/utils";
 
 export default function Popup_Suspended() {
   const {
@@ -30,13 +30,18 @@ export default function Popup_Suspended() {
   return (
     <>
       {areTasksFetched ? (
-        <ul>
-          {tasks.map((task) => (
-            <li key={task.id}>
-              <Markdown>{task.content}</Markdown>
-            </li>
-          ))}
-        </ul>
+        groupTasksBySectionId(tasks).map((group) => (
+          <React.Fragment key={group.sectionId}>
+            {group.sectionId !== null && <h2>{group.sectionId}</h2>}
+            <ul>
+              {group.tasks.map((task) => (
+                <li key={task.id}>
+                  <Markdown>{task.content}</Markdown>
+                </li>
+              ))}
+            </ul>
+          </React.Fragment>
+        ))
       ) : (
         <Spinner className="m-5" />
       )}
@@ -56,8 +61,3 @@ export default function Popup_Suspended() {
     </>
   );
 }
-
-const useWebAppUrl = () => {
-  const [projectId] = storage.useFilteringProjectId_Suspended();
-  return projectId === undefined ? WEB_APP_URL_FOR.HOME : WEB_APP_URL_FOR.PROJECT_FOR(projectId);
-};

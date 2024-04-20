@@ -1,5 +1,5 @@
 import ky from "ky";
-import { isEmpty } from "lodash-es";
+import { camelCase, isEmpty, mapKeys } from "lodash-es";
 import { DEFAULT_FILTER_BY_DUE_BY_TODAY } from "../constants/options";
 import { API_URL_FOR } from "../constants/urls";
 import { STORAGE_KEY_FOR } from "../storage/queryKeys";
@@ -37,9 +37,11 @@ export const getTasksByParams = async ({
   projectId,
   filterByDueByToday,
 }: TaskFilters): Promise<Task[]> => {
-  const tasks: Task[] = await kyInstance
-    .get(buildTasksApiUrl({ projectId, filterByDueByToday })) // タイムアウト(10秒)はデフォルトのまま
+  // biome-ignore lint/suspicious/noExplicitAny:
+  const res: any[] = await kyInstance
+    .get(buildTasksApiUrl({ projectId, filterByDueByToday })) // タイムアウトはデフォルト 10 秒
     .json();
+  const tasks = res.map((task) => mapKeys(task, (_value, key) => camelCase(key)) as Task);
   console.info(tasks);
   return tasks;
 };
@@ -52,13 +54,7 @@ export const getProjects = async () => {
 // ==================================================
 // for BG worker
 // ==================================================
-export const getTasks = async (): Promise<Task[]> => {
-  const tasks: Task[] = await kyInstance
-    .get(buildTasksApiUrl(await getTasksFilters())) // タイムアウトはデフォルト 10 秒
-    .json();
-  console.info(tasks);
-  return tasks;
-};
+export const getTasks = async (): Promise<Task[]> => getTasksByParams(await getTasksFilters());
 
 // ==================================================
 // Utils
