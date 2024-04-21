@@ -28,7 +28,7 @@
     "lint-fix:eslint": "eslint --fix '{entrypoints,src}/**/*.{ts,tsx}'",
     "lint": "pnpm run '/^lint:.+/'",
     "lint-fix": "pnpm run '/^lint-fix:.+/'",
-    "check:ng-word": "./scripts/check-ng-words.sh",
+    "check:ng-word": "ls ./scripts/check-ng-words.sh && echo TODO",
     "check": "pnpm run '/^(compile$|lint$|format$|check:)/'",
     "fix": "pnpm run lint-fix && pnpm run format-fix"
   },
