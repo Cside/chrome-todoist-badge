@@ -72,9 +72,10 @@ export const _buildTasksApiQueryString = ({ projectId, filterByDueByToday }: Tas
   return isEmpty(params) ? "" : `?${new URLSearchParams(params)}`;
 };
 
+// 初期化が終わった後に呼ばれる前提の関数なので、projectId == null の場合はエラーにしている
 const getTasksFilters = async (): Promise<TaskFilters> => {
   const projectId = await storage.getItem<string>(STORAGE_KEY_FOR.CONFIG.FILTER_BY.PROJECT_ID);
-  if (projectId === null) throw new Error("projectId is undefined");
+  if (projectId === null) throw new Error("projectId is null");
 
   const filterByDueByToday =
     (await storage.getItem<boolean>(STORAGE_KEY_FOR.CONFIG.FILTER_BY.DUE_BY_TODAY)) ??

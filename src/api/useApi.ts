@@ -14,21 +14,17 @@ export const useProjects_Suspended = () =>
 export const useTasks = ({
   projectId,
   filterByDueByToday,
-}: { projectId?: string; filterByDueByToday: boolean }) => {
+}: { projectId: string; filterByDueByToday: boolean }) => {
   return useQuery({
     queryKey: [QUERY_KEY_FOR.API.GET_TASKS, projectId, filterByDueByToday],
-    queryFn: async () => {
-      if (projectId === undefined) throw new Error("projectId is undefined");
-      return await getTasksByParams({ projectId, filterByDueByToday });
-    },
-    enabled: projectId !== undefined,
+    queryFn: async () => await getTasksByParams({ projectId, filterByDueByToday }),
   });
 };
 
 // for Popup
 export const useTasks_Suspended = () => {
   const [projectId] = storage.useFilteringProjectId_Suspended();
-  if (!projectId) throw new Error("projectId is undefined");
+  if (projectId === undefined) throw new Error("projectId is undefined");
 
   const [filterByDueByToday] = storage.useFilterByDueByToday_Suspended();
   const [cache] = storage.useCachedTasks_Suspended();

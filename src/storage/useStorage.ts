@@ -1,9 +1,4 @@
-import {
-  type MutationFunction,
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { storage } from "wxt/storage";
 import { QUERY_KEY_FOR } from "../api/queryKeys";
 import type { Task } from "../api/types";
@@ -11,13 +6,9 @@ import { DEFAULT_FILTER_BY_DUE_BY_TODAY } from "../constants/options";
 import { STORAGE_KEY_FOR } from "./queryKeys";
 
 export const useFilteringProjectId_Suspended = () =>
-  useStorage_Suspended<string, string | undefined>({
+  useStorage_Suspended<string>({
     queryKey: QUERY_KEY_FOR.STORAGE.CONFIG.FILTER_BY.PROJECT_ID,
     storageKey: STORAGE_KEY_FOR.CONFIG.FILTER_BY.PROJECT_ID,
-    mutationFn: async (projectId: string | undefined) =>
-      projectId === undefined
-        ? storage.removeItem(STORAGE_KEY_FOR.CONFIG.FILTER_BY.PROJECT_ID)
-        : storage.setItem<string>(STORAGE_KEY_FOR.CONFIG.FILTER_BY.PROJECT_ID, projectId),
   });
 
 export const useFilterByDueByToday_Suspended = () => {
@@ -50,20 +41,14 @@ export const useCachedTasks_Suspended = () =>
 // ==================================================
 
 // storage への insert は一瞬なので、useMutation の isLoading とかは今は扱わない
-const useStorage_Suspended = <
-  StorageType extends MutationType = never,
-  MutationType = StorageType,
->({
+const useStorage_Suspended = <StorageType = never>({
   queryKey,
   storageKey,
-  mutationFn = (async (value: StorageType) =>
-    storage.setItem<StorageType>(storageKey, value)) as MutationFunction<void, MutationType>,
   defaultValue,
   onSuccess,
 }: {
   queryKey: string;
   storageKey: string;
-  mutationFn?: MutationFunction<void, MutationType>;
   defaultValue?: StorageType;
   onSuccess?: () => Promise<void>;
 }) => {
@@ -77,7 +62,7 @@ const useStorage_Suspended = <
       defaultValue ??
       undefined,
     useMutation({
-      mutationFn,
+      mutationFn: (value: StorageType) => storage.setItem<StorageType>(storageKey, value),
       onSuccess: async () => {
         await queryClient.invalidateQueries({ queryKey: [queryKey] });
         if (onSuccess) await onSuccess();
