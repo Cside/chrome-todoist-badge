@@ -31,7 +31,7 @@ const Main_Suspended = () => {
             {MESSAGE_FOR.PIN_EXTENSION_TO_TOOLBAR}
           </NavLink>
         )}
-        {isConfigInitialized ? (
+        {isConfigInitialized !== undefined ? (
           <Checked>{MESSAGE_FOR.OPTIONS}</Checked>
         ) : (
           <NavLink to={HASH_TO.OPTIONS} className="btn btn-primary">

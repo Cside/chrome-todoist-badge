@@ -12,7 +12,7 @@ export default defineBackground(
       await Promise.all([
         setBadgeColor(),
         (async () => {
-          if (await storage.getItem(STORAGE_KEY_FOR.CONFIG.IS_INITIALIZED))
+          if ((await storage.getItem(STORAGE_KEY_FOR.CONFIG.IS_INITIALIZED)) !== undefined)
             activateBadgeCountUpdates();
         })(),
       ]);

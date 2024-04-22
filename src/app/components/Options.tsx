@@ -73,7 +73,7 @@ const Main_Suspended = () => {
         </div>
       </div>
       <div>{areTasksFetched ? <>{tasks.length} Tasks</> : <Spinner className="ml-16" />}</div>
-      {isInitialized || (
+      {isInitialized === undefined && (
         <div>
           <button
             type="submit"

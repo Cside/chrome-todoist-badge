@@ -16,7 +16,7 @@ export const updateBadgeCountOnTaskUpdated = () => {
             commands: { type: string }[];
           };
           const firstCommand = parsed.commands[0]?.type;
-          if (firstCommand) cache.set(details.requestId, firstCommand);
+          if (firstCommand !== undefined) cache.set(details.requestId, firstCommand);
         } catch (error) {
           console.error(`Failed to parse request body. error: ${error}`);
         }
@@ -28,7 +28,7 @@ export const updateBadgeCountOnTaskUpdated = () => {
   chrome.webRequest.onCompleted.addListener(
     async (details) => {
       const command = cache.get(details.requestId);
-      if (command) {
+      if (command !== undefined) {
         console.log(`Command: ${command}`);
         if (/^(item_|section_move$|section_delete$)/.test(command))
           await api.updateBadgeCountWithRetry({ via: "on task updated on Todoist Web App" });

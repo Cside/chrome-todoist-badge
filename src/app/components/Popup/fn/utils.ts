@@ -12,7 +12,7 @@ export const useWebAppUrl = () => {
 
 export const groupTasksBySectionId = (tasks: Task[]): TasksGroupedBySection => {
   const grouped = tasks.reduce((acc: Record<string, Task[]>, task) => {
-    const key = task.sectionId || "null";
+    const key = task.sectionId ?? "null";
     let val = acc[key];
     if (!val) val = [];
     val.push(task);
