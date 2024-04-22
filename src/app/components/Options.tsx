@@ -1,6 +1,7 @@
 import { INTERVAL_MINUTES } from "@/src/background/updateBadgeCount/updateBadgeCountRegularly";
 import { setBadgeText } from "@/src/fn/setBadgeText";
 import { STORAGE_KEY_FOR } from "@/src/storage/queryKeys";
+import { clsx } from "clsx";
 import { Suspense } from "react";
 import useAsyncEffect from "use-async-effect";
 import { storage as wxtStorage } from "wxt/storage";
@@ -10,8 +11,7 @@ import "../../globalUtils";
 import * as storage from "../../storage/useStorage";
 import { Spinner } from "./Spinner";
 
-const PROJECT_ID_ALL = "__all";
-const DEFAULT_PROJECT_ID = PROJECT_ID_ALL;
+const PROJECT_ID_NOT_SELECTED = "__notSelected";
 
 const Main_Suspended = () => {
   const [isInitialized, mutateIsInitialized] = storage.useIsConfigInitialized_Suspended();
@@ -43,15 +43,14 @@ const Main_Suspended = () => {
             Project:
           </label>
           <select
-            value={projectId ?? DEFAULT_PROJECT_ID}
-            onChange={(event) => {
-              const newValue =
-                event.target.value === PROJECT_ID_ALL ? undefined : event.target.value;
-              mutateProjectId(newValue);
-            }}
+            value={projectId ?? PROJECT_ID_NOT_SELECTED}
+            onChange={(event) => mutateProjectId(event.target.value)}
             className="select select-bordered"
+            required
           >
-            <option value={PROJECT_ID_ALL}>All projects</option>
+            <option value={PROJECT_ID_NOT_SELECTED} disabled>
+              Not selected
+            </option>
             {projects.map((project) => (
               <option key={project.id} value={project.id}>
                 {project.name}
@@ -72,13 +71,12 @@ const Main_Suspended = () => {
           </label>
         </div>
       </div>
-
       <div>{areTasksFetched ? <>{tasks.length} Tasks</> : <Spinner className="ml-16" />}</div>
       {isInitialized || (
         <div>
           <button
             type="submit"
-            className="btn btn-primary"
+            className={clsx("btn", "btn-primary", projectId === undefined && "btn-disabled")}
             onClick={async () => mutateIsInitialized(true)}
           >
             Save

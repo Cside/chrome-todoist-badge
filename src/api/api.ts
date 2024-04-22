@@ -66,15 +66,15 @@ const buildTasksApiUrl = (params: TaskFilters) => {
 
 export const _buildTasksApiQueryString = ({ projectId, filterByDueByToday }: TaskFilters) => {
   const params = {
-    ...(projectId !== undefined && { project_id: projectId }),
+    project_id: projectId,
     ...(filterByDueByToday === true && { filter: ["today", "overdue"].join("|") }),
   };
   return isEmpty(params) ? "" : `?${new URLSearchParams(params)}`;
 };
 
 const getTasksFilters = async (): Promise<TaskFilters> => {
-  const projectId =
-    (await storage.getItem<string>(STORAGE_KEY_FOR.CONFIG.FILTER_BY.PROJECT_ID)) ?? undefined;
+  const projectId = await storage.getItem<string>(STORAGE_KEY_FOR.CONFIG.FILTER_BY.PROJECT_ID);
+  if (projectId === null) throw new Error("projectId is undefined");
 
   const filterByDueByToday =
     (await storage.getItem<boolean>(STORAGE_KEY_FOR.CONFIG.FILTER_BY.DUE_BY_TODAY)) ??

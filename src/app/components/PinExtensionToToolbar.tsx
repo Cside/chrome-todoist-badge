@@ -7,7 +7,9 @@ export default function PinExtensionToToolbar() {
   const isOnToolbar = useIsOnToolbar_Suspended();
   const navigate = useNavigate();
 
-  useEffect(() => navigate(HASH_TO.WELCOME), [isOnToolbar]);
+  useEffect(() => {
+    if (isOnToolbar) navigate(HASH_TO.WELCOME);
+  }, [isOnToolbar]);
 
   return (
     <>

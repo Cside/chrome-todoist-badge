@@ -18,24 +18,24 @@ const Main_Suspended = () => {
   const isOnToolbar = useIsOnToolbar_Suspended();
 
   const MESSAGE_FOR = {
-    PIN: "Pin extension to toolbar",
-    CONFIGURE: "Configure extension",
+    PIN_EXTENSION_TO_TOOLBAR: "Pin extension to toolbar",
+    OPTIONS: "Configure extension",
   };
   return (
     <>
       <div className="flex flex-col items-start gap-y-3">
         {isOnToolbar ? (
-          <Checked>{MESSAGE_FOR.PIN}</Checked>
+          <Checked>{MESSAGE_FOR.PIN_EXTENSION_TO_TOOLBAR}</Checked>
         ) : (
-          <NavLink to={HASH_TO.OPTIONS} className="btn btn-primary">
-            {MESSAGE_FOR.PIN}
+          <NavLink to={HASH_TO.PIN_EXTENSION_TO_TOOLBAR} className="btn btn-primary">
+            {MESSAGE_FOR.PIN_EXTENSION_TO_TOOLBAR}
           </NavLink>
         )}
         {isConfigInitialized ? (
-          <Checked>{MESSAGE_FOR.CONFIGURE}</Checked>
+          <Checked>{MESSAGE_FOR.OPTIONS}</Checked>
         ) : (
           <NavLink to={HASH_TO.OPTIONS} className="btn btn-primary">
-            {MESSAGE_FOR.CONFIGURE}
+            {MESSAGE_FOR.OPTIONS}
           </NavLink>
         )}
       </div>
