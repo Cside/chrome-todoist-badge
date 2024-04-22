@@ -1,7 +1,7 @@
 import { INTERVAL_MINUTES } from "@/src/background/updateBadgeCount/updateBadgeCountRegularly";
 import { setBadgeText } from "@/src/fn/setBadgeText";
 import { STORAGE_KEY_FOR } from "@/src/storage/queryKeys";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import { hasMinLength } from "ts-array-length";
 import useAsyncEffect from "use-async-effect";
 import { storage as wxtStorage } from "wxt/storage";
@@ -18,8 +18,12 @@ const Main_Suspended = () => {
 
   // TODO: projectId が projects に含まれているかチェックする
   // (project がアーカイブ/削除されていれば、含まれない)
-  const [selectedProjectId = projects[0].id, mutateSelectedProjectId] =
-    storage.useFilteringProjectId_Suspended();
+  const [projectId, mutateProjectId] = storage.useFilteringProjectId_Suspended();
+  useEffect(() => {
+    if (projectId === undefined) mutateProjectId(projects[0].id);
+  }, [projectId]);
+  const selectedProjectId = projectId ?? projects[0].id;
+
   const [filterByDueByToday, mutateFilterByDueByToday] = storage.useFilterByDueByToday_Suspended();
 
   const { data: tasks, isSuccess: areTasksFetched } = api.useTasks({
@@ -44,7 +48,7 @@ const Main_Suspended = () => {
           </label>
           <select
             value={selectedProjectId}
-            onChange={(event) => mutateSelectedProjectId(event.target.value)}
+            onChange={(event) => mutateProjectId(event.target.value)}
             className="select select-bordered"
             required
           >
