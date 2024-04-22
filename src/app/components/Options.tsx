@@ -2,6 +2,7 @@ import { INTERVAL_MINUTES } from "@/src/background/updateBadgeCount/updateBadgeC
 import { setBadgeText } from "@/src/fn/setBadgeText";
 import { STORAGE_KEY_FOR } from "@/src/storage/queryKeys";
 import { Suspense } from "react";
+import { hasLength } from "ts-array-length";
 import useAsyncEffect from "use-async-effect";
 import { storage as wxtStorage } from "wxt/storage";
 import type { Task } from "../../api/types";
@@ -10,20 +11,19 @@ import "../../globalUtils";
 import * as storage from "../../storage/useStorage";
 import { Spinner } from "./Spinner";
 
-const PROJECT_ID_ALL = "__all";
-const DEFAULT_PROJECT_ID = PROJECT_ID_ALL;
-
 const Main_Suspended = () => {
   const [isInitialized, mutateIsInitialized] = storage.useIsConfigInitialized_Suspended();
   const projects = api.useProjects_Suspended();
+  if (!hasLength(projects, 1)) throw new Error("projects is empty");
 
   // TODO: projectId が projects に含まれているかチェックする
   // (project がアーカイブ/削除されていれば、含まれない)
-  const [projectId, mutateProjectId] = storage.useFilteringProjectId_Suspended();
+  const [selectedProjectId = projects[0].id, mutateSelectedProjectId] =
+    storage.useFilteringProjectId_Suspended();
   const [filterByDueByToday, mutateFilterByDueByToday] = storage.useFilterByDueByToday_Suspended();
 
   const { data: tasks, isSuccess: areTasksFetched } = api.useTasks({
-    projectId,
+    projectId: selectedProjectId,
     filterByDueByToday,
   });
 
@@ -43,15 +43,11 @@ const Main_Suspended = () => {
             Project:
           </label>
           <select
-            value={projectId ?? DEFAULT_PROJECT_ID}
-            onChange={(event) => {
-              const newValue =
-                event.target.value === PROJECT_ID_ALL ? undefined : event.target.value;
-              mutateProjectId(newValue);
-            }}
+            value={selectedProjectId}
+            onChange={(event) => mutateSelectedProjectId(event.target.value)}
             className="select select-bordered"
+            required
           >
-            <option value={PROJECT_ID_ALL}>All projects</option>
             {projects.map((project) => (
               <option key={project.id} value={project.id}>
                 {project.name}
@@ -72,7 +68,6 @@ const Main_Suspended = () => {
           </label>
         </div>
       </div>
-
       <div>{areTasksFetched ? <>{tasks.length} Tasks</> : <Spinner className="ml-16" />}</div>
       {isInitialized || (
         <div>

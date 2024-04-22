@@ -8,7 +8,8 @@
     "tanstack",
     "noreferrer",
     "tailwindcss",
-    "daisyui"
+    "daisyui",
+    "clsx"
   ],
   "emeraldwalk.runonsave": {
     "commands": [
@@ -42,5 +43,6 @@
     "quickfix.biome": "explicit",
     "source.organizeImports.biome": "explicit",
     "source.organizeImports": "never"
-  }
+  },
+  "runCurrentTest.run": "npm run test -- ${relativeTestPath} --testNamePattern \"${fullTestName}\""
 }

@@ -5,7 +5,9 @@ import type { TasksGroupedBySection } from "../types";
 
 export const useWebAppUrl = () => {
   const [projectId] = storage.useFilteringProjectId_Suspended();
-  return projectId === undefined ? WEB_APP_URL_FOR.HOME : WEB_APP_URL_FOR.PROJECT_FOR(projectId);
+  if (projectId === undefined) throw new Error("projectId is undefined");
+
+  return WEB_APP_URL_FOR.PROJECT_FOR(projectId);
 };
 
 export const groupTasksBySectionId = (tasks: Task[]): TasksGroupedBySection => {

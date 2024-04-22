@@ -11,6 +11,8 @@ import * as api from "../../../api/useApi";
 import { Spinner } from "../Spinner";
 import { groupTasksBySectionId, useWebAppUrl } from "./fn/utils";
 
+// 初期化が終わってないと Options.tsx にリダイレクトするので
+// projectId がある前提の作りにする。
 export default function Popup_Suspended() {
   const {
     data: tasks,
