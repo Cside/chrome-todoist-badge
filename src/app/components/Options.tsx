@@ -2,7 +2,7 @@ import { INTERVAL_MINUTES } from "@/src/background/updateBadgeCount/updateBadgeC
 import { setBadgeText } from "@/src/fn/setBadgeText";
 import { STORAGE_KEY_FOR } from "@/src/storage/queryKeys";
 import { Suspense } from "react";
-import { hasLength } from "ts-array-length";
+import { hasMinLength } from "ts-array-length";
 import useAsyncEffect from "use-async-effect";
 import { storage as wxtStorage } from "wxt/storage";
 import type { Task } from "../../api/types";
@@ -14,7 +14,7 @@ import { Spinner } from "./Spinner";
 const Main_Suspended = () => {
   const [isInitialized, mutateIsInitialized] = storage.useIsConfigInitialized_Suspended();
   const projects = api.useProjects_Suspended();
-  if (!hasLength(projects, 1)) throw new Error("projects is empty");
+  if (!hasMinLength(projects, 1)) throw new Error("projects is empty");
 
   // TODO: projectId が projects に含まれているかチェックする
   // (project がアーカイブ/削除されていれば、含まれない)
