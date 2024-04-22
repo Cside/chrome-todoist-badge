@@ -87,7 +87,8 @@ const Main_Suspended = () => {
 
       <hr className="my-1" />
       <div className="text-neutral-400">
-        * Badge number are updated every {INTERVAL_MINUTES} minutes.
+        * Badge number are updated{" "}
+        <span className="underline">every {INTERVAL_MINUTES} minutes</span>.
       </div>
     </div>
   );
