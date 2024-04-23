@@ -11,6 +11,7 @@
   "plugins": ["@typescript-eslint", "react-refresh"],
   "rules": {
     "object-shorthand": "error",
+    "arrow-body-style": ["error", "as-needed"],
     "@typescript-eslint/prefer-includes": "error",
     "@typescript-eslint/no-unnecessary-condition": "error",
     "@typescript-eslint/unbound-method": "error", // メソッドの変数代入とか禁止

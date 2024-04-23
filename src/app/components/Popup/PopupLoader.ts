@@ -1,4 +1,4 @@
-import { STORAGE_KEY_FOR } from "@/src/storage/queryKeys";
+import { STORAGE_KEY_FOR } from "@/src/storage/storageKeys";
 import { redirect } from "react-router-dom";
 import { storage } from "wxt/storage";
 

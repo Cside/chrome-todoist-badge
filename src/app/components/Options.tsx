@@ -1,26 +1,32 @@
-import * as apiProjects from "@/src/api/projects/useProjects";
-import { INTERVAL_MINUTES } from "@/src/background/updateBadgeCount/updateBadgeCountRegularly";
-import { setBadgeText } from "@/src/fn/setBadgeText";
-import { STORAGE_KEY_FOR } from "@/src/storage/queryKeys";
 import { Suspense, useCallback, useEffect } from "react";
 import { isNonEmpty } from "ts-array-length";
 import useAsyncEffect from "use-async-effect";
 import { storage as wxtStorage } from "wxt/storage";
+import * as apiProjects from "../../api/projects/useProjects";
+import * as apiSections from "../../api/sections/useSections";
 import * as apiTasks from "../../api/tasks/useTasks";
 import type { Task } from "../../api/types";
+import { INTERVAL_MINUTES } from "../../background/updateBadgeCount/updateBadgeCountRegularly";
+import { setBadgeText } from "../../fn/setBadgeText";
 import "../../globalUtils";
+import { STORAGE_KEY_FOR } from "../../storage/storageKeys";
 import * as storage from "../../storage/useStorage";
 import { Spinner } from "./Spinner";
 
-const api = { ...apiProjects, ...apiTasks };
+const SECTION_ID_ALL = "__all";
 
 const Main_Suspended = () => {
-  const [isInitialized, mutateIsInitialized] = storage.useIsConfigInitialized_Suspended();
+  const [isInitialized, setIsInitialized] = storage.useIsConfigInitialized_Suspended();
+  const [filterByDueByToday, setFilterByDueByToday] = storage.useFilterByDueByToday_Suspended();
+
+  // ==================================================
+  // All projects && Filtering projectId
+  // ==================================================
   const { data: projects, isSuccess: areProjectsLoaded } = api.useProjects();
 
   // TODO: projectId が projects に含まれているかチェックする
   // (project がアーカイブ/削除されていれば、含まれない)
-  const [projectId, mutateProjectId] = storage.useFilteringProjectId_Suspended();
+  const [projectId, setProjectId] = storage.useFilteringProjectId_Suspended();
   const getFallbackProjectId_WithAssert = useCallback((): string => {
     if (!areProjectsLoaded) throw new Error("projects are not loaded");
     if (!isNonEmpty(projects)) throw new Error("projects are empty");
@@ -28,28 +34,33 @@ const Main_Suspended = () => {
   }, []);
   const getSelectedProjectId_WithAssert = useCallback(
     (): string => projectId ?? getFallbackProjectId_WithAssert(),
-    [],
+    [projectId],
   );
   // set initial projectId to storage
   useEffect(() => {
     if (areProjectsLoaded && projectId === undefined)
-      mutateProjectId(getFallbackProjectId_WithAssert());
+      setProjectId(getFallbackProjectId_WithAssert());
   }, [areProjectsLoaded, projectId]);
 
-  const [filterByDueByToday, mutateFilterByDueByToday] = storage.useFilterByDueByToday_Suspended();
+  // ==================================================
+  // All sections && Filtering sectionId
+  // ==================================================
+  const { data: sections, isSuccess: areSectionsLoaded } = api.useSections({ projectId });
+  const [sectionId, setSectionId, removeSectionId] = storage.useFilteringSectionId_Suspended();
 
+  // ==================================================
+  // Tasks
+  // ==================================================
   // TODO: sectionId が存在するかチェックする?
   const { data: tasks, isSuccess: areTasksLoaded } = api.useTasks({
-    projectId: getSelectedProjectId_WithAssert(),
-    filterByDueByToday,
+    filters: {
+      projectId: getSelectedProjectId_WithAssert(),
+      filterByDueByToday,
+      sectionId,
+    },
     enabled: projectId !== undefined ? true : areProjectsLoaded,
+    deps: [projectId, filterByDueByToday, sectionId],
   });
-
-  // const { data: tasks, isSuccess: areTasksLoaded } = api.useTasks({
-  //   projectId: selectedProjectId,
-  //   filterByDueByToday,
-  // });
-
   useAsyncEffect(async () => {
     // あえて共通化してない
     if (areTasksLoaded) {
@@ -63,18 +74,18 @@ const Main_Suspended = () => {
       <div>
         {areProjectsLoaded ? (
           <div className="flex">
-            <label htmlFor="project-id" className="label cursor-pointer">
-              Project:
-            </label>
+            <label className="label cursor-pointer">Project:</label>
             <select
               value={getSelectedProjectId_WithAssert()}
-              onChange={(event) => mutateProjectId(event.target.value)}
+              onChange={(event) => {
+                setProjectId(event.target.value);
+                removeSectionId();
+              }}
               className="select select-bordered"
-              required
             >
               {projects.map((project) => (
                 <option key={project.id} value={project.id}>
-                  {project.name}
+                  {project.id} {project.name}
                 </option>
               ))}
             </select>
@@ -83,11 +94,37 @@ const Main_Suspended = () => {
           <Spinner />
         )}
 
+        {(() => {
+          if (!areSectionsLoaded) return <Spinner />;
+          if (sections.length === 0) return null;
+
+          return (
+            <div className="flex">
+              <label className="label cursor-pointer">Section (Optional):</label>
+              <select
+                value={sectionId ?? SECTION_ID_ALL}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  value === SECTION_ID_ALL ? removeSectionId() : setSectionId(value);
+                }}
+                className="select select-bordered"
+              >
+                <option value={SECTION_ID_ALL}>All</option>
+                {sections.map((section) => (
+                  <option key={section.id} value={section.id}>
+                    {section.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          );
+        })()}
+
         <div className="flex items-center">
           <input
             type="checkbox"
             checked={filterByDueByToday}
-            onChange={(event) => mutateFilterByDueByToday(event.target.checked)}
+            onChange={(event) => setFilterByDueByToday(event.target.checked)}
             id="filter-by-due-by-today"
             className="toggle toggle-primary"
           />
@@ -96,13 +133,15 @@ const Main_Suspended = () => {
           </label>
         </div>
       </div>
+
       <div>{areTasksLoaded ? <>{tasks.length} Tasks</> : <Spinner className="ml-16" />}</div>
+
       {isInitialized === undefined && (
         <div>
           <button
             type="submit"
             className="btn btn-primary"
-            onClick={async () => mutateIsInitialized(true)}
+            onClick={async () => setIsInitialized(true)}
           >
             Save
           </button>
@@ -128,3 +167,9 @@ export default function Options() {
     </>
   );
 }
+
+const api = {
+  useProjects: apiProjects.useProjects,
+  useTasks: apiTasks.useTasks,
+  useSections: apiSections.useSections,
+};

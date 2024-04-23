@@ -7,28 +7,28 @@ import { getTasksByParams } from "./getTasks";
 
 // from Options
 export const useTasks = ({
-  projectId,
-  filterByDueByToday,
+  filters,
+  deps,
   enabled,
-}: TaskFilters & { enabled: boolean }) => {
-  return useQuery({
-    queryKey: [QUERY_KEY_FOR.API.TASKS, projectId, filterByDueByToday],
-    queryFn: async () => await getTasksByParams({ projectId, filterByDueByToday }),
+}: { filters: TaskFilters; deps: unknown[]; enabled: boolean }) =>
+  useQuery({
+    queryKey: [QUERY_KEY_FOR.API.TASKS, ...deps],
+    queryFn: async () => await getTasksByParams(filters),
     enabled,
   });
-};
 
 // from Popup
-export const useTasks_Suspended = () => {
+export const useTasksWithCache = () => {
   const [projectId] = storage.useFilteringProjectId_Suspended();
   if (projectId === undefined) throw new Error("projectId is undefined");
 
   const [filterByDueByToday] = storage.useFilterByDueByToday_Suspended();
+  const [sectionId] = storage.useFilteringSectionId_Suspended();
   const [cache] = storage.useCachedTasks_Suspended();
 
   return useQuery({
     queryKey: [QUERY_KEY_FOR.API.TASKS, projectId, filterByDueByToday],
-    queryFn: async () => await getTasksByParams({ projectId, filterByDueByToday }),
+    queryFn: async () => await getTasksByParams({ projectId, filterByDueByToday, sectionId }),
     placeholderData: (prevData) => (prevData ? undefined : cache),
   }) as UseQueryResult<Task[]>;
 };

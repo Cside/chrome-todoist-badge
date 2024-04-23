@@ -1,6 +1,6 @@
 import todoistIcon from "@/assets/images/todoist.webp";
 import { setBadgeText } from "@/src/fn/setBadgeText";
-import { STORAGE_KEY_FOR } from "@/src/storage/queryKeys";
+import { STORAGE_KEY_FOR } from "@/src/storage/storageKeys";
 import Markdown from "markdown-to-jsx";
 import React from "react";
 import { NavLink } from "react-router-dom";
@@ -18,7 +18,7 @@ export default function Popup_Suspended() {
     data: tasks,
     isSuccess: areTasksFetched,
     isFetching: areTasksFetching,
-  } = api.useTasks_Suspended();
+  } = api.useTasksWithCache(); // 内部で storage を suspended している
   const webAppUrl = useWebAppUrl();
 
   useAsyncEffect(async () => {

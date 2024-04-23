@@ -7,7 +7,7 @@ export const useWebAppUrl = () => {
   const [projectId] = storage.useFilteringProjectId_Suspended();
   if (projectId === undefined) throw new Error("projectId is undefined");
 
-  return WEB_APP_URL_FOR.PROJECT_FOR(projectId);
+  return WEB_APP_URL_FOR.PROJECT_BY(projectId);
 };
 
 export const groupTasksBySectionId = (tasks: Task[]): TasksGroupedBySection => {
@@ -22,6 +22,6 @@ export const groupTasksBySectionId = (tasks: Task[]): TasksGroupedBySection => {
 
   return sortedKeys.map((key) => ({
     sectionId: key === "null" ? null : key,
-    tasks: grouped[key] || [],
+    tasks: grouped[key] ?? [],
   }));
 };

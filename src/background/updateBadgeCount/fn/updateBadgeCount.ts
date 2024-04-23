@@ -1,6 +1,6 @@
 import * as getTasksByParams from "@/src/api/tasks/getTasks";
 import { MAX_RETRY } from "@/src/constants/maxRetry";
-import { STORAGE_KEY_FOR } from "@/src/storage/queryKeys";
+import { STORAGE_KEY_FOR } from "@/src/storage/storageKeys";
 import pRetry from "p-retry";
 import type { Task } from "../../../api/types";
 import { setBadgeText } from "../../../fn/setBadgeText";
