@@ -1,65 +1,88 @@
-import * as useProjects_Suspended from "@/src/api/projects/useProjects";
+import * as apiProjects from "@/src/api/projects/useProjects";
 import { INTERVAL_MINUTES } from "@/src/background/updateBadgeCount/updateBadgeCountRegularly";
 import { setBadgeText } from "@/src/fn/setBadgeText";
 import { STORAGE_KEY_FOR } from "@/src/storage/queryKeys";
-import { Suspense, useEffect } from "react";
-import { hasMinLength } from "ts-array-length";
+import { Suspense, useCallback, useEffect } from "react";
+import { isNonEmpty } from "ts-array-length";
 import useAsyncEffect from "use-async-effect";
 import { storage as wxtStorage } from "wxt/storage";
-import * as api from "../../api/tasks/useTasks";
+import * as apiTasks from "../../api/tasks/useTasks";
 import type { Task } from "../../api/types";
 import "../../globalUtils";
 import * as storage from "../../storage/useStorage";
 import { Spinner } from "./Spinner";
 
+const api = { ...apiProjects, ...apiTasks };
+
 const Main_Suspended = () => {
   const [isInitialized, mutateIsInitialized] = storage.useIsConfigInitialized_Suspended();
-  const projects = useProjects_Suspended.useProjects_Suspended();
-  if (!hasMinLength(projects, 1)) throw new Error("projects is empty");
+  const { data: projects, isSuccess: areProjectsLoaded } = api.useProjects();
 
   // TODO: projectId が projects に含まれているかチェックする
   // (project がアーカイブ/削除されていれば、含まれない)
   const [projectId, mutateProjectId] = storage.useFilteringProjectId_Suspended();
+  const getFallbackProjectId_WithAssert = useCallback((): string => {
+    if (!areProjectsLoaded) throw new Error("projects are not loaded");
+    if (!isNonEmpty(projects)) throw new Error("projects are empty");
+    return projects[0].id;
+  }, []);
+  const getSelectedProjectId_WithAssert = useCallback(
+    (): string => projectId ?? getFallbackProjectId_WithAssert(),
+    [],
+  );
+  // set initial projectId to storage
   useEffect(() => {
-    if (projectId === undefined) mutateProjectId(projects[0].id);
-  }, [projectId]);
-  const selectedProjectId = projectId ?? projects[0].id;
+    if (areProjectsLoaded && projectId === undefined)
+      mutateProjectId(getFallbackProjectId_WithAssert());
+  }, [areProjectsLoaded, projectId]);
 
   const [filterByDueByToday, mutateFilterByDueByToday] = storage.useFilterByDueByToday_Suspended();
 
-  const { data: tasks, isSuccess: areTasksFetched } = api.useTasks({
-    projectId: selectedProjectId,
+  // TODO: sectionId が存在するかチェックする?
+  const { data: tasks, isSuccess: areTasksLoaded } = api.useTasks({
+    projectId: getSelectedProjectId_WithAssert(),
     filterByDueByToday,
+    enabled: projectId !== undefined ? true : areProjectsLoaded,
   });
+
+  // const { data: tasks, isSuccess: areTasksLoaded } = api.useTasks({
+  //   projectId: selectedProjectId,
+  //   filterByDueByToday,
+  // });
 
   useAsyncEffect(async () => {
     // あえて共通化してない
-    if (areTasksFetched) {
+    if (areTasksLoaded) {
       await setBadgeText(tasks.length);
       await wxtStorage.setItem<Task[]>(STORAGE_KEY_FOR.CACHE.TASKS, tasks);
     }
-  }, [tasks, areTasksFetched]);
+  }, [tasks, areTasksLoaded]);
 
   return (
     <div className="flex flex-col gap-y-3">
       <div>
-        <div className="flex">
-          <label htmlFor="project-id" className="label cursor-pointer">
-            Project:
-          </label>
-          <select
-            value={selectedProjectId}
-            onChange={(event) => mutateProjectId(event.target.value)}
-            className="select select-bordered"
-            required
-          >
-            {projects.map((project) => (
-              <option key={project.id} value={project.id}>
-                {project.name}
-              </option>
-            ))}
-          </select>
-        </div>
+        {areProjectsLoaded ? (
+          <div className="flex">
+            <label htmlFor="project-id" className="label cursor-pointer">
+              Project:
+            </label>
+            <select
+              value={getSelectedProjectId_WithAssert()}
+              onChange={(event) => mutateProjectId(event.target.value)}
+              className="select select-bordered"
+              required
+            >
+              {projects.map((project) => (
+                <option key={project.id} value={project.id}>
+                  {project.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        ) : (
+          <Spinner />
+        )}
+
         <div className="flex items-center">
           <input
             type="checkbox"
@@ -73,7 +96,7 @@ const Main_Suspended = () => {
           </label>
         </div>
       </div>
-      <div>{areTasksFetched ? <>{tasks.length} Tasks</> : <Spinner className="ml-16" />}</div>
+      <div>{areTasksLoaded ? <>{tasks.length} Tasks</> : <Spinner className="ml-16" />}</div>
       {isInitialized === undefined && (
         <div>
           <button

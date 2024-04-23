@@ -1,10 +1,10 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getProjects } from "../getProjects";
 import { QUERY_KEY_FOR } from "../queryKeys";
 
 // from Options
-export const useProjects_Suspended = () =>
-  useSuspenseQuery({
+export const useProjects = () =>
+  useQuery({
     queryKey: [QUERY_KEY_FOR.API.PROJECTS],
     queryFn: getProjects,
-  }).data;
+  });

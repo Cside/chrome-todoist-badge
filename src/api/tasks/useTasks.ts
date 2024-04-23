@@ -1,3 +1,4 @@
+import type { TaskFilters } from "@/src/types";
 import { type UseQueryResult, useQuery } from "@tanstack/react-query";
 import * as storage from "../../storage/useStorage";
 import { QUERY_KEY_FOR } from "../queryKeys";
@@ -8,10 +9,12 @@ import { getTasksByParams } from "./getTasks";
 export const useTasks = ({
   projectId,
   filterByDueByToday,
-}: { projectId: string; filterByDueByToday: boolean }) => {
+  enabled,
+}: TaskFilters & { enabled: boolean }) => {
   return useQuery({
     queryKey: [QUERY_KEY_FOR.API.TASKS, projectId, filterByDueByToday],
     queryFn: async () => await getTasksByParams({ projectId, filterByDueByToday }),
+    enabled,
   });
 };
 

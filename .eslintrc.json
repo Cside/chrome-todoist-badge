@@ -16,6 +16,7 @@
     "@typescript-eslint/unbound-method": "error", // メソッドの変数代入とか禁止
     "@typescript-eslint/no-floating-promises": ["error", { "ignoreIIFE": true }],
     "@typescript-eslint/strict-boolean-expressions": "error",
+    "@typescript-eslint/prefer-nullish-coalescing": "error", // || でなく ??
     "react-refresh/only-export-components": ["error", { "allowConstantExport": true }]
   }
 }
