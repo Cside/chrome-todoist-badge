@@ -1,9 +1,9 @@
 // biome-ignore format:
 export const QUERY_KEY_FOR = {
   API: {
-    GET_PROJECTS: "api:projects",
-    GET_SECTIONS: "api:sections",
-    GET_TASKS:    "api:tasks",
+    PROJECTS: "api:projects",
+    SECTIONS: "api:sections",
+    TASKS:    "api:tasks",
   },
   STORAGE: {
     CONFIG: {

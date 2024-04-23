@@ -5,6 +5,6 @@ import { QUERY_KEY_FOR } from "../queryKeys";
 // from Options
 export const useProjects_Suspended = () =>
   useSuspenseQuery({
-    queryKey: [QUERY_KEY_FOR.API.GET_PROJECTS],
+    queryKey: [QUERY_KEY_FOR.API.PROJECTS],
     queryFn: getProjects,
   }).data;

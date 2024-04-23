@@ -10,7 +10,7 @@ export const useTasks = ({
   filterByDueByToday,
 }: { projectId: string; filterByDueByToday: boolean }) => {
   return useQuery({
-    queryKey: [QUERY_KEY_FOR.API.GET_TASKS, projectId, filterByDueByToday],
+    queryKey: [QUERY_KEY_FOR.API.TASKS, projectId, filterByDueByToday],
     queryFn: async () => await getTasksByParams({ projectId, filterByDueByToday }),
   });
 };
@@ -24,7 +24,7 @@ export const useTasks_Suspended = () => {
   const [cache] = storage.useCachedTasks_Suspended();
 
   return useQuery({
-    queryKey: [QUERY_KEY_FOR.API.GET_TASKS, projectId, filterByDueByToday],
+    queryKey: [QUERY_KEY_FOR.API.TASKS, projectId, filterByDueByToday],
     queryFn: async () => await getTasksByParams({ projectId, filterByDueByToday }),
     placeholderData: (prevData) => (prevData ? undefined : cache),
   }) as UseQueryResult<Task[]>;
