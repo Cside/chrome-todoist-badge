@@ -1,14 +1,8 @@
-import { type UseQueryResult, useQuery, useSuspenseQuery } from "@tanstack/react-query";
-import * as storage from "../storage/useStorage";
-import { getProjects, getTasksByParams } from "./api";
-import { QUERY_KEY_FOR } from "./queryKeys";
-import type { Task } from "./types";
-
-export const useProjects_Suspended = () =>
-  useSuspenseQuery({
-    queryKey: [QUERY_KEY_FOR.API.GET_PROJECTS],
-    queryFn: getProjects,
-  }).data;
+import { type UseQueryResult, useQuery } from "@tanstack/react-query";
+import * as storage from "../../storage/useStorage";
+import { QUERY_KEY_FOR } from "../queryKeys";
+import type { Task } from "../types";
+import { getTasksByParams } from "./getTasks";
 
 // from Options
 export const useTasks = ({
@@ -21,7 +15,7 @@ export const useTasks = ({
   });
 };
 
-// for Popup
+// from Popup
 export const useTasks_Suspended = () => {
   const [projectId] = storage.useFilteringProjectId_Suspended();
   if (projectId === undefined) throw new Error("projectId is undefined");

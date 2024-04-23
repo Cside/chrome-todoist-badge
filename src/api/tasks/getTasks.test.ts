@@ -1,4 +1,4 @@
-import { _buildTasksApiQueryString } from "./api";
+import { _buildTasksApiQueryString } from "./getTasks";
 
 describe(`${_buildTasksApiQueryString.name}()`, () => {
   const cases: {

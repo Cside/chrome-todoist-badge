@@ -6,8 +6,8 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import useAsyncEffect from "use-async-effect";
 import { storage as wxtStorage } from "wxt/storage";
+import * as api from "../../../api/tasks/useTasks";
 import type { Task } from "../../../api/types";
-import * as api from "../../../api/useApi";
 import { Spinner } from "../Spinner";
 import { groupTasksBySectionId, useWebAppUrl } from "./fn/utils";
 
