@@ -1,6 +1,6 @@
 import { camelCase, mapKeys } from "lodash-es";
 import { API_URL_FOR } from "../../constants/urls";
-import { getTasksFilters } from "../../storage/getTasksFilters";
+import { getTaskFilters } from "../../storage/taskFilters/getTaskFilters";
 import type { TaskFilters } from "../../types";
 import { kyInstance } from "../kyInstance";
 import type { Task } from "../types";
@@ -15,7 +15,7 @@ export const getTasksByParams = async (filters: TaskFilters): Promise<Task[]> =>
 };
 
 // for BG worker
-export const getTasks = async (): Promise<Task[]> => getTasksByParams(await getTasksFilters());
+export const getTasks = async (): Promise<Task[]> => getTasksByParams(await getTaskFilters());
 
 // ==================================================
 // Utils

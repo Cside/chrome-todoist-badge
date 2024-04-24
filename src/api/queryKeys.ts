@@ -11,6 +11,7 @@ export const QUERY_KEY_FOR = {
         PROJECT_ID:   "config:filterBy:projectId",
         DUE_BY_TODAY: "config:filterBy:dueByToday",
       },
+      FILTERS:        "config:filters",
       IS_INITIALIZED: "config:isInitialized",
     },
     CACHE: {

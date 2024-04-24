@@ -100,7 +100,7 @@ const Main_Suspended = () => {
 
           return (
             <div className="flex">
-              <label className="label cursor-pointer">Section (Optional):</label>
+              <label className="label cursor-pointer">Section:</label>
               <select
                 value={sectionId ?? SECTION_ID_ALL}
                 onChange={(event) => {
