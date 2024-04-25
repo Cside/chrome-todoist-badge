@@ -3,7 +3,7 @@ import { openWelcomePageOnInstalled } from "@/src/background/openWelcomePage";
 import { setBadgeColor } from "@/src/background/setBadgeColor";
 import { activateBadgeCountUpdates } from "@/src/fn/activateBadgeCountUpdates";
 import "@/src/globalUtils";
-import { STORAGE_KEY_FOR } from "@/src/storage/queryKeys";
+import { STORAGE_KEY_FOR } from "@/src/storage/storageKeys";
 
 export default defineBackground(
   // async にすると警告が出る
@@ -12,7 +12,7 @@ export default defineBackground(
       await Promise.all([
         setBadgeColor(),
         (async () => {
-          if (await storage.getItem(STORAGE_KEY_FOR.CONFIG.IS_INITIALIZED))
+          if ((await storage.getItem(STORAGE_KEY_FOR.CONFIG.IS_INITIALIZED)) !== undefined)
             activateBadgeCountUpdates();
         })(),
       ]);

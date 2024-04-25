@@ -1,6 +1,6 @@
-import type { SectionId, Task } from "@/src/api/types";
+import type { SectionIdOfTask, Task } from "@/src/api/types";
 
 export type TasksGroupedBySection = {
-  sectionId: SectionId;
+  sectionId: SectionIdOfTask;
   tasks: Task[];
 }[];

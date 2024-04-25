@@ -1,38 +1,43 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import { useCallback } from "react";
 import { storage } from "wxt/storage";
-import { QUERY_KEY_FOR } from "../api/queryKeys";
 import type { Task } from "../api/types";
-import { DEFAULT_FILTER_BY_DUE_BY_TODAY } from "../constants/options";
-import { STORAGE_KEY_FOR } from "./queryKeys";
+import {
+  DEFAULT_FILTER_BY_DUE_BY_TODAY,
+  DEFAULT_IS_CONFIG_INITIALIZED,
+} from "../constants/options";
+import { STORAGE_KEY_FOR } from "./storageKeys";
 
 export const useFilteringProjectId_Suspended = () =>
   useStorage_Suspended<string>({
-    queryKey: QUERY_KEY_FOR.STORAGE.CONFIG.FILTER_BY.PROJECT_ID,
     storageKey: STORAGE_KEY_FOR.CONFIG.FILTER_BY.PROJECT_ID,
   });
 
 export const useFilterByDueByToday_Suspended = () => {
-  const [filterByDueByToday = DEFAULT_FILTER_BY_DUE_BY_TODAY, mutateFilterByDueByToday] =
-    useStorage_Suspended<boolean>({
-      queryKey: QUERY_KEY_FOR.STORAGE.CONFIG.FILTER_BY.DUE_BY_TODAY,
-      storageKey: STORAGE_KEY_FOR.CONFIG.FILTER_BY.DUE_BY_TODAY,
-      defaultValue: DEFAULT_FILTER_BY_DUE_BY_TODAY,
-    });
-  return [filterByDueByToday, mutateFilterByDueByToday] as const;
+  const [value = DEFAULT_FILTER_BY_DUE_BY_TODAY, mutate] = useStorage_Suspended<boolean>({
+    storageKey: STORAGE_KEY_FOR.CONFIG.FILTER_BY.DUE_BY_TODAY,
+    defaultValue: DEFAULT_FILTER_BY_DUE_BY_TODAY,
+  });
+  return [value, mutate] as const;
 };
 
-export const useIsConfigInitialized_Suspended = () =>
-  useStorage_Suspended<boolean>({
-    queryKey: QUERY_KEY_FOR.STORAGE.CONFIG.IS_INITIALIZED,
+export const useFilteringSectionId_Suspended = () =>
+  useStorage_Suspended<string>({
+    storageKey: STORAGE_KEY_FOR.CONFIG.FILTER_BY.SECTION_ID,
+  });
+
+export const useIsConfigInitialized_Suspended = () => {
+  const [value = DEFAULT_IS_CONFIG_INITIALIZED, mutate] = useStorage_Suspended<boolean>({
     storageKey: STORAGE_KEY_FOR.CONFIG.IS_INITIALIZED,
     defaultValue: false,
-    onSuccess: async () =>
+    onMutationSuccess: async () =>
       await chrome.runtime.sendMessage({ action: "activate-badge-count-updates" }),
   });
+  return [value, mutate] as const;
+};
 
 export const useCachedTasks_Suspended = () =>
   useStorage_Suspended<Task[]>({
-    queryKey: QUERY_KEY_FOR.STORAGE.CACHE.TASKS,
     storageKey: STORAGE_KEY_FOR.CACHE.TASKS,
   });
 
@@ -41,32 +46,39 @@ export const useCachedTasks_Suspended = () =>
 // ==================================================
 
 // storage への insert は一瞬なので、useMutation の isLoading とかは今は扱わない
-const useStorage_Suspended = <StorageType = never>({
-  queryKey,
+const useStorage_Suspended = <StorageValue = never>({
   storageKey,
   defaultValue,
-  onSuccess,
+  onMutationSuccess,
 }: {
-  queryKey: string;
   storageKey: string;
-  defaultValue?: StorageType;
-  onSuccess?: () => Promise<void>;
+  defaultValue?: StorageValue;
+  onMutationSuccess?: () => Promise<void>;
 }) => {
   const queryClient = useQueryClient();
+  const queryKey = storageKey; // お行儀悪い気がするけど…。ズボラしちゃう。
+
+  const onSuccess = useCallback(async () => {
+    await queryClient.invalidateQueries({ queryKey: [queryKey] });
+    if (onMutationSuccess) await onMutationSuccess();
+  }, []);
+  const mutate = useMutation({
+    mutationFn: (value: StorageValue) => storage.setItem<StorageValue>(storageKey, value),
+    onSuccess,
+  }).mutate;
+  const remove = useMutation({
+    mutationFn: () => storage.removeItem(storageKey),
+    onSuccess,
+  }).mutate;
 
   return [
     useSuspenseQuery({
       queryKey: [queryKey],
-      queryFn: async () => await storage.getItem<StorageType>(storageKey),
+      queryFn: async () => await storage.getItem<StorageValue>(storageKey),
     }).data ??
       defaultValue ??
       undefined,
-    useMutation({
-      mutationFn: (value: StorageType) => storage.setItem<StorageType>(storageKey, value),
-      onSuccess: async () => {
-        await queryClient.invalidateQueries({ queryKey: [queryKey] });
-        if (onSuccess) await onSuccess();
-      },
-    }).mutate,
+    mutate,
+    remove,
   ] as const;
 };

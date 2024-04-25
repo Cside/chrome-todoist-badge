@@ -1,8 +1,9 @@
-// biome-ignore format: for alignment
+// biome-ignore format:
 export const QUERY_KEY_FOR = {
   API: {
-    GET_TASKS:    "api:getTasks",
-    GET_PROJECTS: "api:getProjects",
+    PROJECTS: "api:projects",
+    SECTIONS: "api:sections",
+    TASKS:    "api:tasks",
   },
   STORAGE: {
     CONFIG: {
@@ -10,6 +11,7 @@ export const QUERY_KEY_FOR = {
         PROJECT_ID:   "config:filterBy:projectId",
         DUE_BY_TODAY: "config:filterBy:dueByToday",
       },
+      FILTERS:        "config:filters",
       IS_INITIALIZED: "config:isInitialized",
     },
     CACHE: {

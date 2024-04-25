@@ -5,10 +5,16 @@ export type Project = {
   name: string;
 };
 
-export type SectionId = string | null;
+export type SectionIdOfTask = string | null;
 
 export type Task = {
   id: string;
   content: string;
-  sectionId: SectionId;
+  sectionId: SectionIdOfTask;
+};
+
+export type Section = {
+  id: string;
+  name: string;
+  order: number;
 };
