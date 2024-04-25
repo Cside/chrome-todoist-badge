@@ -18,11 +18,11 @@ export default function Popup_Suspended() {
     data: tasks,
     isSuccess: areTasksFetched,
     isFetching: areTasksFetching,
-  } = api.useTasksWithCache(); // 内部で storage を suspended している
+  } = api.useTasksCache(); // 内部で storage を suspended している
   const webAppUrl = useWebAppUrl();
 
   useAsyncEffect(async () => {
-    // あえて共通化してない
+    // バッヂ更新。あえて共通化してない
     if (areTasksFetched) {
       await setBadgeText(tasks.length);
       await wxtStorage.setItem<Task[]>(STORAGE_KEY_FOR.CACHE.TASKS, tasks);

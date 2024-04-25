@@ -1,4 +1,3 @@
-import * as taskFilterStorage from "@/src/storage/taskFilters/useTaskFilters";
 import type { TaskFilters } from "@/src/types";
 import { type UseQueryResult, useQuery } from "@tanstack/react-query";
 import * as commonStorage from "../../storage/useStorage";
@@ -19,9 +18,13 @@ export const useTasks = ({
   });
 
 // from Popup
-export const useTasksWithCache = () => {
+export const useTasksCache = () => {
   // NOTE: 現状 ここでしか使ってない関数。共通関数化して良かったのだろうか…
-  const { projectId, filterByDueByToday, sectionId } = storage.useTaskFilters_Suspended();
+  const [projectId] = storage.useFilteringProjectId_Suspended();
+  if (projectId === undefined) throw new Error("projectId is undefined");
+  const [filterByDueByToday] = storage.useFilterByDueByToday_Suspended();
+  const [sectionId] = storage.useFilteringSectionId_Suspended();
+
   const [cache] = storage.useCachedTasks_Suspended();
 
   return useQuery({
@@ -32,6 +35,8 @@ export const useTasksWithCache = () => {
 };
 
 const storage = {
+  useFilterByDueByToday_Suspended: commonStorage.useFilterByDueByToday_Suspended,
+  useFilteringProjectId_Suspended: commonStorage.useFilteringProjectId_Suspended,
+  useFilteringSectionId_Suspended: commonStorage.useFilteringSectionId_Suspended,
   useCachedTasks_Suspended: commonStorage.useCachedTasks_Suspended,
-  useTaskFilters_Suspended: taskFilterStorage.useTaskFilters_Suspended,
 };
