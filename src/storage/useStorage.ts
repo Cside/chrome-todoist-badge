@@ -2,7 +2,10 @@ import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-q
 import { useCallback } from "react";
 import { storage } from "wxt/storage";
 import type { Task } from "../api/types";
-import { DEFAULT_FILTER_BY_DUE_BY_TODAY } from "../constants/options";
+import {
+  DEFAULT_FILTER_BY_DUE_BY_TODAY,
+  DEFAULT_IS_CONFIG_INITIALIZED,
+} from "../constants/options";
 import { STORAGE_KEY_FOR } from "./storageKeys";
 
 export const useFilteringProjectId_Suspended = () =>
@@ -11,12 +14,11 @@ export const useFilteringProjectId_Suspended = () =>
   });
 
 export const useFilterByDueByToday_Suspended = () => {
-  const [filterByDueByToday = DEFAULT_FILTER_BY_DUE_BY_TODAY, mutateFilterByDueByToday] =
-    useStorage_Suspended<boolean>({
-      storageKey: STORAGE_KEY_FOR.CONFIG.FILTER_BY.DUE_BY_TODAY,
-      defaultValue: DEFAULT_FILTER_BY_DUE_BY_TODAY,
-    });
-  return [filterByDueByToday, mutateFilterByDueByToday] as const;
+  const [value = DEFAULT_FILTER_BY_DUE_BY_TODAY, mutate] = useStorage_Suspended<boolean>({
+    storageKey: STORAGE_KEY_FOR.CONFIG.FILTER_BY.DUE_BY_TODAY,
+    defaultValue: DEFAULT_FILTER_BY_DUE_BY_TODAY,
+  });
+  return [value, mutate] as const;
 };
 
 export const useFilteringSectionId_Suspended = () =>
@@ -24,13 +26,15 @@ export const useFilteringSectionId_Suspended = () =>
     storageKey: STORAGE_KEY_FOR.CONFIG.FILTER_BY.SECTION_ID,
   });
 
-export const useIsConfigInitialized_Suspended = () =>
-  useStorage_Suspended<boolean>({
+export const useIsConfigInitialized_Suspended = () => {
+  const [value = DEFAULT_IS_CONFIG_INITIALIZED, mutate] = useStorage_Suspended<boolean>({
     storageKey: STORAGE_KEY_FOR.CONFIG.IS_INITIALIZED,
     defaultValue: false,
     onMutationSuccess: async () =>
       await chrome.runtime.sendMessage({ action: "activate-badge-count-updates" }),
   });
+  return [value, mutate] as const;
+};
 
 export const useCachedTasks_Suspended = () =>
   useStorage_Suspended<Task[]>({

@@ -71,72 +71,92 @@ const Main_Suspended = () => {
 
   return (
     <div className="flex flex-col gap-y-3">
+      <table className="my-0 table">
+        <tbody>
+          <tr className="border-none">
+            <th className="w-48 font-normal">
+              <label className="label cursor-pointer">Project:</label>
+            </th>
+            <td>
+              {areProjectsLoaded ? (
+                <select
+                  value={getSelectedProjectId_WithAssert()}
+                  onChange={(event) => {
+                    setProjectId(event.target.value);
+                    removeSectionId();
+                  }}
+                  className="select select-bordered"
+                >
+                  {projects.map((project) => (
+                    <option key={project.id} value={project.id}>
+                      {project.name}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <Spinner />
+              )}
+            </td>
+          </tr>
+
+          {(() => {
+            if (!areSectionsLoaded) return null;
+            if (sections.length === 0) return null;
+
+            return (
+              <tr className="border-none">
+                <th className="w-48 font-normal">
+                  <label className="label cursor-pointer">Section:</label>
+                </th>
+                <td>
+                  <select
+                    value={sectionId ?? SECTION_ID_ALL}
+                    onChange={(event) => {
+                      const value = event.target.value;
+                      value === SECTION_ID_ALL ? removeSectionId() : setSectionId(value);
+                    }}
+                    className="select select-bordered"
+                  >
+                    <option value={SECTION_ID_ALL}>All</option>
+                    {sections.map((section) => (
+                      <option key={section.id} value={section.id}>
+                        {section.name}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+              </tr>
+            );
+          })()}
+
+          <tr className="border-none">
+            <th className="w-48 font-normal">
+              <label htmlFor="filter-by-due-by-today" className="label cursor-pointer">
+                Due by today
+              </label>
+            </th>
+            <td>
+              <input
+                type="checkbox"
+                checked={filterByDueByToday}
+                onChange={(event) => setFilterByDueByToday(event.target.checked)}
+                id="filter-by-due-by-today"
+                className="toggle toggle-primary"
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
       <div>
-        {areProjectsLoaded ? (
-          <div className="flex">
-            <label className="label cursor-pointer">Project:</label>
-            <select
-              value={getSelectedProjectId_WithAssert()}
-              onChange={(event) => {
-                setProjectId(event.target.value);
-                removeSectionId();
-              }}
-              className="select select-bordered"
-            >
-              {projects.map((project) => (
-                <option key={project.id} value={project.id}>
-                  {project.id} {project.name}
-                </option>
-              ))}
-            </select>
-          </div>
+        {areTasksLoaded ? (
+          <span className="font-bold text-primary">{tasks.length} Tasks</span>
         ) : (
-          <Spinner />
+          <Spinner className="ml-16" />
         )}
-
-        {(() => {
-          if (!areSectionsLoaded) return <Spinner />;
-          if (sections.length === 0) return null;
-
-          return (
-            <div className="flex">
-              <label className="label cursor-pointer">Section:</label>
-              <select
-                value={sectionId ?? SECTION_ID_ALL}
-                onChange={(event) => {
-                  const value = event.target.value;
-                  value === SECTION_ID_ALL ? removeSectionId() : setSectionId(value);
-                }}
-                className="select select-bordered"
-              >
-                <option value={SECTION_ID_ALL}>All</option>
-                {sections.map((section) => (
-                  <option key={section.id} value={section.id}>
-                    {section.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          );
-        })()}
-
-        <div className="flex items-center">
-          <input
-            type="checkbox"
-            checked={filterByDueByToday}
-            onChange={(event) => setFilterByDueByToday(event.target.checked)}
-            id="filter-by-due-by-today"
-            className="toggle toggle-primary"
-          />
-          <label htmlFor="filter-by-due-by-today" className="label cursor-pointer">
-            Tasks due by today
-          </label>
-        </div>
       </div>
 
-      <div>{areTasksLoaded ? <>{tasks.length} Tasks</> : <Spinner className="ml-16" />}</div>
-
-      {isInitialized === undefined && (
+      {isInitialized || (
         <div>
           <button
             type="submit"

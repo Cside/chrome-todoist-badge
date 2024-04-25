@@ -1,1 +1,3 @@
+// initial でもあり、default でもある気がする…
 export const DEFAULT_FILTER_BY_DUE_BY_TODAY = false;
+export const DEFAULT_IS_CONFIG_INITIALIZED = false;
