@@ -5,7 +5,7 @@ import { storage as wxtStorage } from "wxt/storage";
 import * as apiProjects from "../../api/projects/useProjects";
 import * as apiSections from "../../api/sections/useSections";
 import * as apiTasks from "../../api/tasks/useTasks";
-import type { Task } from "../../api/types";
+import type { Section, Task } from "../../api/types";
 import { INTERVAL_MINUTES } from "../../background/updateBadgeCount/updateBadgeCountRegularly";
 import { setBadgeText } from "../../fn/setBadgeText";
 import "../../globalUtils";
@@ -45,8 +45,14 @@ const Main_Suspended = () => {
   // ==================================================
   // All sections && Filtering sectionId
   // ==================================================
-  const { data: sections, isSuccess: areSectionsLoaded } = api.useSections({ projectId });
+  const { data: sections, isSuccess: areSectionsLoaded } = api.useSections();
   const [sectionId, setSectionId, removeSectionId] = storage.useFilteringSectionId_Suspended();
+  type SectionIdToSection = Record<string, Section>;
+  useAsyncEffect(async () => {
+    if (areSectionsLoaded)
+      // Popup とは別 Window なので TQ は使う意味ない。
+      await wxtStorage.setItem<SectionIdToSection>(STORAGE_KEY_FOR.CACHE.SECTIONS, sections); // retry はサボる
+  }, [sections, areSectionsLoaded]);
 
   // ==================================================
   // Tasks

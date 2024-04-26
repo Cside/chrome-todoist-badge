@@ -6,7 +6,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import useAsyncEffect from "use-async-effect";
 import { storage as wxtStorage } from "wxt/storage";
-import * as api from "../../../api/tasks/useTasks";
+import * as apiTasks from "../../../api/tasks/useTasks";
 import type { Task } from "../../../api/types";
 import { Spinner } from "../Spinner";
 import { groupTasksBySectionId, useWebAppUrl } from "./fn/utils";
@@ -18,14 +18,14 @@ export default function Popup_Suspended() {
     data: tasks,
     isSuccess: areTasksFetched,
     isFetching: areTasksFetching,
-  } = api.useTasksCache(); // 内部で storage を suspended している
+  } = apiTasks.useCachedTasks(); // 内部で storage を suspended している
   const webAppUrl = useWebAppUrl();
 
   useAsyncEffect(async () => {
     // バッヂ更新。あえて共通化してない
     if (areTasksFetched) {
       await setBadgeText(tasks.length);
-      await wxtStorage.setItem<Task[]>(STORAGE_KEY_FOR.CACHE.TASKS, tasks);
+      await wxtStorage.setItem<Task[]>(STORAGE_KEY_FOR.CACHE.TASKS, tasks); // retry サボる
     }
   }, [tasks, areTasksFetched]);
 

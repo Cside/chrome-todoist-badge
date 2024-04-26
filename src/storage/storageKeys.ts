@@ -9,6 +9,8 @@ export const STORAGE_KEY_FOR = {
     IS_INITIALIZED: "local:config:isInitialized",
   },
   CACHE: {
-    TASKS: "local:cache:tasks",
+    // biome-ignore format:
+    TASKS:    "local:cache:tasks",
+    SECTIONS: "local:cache:sections",
   },
 };

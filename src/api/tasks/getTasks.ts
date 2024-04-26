@@ -1,21 +1,15 @@
 import { DEFAULT_FILTER_BY_DUE_BY_TODAY } from "@/src/constants/options";
 import { STORAGE_KEY_FOR } from "@/src/storage/storageKeys";
-import { camelCase, mapKeys } from "lodash-es";
 import { API_URL_FOR } from "../../constants/urls";
 import type { TaskFilters } from "../../types";
-import { kyInstance } from "../kyInstance";
+import { ky } from "../ky";
 import type { Task } from "../types";
 
 // for TQ
-export const getTasksByParams = async (filters: TaskFilters): Promise<Task[]> => {
-  // biome-ignore lint/suspicious/noExplicitAny:
-  const res: any[] = await kyInstance
-    .get(buildTasksApiUrl(filters)) // タイムアウトはデフォルト 10 秒
-    .json();
-  return res.map((task) => mapKeys(task, (_value, key) => camelCase(key)) as Task);
-};
+export const getTasksByParams = async (filters: TaskFilters): Promise<Task[]> =>
+  await ky.getCamelized<Task[]>(buildTasksApiUrl(filters));
 
-// for BG worker
+// for BG worker 。Retry は呼び出し元で行うので、ここではやらない
 export const getTasks = async (): Promise<Task[]> => getTasksByParams(await getTaskFilters());
 
 // 初期化が終わった後に呼ばれる前提の関数なので、projectId == null の場合はエラーにしている

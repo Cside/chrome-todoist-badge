@@ -1,4 +1,4 @@
-import * as getTasksByParams from "@/src/api/tasks/getTasks";
+import * as api from "@/src/api/tasks/getTasks";
 import { MAX_RETRY } from "@/src/constants/maxRetry";
 import { STORAGE_KEY_FOR } from "@/src/storage/storageKeys";
 import pRetry from "p-retry";
@@ -10,7 +10,7 @@ export const updateBadgeCountWithRetry = async ({ via }: { via: string }) => {
   console.info(`(via: ${via}) update badge count`);
   await pRetry(
     async () => {
-      const tasks = await getTasksByParams.getTasks();
+      const tasks = await api.getTasks();
       await storage.setItem<Task[]>(STORAGE_KEY_FOR.CACHE.TASKS, tasks);
       await setBadgeText(tasks.length);
     },

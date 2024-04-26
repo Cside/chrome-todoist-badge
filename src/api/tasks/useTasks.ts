@@ -18,7 +18,7 @@ export const useTasks = ({
   });
 
 // from Popup
-export const useTasksCache = () => {
+export const useCachedTasks = () => {
   // NOTE: 現状 ここでしか使ってない関数。共通関数化して良かったのだろうか…
   const [projectId] = storage.useFilteringProjectId_Suspended();
   if (projectId === undefined) throw new Error("projectId is undefined");

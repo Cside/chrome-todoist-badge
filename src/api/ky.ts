@@ -1,9 +1,11 @@
-import ky from "ky";
+import camelcaseKeysDeep from "camelcase-keys-deep";
+import _ky from "ky";
+import {} from "vitest/dist/reporters-P7C2ytIv.js";
 
 // これだとリクエストがパラで飛んだ時駄目。
 // req id があれば一番楽だが...
 const requestStartedAt: Map<string, number | undefined> = new Map();
-export const kyInstance = ky.create({
+const kyInstance = _ky.create({
   hooks: {
     beforeRequest: [
       (req) => {
@@ -26,3 +28,7 @@ export const kyInstance = ky.create({
     ],
   },
 });
+
+export const ky = {
+  getCamelized: async <T>(url: string) => camelcaseKeysDeep(await kyInstance.get(url).json()) as T,
+};

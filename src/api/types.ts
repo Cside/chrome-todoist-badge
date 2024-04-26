@@ -1,4 +1,5 @@
 // NOTE: types/api.ts と迷ってる。。
+// TODO: ここではない気がする…。src/types.ts か src/types/* あたり？
 
 export type Project = {
   id: string;
