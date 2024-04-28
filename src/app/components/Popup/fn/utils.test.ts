@@ -9,7 +9,6 @@ describe(`${groupTasksBySectionId.name}()`, () => {
     input: Parameters<typeof groupTasksBySectionId>[0];
     expected: ReturnType<typeof groupTasksBySectionId>;
   }[] = [
-    // FIXME: order
     {
       name: "basic",
       input: {
