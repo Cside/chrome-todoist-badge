@@ -25,7 +25,8 @@
       },
       "a11y": {
         "noSvgWithoutTitle": "off",
-        "useAltText": "off"
+        "useAltText": "off",
+        "useKeyWithClickEvents": "off"
       }
     }
   },

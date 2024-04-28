@@ -58,14 +58,20 @@ export default function Popup_Suspended() {
             <ul>
               {group.tasks.map((task) => (
                 <li key={task.id}>
-                  <a
-                    href={task.url}
-                    className="link link-hover m-0 block font-normal"
-                    target="_blank" // popup 以外で開かせる予定は今のところ無いから、良いや…
-                    rel="noreferrer"
+                  {/* Markdown の中に a タグが入り込みうるため、div にする */}
+                  <div
+                    className="link link-hover m-0"
+                    onClick={(event) => {
+                      if (event.target instanceof HTMLAnchorElement) {
+                        event.preventDefault();
+                        window.open(event.target.href);
+                        return;
+                      }
+                      window.open(task.url);
+                    }}
                   >
                     <Markdown>{task.content}</Markdown>
-                  </a>
+                  </div>
                 </li>
               ))}
             </ul>
