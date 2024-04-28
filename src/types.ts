@@ -17,6 +17,7 @@ export type Task = {
   order: number;
   content: string;
   sectionId: SectionIdOfTask;
+  url: string;
 };
 
 export type Section = {
