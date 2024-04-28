@@ -1,3 +1,4 @@
+import { clsx } from "clsx";
 import { Suspense, useCallback, useEffect } from "react";
 import { isNonEmpty } from "ts-array-length";
 import useAsyncEffect from "use-async-effect";
@@ -166,7 +167,11 @@ const Main_Suspended = () => {
         <div>
           <button
             type="submit"
-            className="btn btn-primary"
+            className={clsx(
+              "btn",
+              "btn-primary",
+              (!areProjectsLoaded || !areSectionsLoaded) && "btn-disabled",
+            )}
             onClick={async () => setIsInitialized(true)}
           >
             Save

@@ -35,6 +35,7 @@
   "dependencies": {
     "@tanstack/react-query": "^5.29.2",
     "camelcase-keys-deep": "^0.1.0",
+    "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
     "ky": "^1.2.2",
     "lodash-es": "^4.17.21",
