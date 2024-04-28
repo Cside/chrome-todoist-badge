@@ -1,6 +1,6 @@
-import { MAX_RETRY } from "@/src/constants/maxRetry";
 import { QueryClient, QueryClientProvider as _QueryClientProvider } from "@tanstack/react-query";
 import type { ReactNode } from "react";
+import { MAX_RETRY } from "../../../constants/maxRetry";
 
 const queryClient = new QueryClient({
   // https://tanstack.com/query/latest/docs/reference/QueryClient

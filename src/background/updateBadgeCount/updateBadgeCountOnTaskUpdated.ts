@@ -1,5 +1,5 @@
-import { ONE_MINUTE } from "@/src/constants/time";
-import { API_URL_MATCH_PATTERN_FOR } from "@/src/constants/urls";
+import { ONE_MINUTE } from "../../constants/time";
+import { API_URL_MATCH_PATTERN_FOR } from "../../constants/urls";
 import { Cache } from "../Cache";
 import * as api from "./fn/updateBadgeCount";
 

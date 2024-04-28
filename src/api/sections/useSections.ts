@@ -1,14 +1,31 @@
 import { useQuery } from "@tanstack/react-query";
+import { storage as wxtStorage } from "wxt/storage";
+import { STORAGE_KEY_FOR } from "../../storage/storageKeys";
+import * as storage from "../../storage/useStorage";
+import type { Section } from "../../types";
 import { QUERY_KEY_FOR } from "../queryKeys";
-import { getSections } from "./getSections";
+import * as api from "./getSections";
 
-// from Popup
-export const useSections = ({ projectId }: { projectId: string | undefined }) =>
-  useQuery({
+// from Options
+export const useSections = ({ cache }: { cache?: Section[] | undefined } = {}) => {
+  const [projectId] = storage.useFilteringProjectId_Suspended();
+  return useQuery({
     queryKey: [QUERY_KEY_FOR.API.SECTIONS, projectId],
     queryFn: async () => {
       if (projectId === undefined) throw new Error("projectId is undefined");
-      return await getSections({ projectId });
+      const sections = await api.getSections({ projectId });
+      await wxtStorage.setItem<Section[]>(STORAGE_KEY_FOR.CACHE.SECTIONS, sections); // retry はサボる
+      return sections;
     },
+    ...(cache && {
+      placeholderData: (prevData) => (prevData ? undefined : cache),
+    }),
     enabled: projectId !== undefined,
   });
+};
+
+// from Popup
+export const useSectionsCache = ({ isCacheAvailable }: { isCacheAvailable: boolean }) => {
+  const cache = storage.useCachedSections_Suspended();
+  return useSections({ cache: isCacheAvailable ? cache : undefined });
+};

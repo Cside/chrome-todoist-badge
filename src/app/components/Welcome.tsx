@@ -1,10 +1,10 @@
-import { HASH_TO } from "@/src/constants/paths";
-import { useIsOnToolbar_Suspended } from "@/src/hooks/useIsOnToolbar";
-import * as storage from "@/src/storage/useStorage";
 import { Suspense } from "react";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { name as TITLE } from "../../../package.json";
+import { HASH_TO } from "../../constants/paths";
+import { useIsOnToolbar_Suspended } from "../../hooks/useIsOnToolbar";
+import * as storage from "../../storage/useStorage";
 import { Spinner } from "./Spinner";
 
 const Checked = React.memo(({ children }: { children: string }) => (
@@ -31,7 +31,7 @@ const Main_Suspended = () => {
             {MESSAGE_FOR.PIN_EXTENSION_TO_TOOLBAR}
           </NavLink>
         )}
-        {isConfigInitialized !== undefined ? (
+        {isConfigInitialized ? (
           <Checked>{MESSAGE_FOR.OPTIONS}</Checked>
         ) : (
           <NavLink to={HASH_TO.OPTIONS} className="btn btn-primary">

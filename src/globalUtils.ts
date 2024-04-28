@@ -10,7 +10,7 @@ declare global {
 const global = typeof window !== "undefined" ? window : self;
 
 // sl = storage local
-global.sl = async () => console.table(await chrome.storage.local.get());
+global.sl = async () => console.info(await chrome.storage.local.get());
 global.sld = async (key: string) => await chrome.storage.local.remove(key);
 // ss = storage sync
 global.ss = async () => console.table(await chrome.storage.sync.get());

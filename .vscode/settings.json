@@ -9,7 +9,8 @@
     "noreferrer",
     "tailwindcss",
     "daisyui",
-    "clsx"
+    "clsx",
+    "camelcase"
   ],
   "emeraldwalk.runonsave": {
     "commands": [

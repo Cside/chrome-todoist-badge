@@ -1,9 +1,10 @@
-import ky from "ky";
+import _ky from "ky";
+import { camelCase, isObject, transform } from "lodash-es";
 
 // これだとリクエストがパラで飛んだ時駄目。
 // req id があれば一番楽だが...
 const requestStartedAt: Map<string, number | undefined> = new Map();
-export const kyInstance = ky.create({
+const kyInstance = _ky.create({
   hooks: {
     beforeRequest: [
       (req) => {
@@ -26,3 +27,13 @@ export const kyInstance = ky.create({
     ],
   },
 });
+
+export const ky = {
+  getCamelized: async <T>(url: string) => normalizeApiObject(await kyInstance.get(url).json()) as T,
+};
+
+export const normalizeApiObject = (obj: unknown): unknown =>
+  transform(obj as object, (acc: Record<string, unknown>, value: unknown, key: string, target) => {
+    const camelKey = Array.isArray(target) ? key : camelCase(key as string);
+    acc[camelKey] = isObject(value) ? normalizeApiObject(value) : value ?? undefined;
+  });

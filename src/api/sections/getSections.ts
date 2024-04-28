@@ -1,6 +1,6 @@
-import { API_URL_FOR } from "@/src/constants/urls";
-import { kyInstance } from "../kyInstance";
-import type { Section } from "../types";
+import { API_URL_FOR } from "../../constants/urls";
+import type { ProjectId, Section } from "../../types";
+import { ky } from "../ky";
 
-export const getSections = async ({ projectId }: { projectId: string }) =>
-  (await kyInstance.get(API_URL_FOR.GET_SECTIONS_BY(projectId)).json()) as Section[];
+export const getSections = async ({ projectId }: { projectId: ProjectId }) =>
+  await ky.getCamelized<Section[]>(API_URL_FOR.GET_SECTIONS_BY(projectId));

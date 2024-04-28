@@ -1,8 +1,10 @@
-import type { Task } from "@/src/api/types";
-import { WEB_APP_URL_FOR } from "@/src/constants/urls";
+import { difference } from "lodash-es";
+import { WEB_APP_URL_FOR } from "../../../../constants/urls";
 import * as storage from "../../../../storage/useStorage";
-import type { TasksGroupedBySection } from "../types";
+import type { Section, SectionId, Task, TasksGroupedBySection } from "../../../../types";
 
+// 初期化が終わってないと Options.tsx にリダイレクトするので
+// projectId がある前提の作りにする。
 export const useWebAppUrl = () => {
   const [projectId] = storage.useFilteringProjectId_Suspended();
   if (projectId === undefined) throw new Error("projectId is undefined");
@@ -10,18 +12,42 @@ export const useWebAppUrl = () => {
   return WEB_APP_URL_FOR.PROJECT_BY(projectId);
 };
 
-export const groupTasksBySectionId = (tasks: Task[]): TasksGroupedBySection => {
-  const grouped = tasks.reduce((acc: Record<string, Task[]>, task) => {
-    const key = task.sectionId ?? "null";
-    let val = acc[key];
-    if (!val) val = [];
-    val.push(task);
+const undefinedKey = "undefined";
+export const groupTasksBySectionId = ({
+  tasks,
+  sections,
+}: { tasks: Task[]; sections: Section[] }): TasksGroupedBySection => {
+  const sectionIdToSection = new Map(sections.map((section) => [section.id, section] as const));
+
+  const grouped = tasks.reduce((acc: Record<SectionId, Task[]>, task) => {
+    const key = task.sectionId ?? undefinedKey;
+
+    acc[key] ??= [];
+    acc[key]?.push(task);
+
     return acc;
   }, {});
-  const sortedKeys = Object.keys(grouped).sort((a, b) => (a === "null" ? -1 : a.localeCompare(b)));
+
+  const sortedKeys = Object.keys(grouped).sort((a, b) =>
+    a === undefinedKey
+      ? -1
+      : (sectionIdToSection.get(a)?.order ?? 0) - (sectionIdToSection.get(b)?.order ?? 0),
+  );
 
   return sortedKeys.map((key) => ({
-    sectionId: key === "null" ? null : key,
-    tasks: grouped[key] ?? [],
+    section:
+      key === undefinedKey
+        ? undefined
+        : sectionIdToSection.get(key) ??
+          (() => {
+            throw new Error(`section was not found. id: ${key}`);
+          })(),
+    tasks: (grouped[key] ?? []).sort((a, b) => a.order - b.order),
   }));
 };
+
+export const getUnknownSectionIds = ({ tasks, sections }: { tasks: Task[]; sections: Section[] }) =>
+  difference(
+    tasks.map((task) => task.sectionId).filter((id) => id !== undefined) as string[],
+    sections.map((section) => section.id),
+  );
