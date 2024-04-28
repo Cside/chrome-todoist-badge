@@ -47,9 +47,22 @@ describe(`${groupTasksBySectionId.name}()`, () => {
       ],
     },
     {
-      name: "empty",
+      name: "empty tasks",
       input: { tasks: [], sections: [] },
       expected: [],
+    },
+    {
+      name: "empty section",
+      input: {
+        tasks: [{ id: "id-100", order: 0, sectionId: undefined, content: "" }],
+        sections: [SECTION1],
+      },
+      expected: [
+        {
+          section: undefined,
+          tasks: [{ id: "id-100", order: 0, sectionId: undefined, content: "" }],
+        },
+      ],
     },
     {
       name: "only undefined sections",
