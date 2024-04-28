@@ -1,7 +1,7 @@
-import { HASH_TO } from "@/src/constants/paths";
-import { useIsOnToolbar_Suspended } from "@/src/hooks/useIsOnToolbar";
 import { useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { HASH_TO } from "../../constants/paths";
+import { useIsOnToolbar_Suspended } from "../../hooks/useIsOnToolbar";
 
 export default function PinExtensionToToolbar() {
   const isOnToolbar = useIsOnToolbar_Suspended();

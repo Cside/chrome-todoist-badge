@@ -1,52 +1,67 @@
-import type { Task } from "@/src/api/types";
-import type { TasksGroupedBySection } from "../types";
 import { groupTasksBySectionId } from "./utils";
 
+const SECTION1 = { id: "sec-100", name: "Section 1", order: 0 };
+const SECTION2 = { id: "sec-200", name: "Section 2", order: 1 };
+
 describe(`${groupTasksBySectionId.name}()`, () => {
-  const cases: { input: Task[]; expected: TasksGroupedBySection }[] = [
+  const cases: {
+    name: string;
+    input: Parameters<typeof groupTasksBySectionId>[0];
+    expected: ReturnType<typeof groupTasksBySectionId>;
+  }[] = [
+    // FIXME: order
     {
-      input: [
-        { id: "id-100", sectionId: "sec-100", content: "" },
-        { id: "id-200", sectionId: null, content: "" },
-        { id: "id-300", sectionId: null, content: "" },
-        { id: "id-400", sectionId: "sec-100", content: "" },
-        { id: "id-500", sectionId: "sec-200", content: "" },
-        { id: "id-600", sectionId: "sec-200", content: "" },
-      ],
+      name: "basic",
+      input: {
+        tasks: [
+          { id: "id-100", order: 1, sectionId: "sec-100", content: "" },
+          { id: "id-200", order: 2, sectionId: undefined, content: "" },
+          { id: "id-300", order: 3, sectionId: undefined, content: "" },
+          { id: "id-400", order: 4, sectionId: "sec-100", content: "" },
+          { id: "id-500", order: 50, sectionId: "sec-200", content: "" },
+          { id: "id-600", order: 6, sectionId: "sec-200", content: "" },
+        ],
+        sections: [SECTION1, SECTION2],
+      },
       expected: [
         {
-          sectionId: null,
+          section: undefined,
           tasks: [
-            { id: "id-200", sectionId: null, content: "" },
-            { id: "id-300", sectionId: null, content: "" },
+            { id: "id-200", order: 2, sectionId: undefined, content: "" },
+            { id: "id-300", order: 3, sectionId: undefined, content: "" },
           ],
         },
         {
-          sectionId: "sec-100",
+          section: SECTION1,
           tasks: [
-            { id: "id-100", sectionId: "sec-100", content: "" },
-            { id: "id-400", sectionId: "sec-100", content: "" },
+            { id: "id-100", order: 1, sectionId: "sec-100", content: "" },
+            { id: "id-400", order: 4, sectionId: "sec-100", content: "" },
           ],
         },
         {
-          sectionId: "sec-200",
+          section: SECTION2,
           tasks: [
-            { id: "id-500", sectionId: "sec-200", content: "" },
-            { id: "id-600", sectionId: "sec-200", content: "" },
+            { id: "id-600", order: 6, sectionId: "sec-200", content: "" },
+            { id: "id-500", order: 50, sectionId: "sec-200", content: "" },
           ],
         },
       ],
     },
     {
-      input: [],
+      name: "empty",
+      input: { tasks: [], sections: [] },
       expected: [],
     },
     {
-      input: [{ id: "id-100", sectionId: null, content: "" }],
+      name: "only undefined sections",
+      input: {
+        tasks: [{ id: "id-100", order: 0, sectionId: undefined, content: "" }],
+        sections: [],
+      },
       expected: [
         {
-          sectionId: null,
-          tasks: [{ id: "id-100", sectionId: null, content: "" }],
+          section: undefined,
+          tasks: [{ id: "id-100", order: 0, sectionId: undefined, content: "" }],
         },
       ],
     },

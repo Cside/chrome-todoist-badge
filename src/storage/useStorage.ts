@@ -1,15 +1,15 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { useCallback } from "react";
 import { storage } from "wxt/storage";
-import type { Task } from "../api/types";
 import {
   DEFAULT_FILTER_BY_DUE_BY_TODAY,
   DEFAULT_IS_CONFIG_INITIALIZED,
 } from "../constants/options";
+import type { ProjectId, Section, SectionId, Task } from "../types";
 import { STORAGE_KEY_FOR } from "./storageKeys";
 
 export const useFilteringProjectId_Suspended = () =>
-  useStorage_Suspended<string>({
+  useStorage_Suspended<ProjectId>({
     storageKey: STORAGE_KEY_FOR.CONFIG.FILTER_BY.PROJECT_ID,
   });
 
@@ -22,7 +22,7 @@ export const useFilterByDueByToday_Suspended = () => {
 };
 
 export const useFilteringSectionId_Suspended = () =>
-  useStorage_Suspended<string>({
+  useStorage_Suspended<SectionId>({
     storageKey: STORAGE_KEY_FOR.CONFIG.FILTER_BY.SECTION_ID,
   });
 
@@ -36,10 +36,17 @@ export const useIsConfigInitialized_Suspended = () => {
   return [value, mutate] as const;
 };
 
-export const useCachedTasks_Suspended = () =>
+export const useTasksCache_Suspended = () =>
   useStorage_Suspended<Task[]>({
     storageKey: STORAGE_KEY_FOR.CACHE.TASKS,
   });
+
+export const useCachedSections_Suspended = () =>
+  // Mutation 使わないので素の useSuspenseQuery
+  useSuspenseQuery({
+    queryKey: [STORAGE_KEY_FOR.CACHE.SECTIONS],
+    queryFn: async () => await storage.getItem<Section[]>(STORAGE_KEY_FOR.CACHE.SECTIONS),
+  }).data ?? undefined;
 
 // ==================================================
 // Utils

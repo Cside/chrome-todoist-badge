@@ -1,9 +1,9 @@
-import * as api from "@/src/api/tasks/getTasks";
-import { MAX_RETRY } from "@/src/constants/maxRetry";
-import { STORAGE_KEY_FOR } from "@/src/storage/storageKeys";
 import pRetry from "p-retry";
-import type { Task } from "../../../api/types";
+import * as api from "../../../api/tasks/getTasks";
+import { MAX_RETRY } from "../../../constants/maxRetry";
 import { setBadgeText } from "../../../fn/setBadgeText";
+import { STORAGE_KEY_FOR } from "../../../storage/storageKeys";
+import type { Task } from "../../../types";
 
 // for bg worker
 export const updateBadgeCountWithRetry = async ({ via }: { via: string }) => {

@@ -1,6 +1,5 @@
-import camelcaseKeysDeep from "camelcase-keys-deep";
 import _ky from "ky";
-import {} from "vitest/dist/reporters-P7C2ytIv.js";
+import { camelCase, isObject, transform } from "lodash-es";
 
 // これだとリクエストがパラで飛んだ時駄目。
 // req id があれば一番楽だが...
@@ -30,5 +29,11 @@ const kyInstance = _ky.create({
 });
 
 export const ky = {
-  getCamelized: async <T>(url: string) => camelcaseKeysDeep(await kyInstance.get(url).json()) as T,
+  getCamelized: async <T>(url: string) => normalizeApiObject(await kyInstance.get(url).json()) as T,
 };
+
+export const normalizeApiObject = (obj: unknown): unknown =>
+  transform(obj as object, (acc: Record<string, unknown>, value: unknown, key: string, target) => {
+    const camelKey = Array.isArray(target) ? key : camelCase(key as string);
+    acc[camelKey] = isObject(value) ? normalizeApiObject(value) : value ?? undefined;
+  });

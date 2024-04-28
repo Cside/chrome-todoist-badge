@@ -2,16 +2,17 @@ import { Suspense, useCallback, useEffect } from "react";
 import { isNonEmpty } from "ts-array-length";
 import useAsyncEffect from "use-async-effect";
 import { storage as wxtStorage } from "wxt/storage";
-import * as apiProjects from "../../api/projects/useProjects";
-import * as apiSections from "../../api/sections/useSections";
-import * as apiTasks from "../../api/tasks/useTasks";
-import type { Section, Task } from "../../api/types";
+import { useProjects } from "../../api/projects/useProjects";
+import { useSections } from "../../api/sections/useSections";
+import { useTasks } from "../../api/tasks/useTasks";
 import { INTERVAL_MINUTES } from "../../background/updateBadgeCount/updateBadgeCountRegularly";
 import { setBadgeText } from "../../fn/setBadgeText";
-import "../../globalUtils";
 import { STORAGE_KEY_FOR } from "../../storage/storageKeys";
 import * as storage from "../../storage/useStorage";
+import type { ProjectId, Section, Task } from "../../types";
 import { Spinner } from "./Spinner";
+
+const api = { useProjects, useTasks, useSections };
 
 const SECTION_ID_ALL = "__all";
 
@@ -27,19 +28,15 @@ const Main_Suspended = () => {
   // TODO: projectId が projects に含まれているかチェックする
   // (project がアーカイブ/削除されていれば、含まれない)
   const [projectId, setProjectId] = storage.useFilteringProjectId_Suspended();
-  const getFallbackProjectId_WithAssert = useCallback((): string => {
+  const getFirstProjectId_WithAssert = useCallback((): ProjectId => {
     if (!areProjectsLoaded) throw new Error("projects are not loaded");
     if (!isNonEmpty(projects)) throw new Error("projects are empty");
     return projects[0].id;
-  }, []);
-  const getSelectedProjectId_WithAssert = useCallback(
-    (): string => projectId ?? getFallbackProjectId_WithAssert(),
-    [projectId],
-  );
+  }, [areProjectsLoaded]);
+
   // set initial projectId to storage
   useEffect(() => {
-    if (areProjectsLoaded && projectId === undefined)
-      setProjectId(getFallbackProjectId_WithAssert());
+    if (areProjectsLoaded && projectId === undefined) setProjectId(getFirstProjectId_WithAssert());
   }, [areProjectsLoaded, projectId]);
 
   // ==================================================
@@ -47,11 +44,11 @@ const Main_Suspended = () => {
   // ==================================================
   const { data: sections, isSuccess: areSectionsLoaded } = api.useSections();
   const [sectionId, setSectionId, removeSectionId] = storage.useFilteringSectionId_Suspended();
-  type SectionIdToSection = Record<string, Section>;
+
   useAsyncEffect(async () => {
     if (areSectionsLoaded)
       // Popup とは別 Window なので TQ は使う意味ない。
-      await wxtStorage.setItem<SectionIdToSection>(STORAGE_KEY_FOR.CACHE.SECTIONS, sections); // retry はサボる
+      await wxtStorage.setItem<Section[]>(STORAGE_KEY_FOR.CACHE.SECTIONS, sections); // retry はサボる
   }, [sections, areSectionsLoaded]);
 
   // ==================================================
@@ -60,11 +57,14 @@ const Main_Suspended = () => {
   // TODO: sectionId が存在するかチェックする?
   const { data: tasks, isSuccess: areTasksLoaded } = api.useTasks({
     filters: {
-      projectId: getSelectedProjectId_WithAssert(),
+      projectId: (() => {
+        if (projectId !== undefined) return projectId;
+        return areProjectsLoaded ? getFirstProjectId_WithAssert() : "";
+      })(),
       filterByDueByToday,
       sectionId,
     },
-    enabled: projectId !== undefined ? true : areProjectsLoaded,
+    enabled: projectId !== undefined || areProjectsLoaded,
     deps: [projectId, filterByDueByToday, sectionId],
   });
   useAsyncEffect(async () => {
@@ -86,7 +86,7 @@ const Main_Suspended = () => {
             <td>
               {areProjectsLoaded ? (
                 <select
-                  value={getSelectedProjectId_WithAssert()}
+                  value={projectId ?? getFirstProjectId_WithAssert()}
                   onChange={(event) => {
                     setProjectId(event.target.value);
                     removeSectionId();
@@ -193,9 +193,3 @@ export default function Options() {
     </>
   );
 }
-
-const api = {
-  useProjects: apiProjects.useProjects,
-  useTasks: apiTasks.useTasks,
-  useSections: apiSections.useSections,
-};
