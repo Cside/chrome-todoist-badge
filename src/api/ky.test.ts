@@ -6,7 +6,7 @@ describe(`${normalizeApiObject.name}()`, () => {
     {
       name: string;
       input: Parameters<typeof normalizeApiObject>[0];
-      expected: ReturnType<typeof normalizeApiObject>[0];
+      expected: ReturnType<typeof normalizeApiObject>;
     }[]
   > = {
     camelize: [

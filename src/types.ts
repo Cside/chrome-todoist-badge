@@ -35,8 +35,6 @@ export type TaskFilters = {
   sectionId: SectionId | undefined;
 };
 
-export type SectionEntries = [SectionId, Section][];
-
 export type TasksGroupedBySection = {
   section: Section | undefined;
   tasks: Task[];
