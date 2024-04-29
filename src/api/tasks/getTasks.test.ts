@@ -1,4 +1,4 @@
-import { _buildTasksApiQueryString } from "./getTasks";
+import { _buildTasksApiQueryString, _escapeFilter } from "./getTasks";
 
 describe(`${_buildTasksApiQueryString.name}()`, () => {
   const cases: {
@@ -26,3 +26,6 @@ describe(`${_buildTasksApiQueryString.name}()`, () => {
     expect(_buildTasksApiQueryString(input)).toBe(expected),
   );
 });
+
+test(`${_escapeFilter.name}()`, () =>
+  expect(_escapeFilter("foo & bar & baz")).toBe("foo \\& bar \\& baz"));
