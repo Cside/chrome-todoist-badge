@@ -7,6 +7,7 @@ import { useProjects } from "../../api/projects/useProjects";
 import { useSections } from "../../api/sections/useSections";
 import { useTasks } from "../../api/tasks/useTasks";
 import { INTERVAL_MINUTES } from "../../background/updateBadgeCount/updateBadgeCountRegularly";
+import { SECTION_ID_FOR } from "../../constants/options";
 import { setBadgeText } from "../../fn/setBadgeText";
 import { STORAGE_KEY_FOR } from "../../storage/storageKeys";
 import * as storage from "../../storage/useStorage";
@@ -14,8 +15,6 @@ import type { ProjectId, Section, Task } from "../../types";
 import { Spinner } from "./Spinner";
 
 const api = { useProjects, useTasks, useSections };
-
-const SECTION_ID_ALL = "__all";
 
 const Main_Suspended = () => {
   const [isInitialized, setIsInitialized] = storage.useIsConfigInitialized_Suspended();
@@ -106,35 +105,31 @@ const Main_Suspended = () => {
             </td>
           </tr>
 
-          {(() => {
-            if (!areSectionsLoaded) return null;
-            if (sections.length === 0) return null;
-
-            return (
-              <tr className="border-none">
-                <th className="w-48 font-normal">
-                  <label className="label cursor-pointer">Section:</label>
-                </th>
-                <td>
-                  <select
-                    value={sectionId ?? SECTION_ID_ALL}
-                    onChange={(event) => {
-                      const value = event.target.value;
-                      value === SECTION_ID_ALL ? removeSectionId() : setSectionId(value);
-                    }}
-                    className="select select-bordered"
-                  >
-                    <option value={SECTION_ID_ALL}>All</option>
-                    {sections.map((section) => (
-                      <option key={section.id} value={section.id}>
-                        {section.name}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-              </tr>
-            );
-          })()}
+          {areSectionsLoaded && sections.length > 0 ? (
+            <tr className="border-none">
+              <th className="w-48 font-normal">
+                <label className="label cursor-pointer">Section:</label>
+              </th>
+              <td>
+                <select
+                  value={sectionId ?? SECTION_ID_FOR.ALL}
+                  onChange={(event) => {
+                    const value = event.target.value;
+                    value === SECTION_ID_FOR.ALL ? removeSectionId() : setSectionId(value);
+                  }}
+                  className="select select-bordered"
+                >
+                  <option value={SECTION_ID_FOR.ALL}>(All)</option>
+                  <option value={SECTION_ID_FOR.ALL}>(No parent section)</option>
+                  {sections.map((section) => (
+                    <option key={section.id} value={section.id}>
+                      {section.name}
+                    </option>
+                  ))}
+                </select>
+              </td>
+            </tr>
+          ) : null}
 
           <tr className="border-none">
             <th className="w-48 font-normal">

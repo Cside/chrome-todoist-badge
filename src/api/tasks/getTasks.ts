@@ -1,12 +1,15 @@
 import { DEFAULT_FILTER_BY_DUE_BY_TODAY } from "../../constants/options";
-import { API_URL_FOR } from "../../constants/urls";
+import { API_REST_BASE_URL, API_URL_FOR } from "../../constants/urls";
 import { STORAGE_KEY_FOR } from "../../storage/storageKeys";
-import type { ProjectId, SectionId, Task, TaskFilters } from "../../types";
+import type { ProjectId, Section, Task, TaskFilters } from "../../types";
 import { ky } from "../ky";
 
 // for TQ
-export const getTasksByParams = async (filters: TaskFilters): Promise<Task[]> =>
-  await ky.getCamelized<Task[]>(buildTasksApiUrl(filters));
+export const getTasksByParams = async (filters: TaskFilters): Promise<Task[]> => {
+  const url = `${API_URL_FOR.GET_TASKS}${await _buildTasksApiQueryString(filters)}`;
+  const tasks = await ky.getCamelized<Task[]>(url);
+  return tasks;
+};
 
 // for BG worker 。Retry は呼び出し元で行うので、ここではやらない
 export const getTasks = async (): Promise<Task[]> => getTasksByParams(await getTaskFilters());
@@ -20,7 +23,7 @@ const getTaskFilters = async (): Promise<TaskFilters> => {
     (await storage.getItem<boolean>(STORAGE_KEY_FOR.CONFIG.FILTER_BY.DUE_BY_TODAY)) ??
     DEFAULT_FILTER_BY_DUE_BY_TODAY;
   const sectionId =
-    (await storage.getItem<SectionId>(STORAGE_KEY_FOR.CONFIG.FILTER_BY.SECTION_ID)) ?? undefined;
+    (await storage.getItem<ProjectId>(STORAGE_KEY_FOR.CONFIG.FILTER_BY.SECTION_ID)) ?? undefined;
 
   return { projectId, filterByDueByToday, sectionId };
 };
@@ -28,16 +31,40 @@ const getTaskFilters = async (): Promise<TaskFilters> => {
 // ==================================================
 // Utils
 // ==================================================
-const buildTasksApiUrl = (params: TaskFilters) =>
-  `${API_URL_FOR.GET_TASKS}${_buildTasksApiQueryString(params)}`;
 
-export const _buildTasksApiQueryString = ({
+// Spec: https://todoist.com/help/articles/introduction-to-filters-V98wIH
+export const _buildTasksApiQueryString = async ({
   projectId,
   filterByDueByToday,
   sectionId,
-}: TaskFilters) =>
-  `?${new URLSearchParams({
-    project_id: projectId,
-    ...(filterByDueByToday === true && { filter: ["today", "overdue"].join("|") }),
-    ...(sectionId !== undefined && { section_id: sectionId }),
+}: TaskFilters) => {
+  const filters = [
+    filterByDueByToday === true && "(today | overdue)",
+    ...(await Promise.all([
+      await projectIdToFilter(projectId),
+      sectionId !== undefined && (await sectionIdToFilter(sectionId)),
+    ])),
+  ]
+    .filter(Boolean)
+    .join(" & ");
+
+  return `?${new URLSearchParams({
+    filter: filters,
   })}`;
+};
+
+const projectIdToFilter = async (projectId: ProjectId) =>
+  `#${_escapeFilter(await projectIdToName(projectId))}`;
+
+const sectionIdToFilter = async (sectionId: ProjectId) =>
+  `/${_escapeFilter(await sectionIdToName(sectionId))}`;
+
+// FIXME: 404 とかの場合のハンドリング
+// TODO: キャッシュ…どうしようね…
+const sectionIdToName = async (sectionId: ProjectId) =>
+  (await ky.getCamelized<Section>(`${API_REST_BASE_URL}/sections/${sectionId}`)).name;
+
+const projectIdToName = async (projectId: ProjectId) =>
+  (await ky.getCamelized<Section>(`${API_REST_BASE_URL}/projects/${projectId}`)).name;
+
+export const _escapeFilter = (filter: string) => filter.replace(/([&])/g, "\\$1");
