@@ -6,7 +6,7 @@ import { ky } from "../ky";
 
 // for TQ
 export const getTasksByParams = async (filters: TaskFilters): Promise<Task[]> =>
-  await ky.getCamelized<Task[]>(buildTasksApiUrl(filters));
+  await ky.getCamelized<Task[]>(`${API_URL_FOR.GET_TASKS}${_buildTasksApiQueryString(filters)}`);
 
 // for BG worker 。Retry は呼び出し元で行うので、ここではやらない
 export const getTasks = async (): Promise<Task[]> => getTasksByParams(await getTaskFilters());
@@ -28,8 +28,6 @@ const getTaskFilters = async (): Promise<TaskFilters> => {
 // ==================================================
 // Utils
 // ==================================================
-const buildTasksApiUrl = (params: TaskFilters) =>
-  `${API_URL_FOR.GET_TASKS}${_buildTasksApiQueryString(params)}`;
 
 export const _buildTasksApiQueryString = ({
   projectId,
