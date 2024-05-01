@@ -6,7 +6,7 @@ import { STORAGE_KEY_FOR } from "../../../storage/storageKeys";
 import type { Task } from "../../../types";
 
 // for bg worker
-export const updateBadgeCountWithRetry = async ({ via }: { via: string }) => {
+export const updateBadgeCount_AndResetCache_WithRetry = async ({ via }: { via: string }) => {
   console.info(`(via: ${via}) update badge count`);
   await pRetry(
     async () => {

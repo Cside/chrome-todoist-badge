@@ -8,7 +8,7 @@ export const updateBadgeCountRegularly = () => {
   chrome.alarms.onAlarm.addListener(async (alarm) => {
     switch (alarm.name) {
       case ALARM_NAME: {
-        await api.updateBadgeCountWithRetry({ via: "alarm" });
+        await api.updateBadgeCount_AndResetCache_WithRetry({ via: "alarm" });
         console.info(
           `Executed the alarm at ${new Date().toLocaleTimeString("ja-JP")}.\n` +
             `Next execution is at ${new Date(alarm.scheduledTime).toLocaleTimeString("ja-JP")}.`,

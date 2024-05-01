@@ -31,7 +31,9 @@ export const updateBadgeCountOnTaskUpdated = () => {
       if (command !== undefined) {
         console.log(`Command: ${command}`);
         if (/^(item_|section_move$|section_delete$)/.test(command))
-          await api.updateBadgeCountWithRetry({ via: "on task updated on Todoist Web App" });
+          await api.updateBadgeCount_AndResetCache_WithRetry({
+            via: "on task updated on Todoist Web App",
+          });
       }
     },
     { urls: [API_URL_MATCH_PATTERN_FOR.SYNC] },
