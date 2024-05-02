@@ -31,7 +31,9 @@ export const useIsConfigInitialized_Suspended = () => {
     storageKey: STORAGE_KEY_FOR.CONFIG.IS_INITIALIZED,
     defaultValue: false,
     onMutationSuccess: async () =>
-      await chrome.runtime.sendMessage({ action: "activate-badge-count-updates" }),
+      await chrome.runtime.sendMessage({
+        action: "activate-tasks-cache-refresh-and-badge-count-updates",
+      }),
   });
   return [value, mutate] as const;
 };

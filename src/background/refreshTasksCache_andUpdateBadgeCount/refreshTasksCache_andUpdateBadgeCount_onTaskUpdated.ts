@@ -1,12 +1,12 @@
 import { ONE_MINUTE } from "../../constants/time";
 import { API_URL_MATCH_PATTERN_FOR } from "../../constants/urls";
 import { Cache } from "../Cache";
-import * as api from "./fn/updateBadgeCount";
+import * as api from "./fn/refreshTasksCache_andUpdateBadgeCount";
 
 const decoder = new TextDecoder("utf-8");
 const cache = new Cache<string>({ ttl: ONE_MINUTE });
 
-export const updateBadgeCountOnTaskUpdated = () => {
+export const refreshTasksCache_andUpdateBadgeCount_onTaskUpdated = () => {
   chrome.webRequest.onBeforeRequest.addListener(
     (details) => {
       const requestBody = details.requestBody?.raw?.[0]?.bytes;
@@ -31,7 +31,7 @@ export const updateBadgeCountOnTaskUpdated = () => {
       if (command !== undefined) {
         console.log(`Command: ${command}`);
         if (/^(item_|section_move$|section_delete$)/.test(command))
-          await api.updateBadgeCount_AndResetCache_WithRetry({
+          await api.refreshTasksCache_andUpdateBadgeCount_withRetry({
             via: "on task updated on Todoist Web App",
           });
       }
