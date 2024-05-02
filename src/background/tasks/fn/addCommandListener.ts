@@ -32,8 +32,9 @@ export const addCommandListener = (commandRegexp: RegExp, callback: () => unknow
     async (details) => {
       const command = cache.get(details.requestId);
       if (command !== undefined) {
-        console.log(`Command: ${command}`);
-        if (commandRegexp.test(command)) await callback();
+        const matched = commandRegexp.test(command);
+        console.info(`Command: ${command}, matched: ${matched}`);
+        if (matched) await callback();
       }
     },
     { urls: [API_URL_MATCH_PATTERN_FOR.SYNC] },

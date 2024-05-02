@@ -61,8 +61,7 @@ const projectIdToFilter = async (projectId: ProjectId) =>
 const sectionIdToFilter = async (sectionId: ProjectId) =>
   `/${_escapeFilter(await self._sectionIdToName(sectionId))}`;
 
-// FIXME: 404 とかの場合のハンドリング
-// TODO: キャッシュ…どうしようね…
+// TODO: キャッシュ…
 export const _sectionIdToName = async (sectionId: ProjectId) =>
   (await ky.getCamelized<Section>(`${API_REST_BASE_URL}/sections/${sectionId}`)).name;
 
