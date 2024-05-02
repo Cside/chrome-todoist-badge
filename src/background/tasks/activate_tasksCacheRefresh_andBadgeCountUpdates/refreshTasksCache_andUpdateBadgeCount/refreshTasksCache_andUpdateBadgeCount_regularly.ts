@@ -1,14 +1,14 @@
 import { formatDistance } from "date-fns";
-import * as api from "./fn/updateBadgeCount";
+import * as api from "./fn/refreshTasksCache_andUpdateBadgeCount";
 
 const ALARM_NAME = "update-count";
 export const INTERVAL_MINUTES = 15; // 別の場所に移してもいいかも…
 
-export const updateBadgeCountRegularly = () => {
+export const refreshTasksCache_andUpdateBadgeCount_regularly = () => {
   chrome.alarms.onAlarm.addListener(async (alarm) => {
     switch (alarm.name) {
       case ALARM_NAME: {
-        await api.updateBadgeCountWithRetry({ via: "alarm" });
+        await api.refreshTasksCache_andUpdateBadgeCount_withRetry({ via: "alarm" });
         console.info(
           `Executed the alarm at ${new Date().toLocaleTimeString("ja-JP")}.\n` +
             `Next execution is at ${new Date(alarm.scheduledTime).toLocaleTimeString("ja-JP")}.`,

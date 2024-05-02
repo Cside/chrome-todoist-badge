@@ -1,6 +1,7 @@
 import type { ProjectId } from "../types";
 
-export const API_BASE_URL = "https://api.todoist.com";
+// biome-ignore format:
+export const API_BASE_URL     = "https://api.todoist.com";
 export const WEB_APP_BASE_URL = "https://app.todoist.com";
 
 // ==================================================
@@ -16,7 +17,7 @@ export const API_URL_FOR = {
 };
 
 export const API_URL_MATCH_PATTERN_FOR = {
-  SYNC: `${WEB_APP_BASE_URL}/API/v*/sync*`,
+  SYNC: `${WEB_APP_BASE_URL}/api/v*/sync*`,
 };
 
 // ==================================================

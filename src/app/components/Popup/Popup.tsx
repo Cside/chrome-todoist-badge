@@ -51,7 +51,6 @@ export default function Popup_Suspended() {
   const GroupedTasks = useMemo(
     () =>
       areTasksLoaded && areSectionsLoaded ? (
-        // あとで memo 化
         groupTasksBySectionId({ tasks, sections }).map((group) => (
           <React.Fragment key={group.section?.id ?? ""}>
             {group.section !== undefined && <h2 className="my-4">{group.section.name}</h2>}
@@ -70,7 +69,7 @@ export default function Popup_Suspended() {
                       window.open(task.url);
                     }}
                   >
-                    <Markdown>{task.content}</Markdown>
+                    {/^-+$/.test(task.content) ? task.content : <Markdown>{task.content}</Markdown>}
                   </div>
                 </li>
               ))}
@@ -87,7 +86,7 @@ export default function Popup_Suspended() {
     <>
       {GroupedTasks}
 
-      <div className="flex flex-col items-start gap-y-2">
+      <div className="flex gap-x-3">
         <div>
           <a href={webAppUrl} className="btn btn-primary" target="_blank" rel="noreferrer">
             <img src={todoistIcon} width="35" height="35" className="m-0" />

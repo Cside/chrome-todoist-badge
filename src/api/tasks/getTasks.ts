@@ -53,18 +53,19 @@ export const _buildTasksApiQueryString = async ({
   })}`;
 };
 
+import * as self from "./getTasks";
+
 const projectIdToFilter = async (projectId: ProjectId) =>
-  `#${_escapeFilter(await projectIdToName(projectId))}`;
+  `#${_escapeFilter(await self._projectIdToName(projectId))}`;
 
 const sectionIdToFilter = async (sectionId: ProjectId) =>
-  `/${_escapeFilter(await sectionIdToName(sectionId))}`;
+  `/${_escapeFilter(await self._sectionIdToName(sectionId))}`;
 
-// FIXME: 404 とかの場合のハンドリング
-// TODO: キャッシュ…どうしようね…
-const sectionIdToName = async (sectionId: ProjectId) =>
+// TODO: キャッシュ…
+export const _sectionIdToName = async (sectionId: ProjectId) =>
   (await ky.getCamelized<Section>(`${API_REST_BASE_URL}/sections/${sectionId}`)).name;
 
-const projectIdToName = async (projectId: ProjectId) =>
+export const _projectIdToName = async (projectId: ProjectId) =>
   (await ky.getCamelized<Section>(`${API_REST_BASE_URL}/projects/${projectId}`)).name;
 
 export const _escapeFilter = (filter: string) => filter.replace(/([&])/g, "\\$1");
