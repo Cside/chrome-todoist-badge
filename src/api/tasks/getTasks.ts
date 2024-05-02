@@ -66,9 +66,7 @@ const sectionIdToFilter = async (sectionId: ProjectId) =>
 export const _sectionIdToName = async (sectionId: ProjectId) =>
   (await ky.getCamelized<Section>(`${API_REST_BASE_URL}/sections/${sectionId}`)).name;
 
-export const _projectIdToName = async (projectId: ProjectId) => {
-  console.log("####### _projectIdToName");
-  return (await ky.getCamelized<Section>(`${API_REST_BASE_URL}/projects/${projectId}`)).name;
-};
+export const _projectIdToName = async (projectId: ProjectId) =>
+  (await ky.getCamelized<Section>(`${API_REST_BASE_URL}/projects/${projectId}`)).name;
 
 export const _escapeFilter = (filter: string) => filter.replace(/([&])/g, "\\$1");

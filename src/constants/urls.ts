@@ -17,7 +17,7 @@ export const API_URL_FOR = {
 };
 
 export const API_URL_MATCH_PATTERN_FOR = {
-  SYNC: `${WEB_APP_BASE_URL}/API/v*/sync*`,
+  SYNC: `${WEB_APP_BASE_URL}/api/v*/sync*`,
 };
 
 // ==================================================

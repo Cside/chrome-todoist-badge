@@ -31,9 +31,14 @@ export const useIsConfigInitialized_Suspended = () => {
     storageKey: STORAGE_KEY_FOR.CONFIG.IS_INITIALIZED,
     defaultValue: false,
     onMutationSuccess: async () =>
-      await chrome.runtime.sendMessage({
-        action: "activate-tasks-cache-refresh-and-badge-count-updates",
-      }),
+      await Promise.all([
+        chrome.runtime.sendMessage({
+          action: "activate-tasks-cache-refresh-and-badge-count-updates",
+        }),
+        chrome.runtime.sendMessage({
+          action: "activate-sections-cache-refresh",
+        }),
+      ]),
   });
   return [value, mutate] as const;
 };
@@ -62,7 +67,7 @@ const useStorage_Suspended = <StorageValue = never>({
 }: {
   storageKey: string;
   defaultValue?: StorageValue;
-  onMutationSuccess?: () => Promise<void>;
+  onMutationSuccess?: () => Promise<unknown>;
 }) => {
   const queryClient = useQueryClient();
   const queryKey = storageKey; // お行儀悪い気がするけど…。ズボラしちゃう。

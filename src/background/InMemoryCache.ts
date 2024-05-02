@@ -1,4 +1,4 @@
-export class Cache<T = never> {
+export class InMemoryCache<T = never> {
   private cache: Map<string, { value: T; expiresAt: number }>;
   private ttl: number;
 

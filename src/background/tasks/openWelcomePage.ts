@@ -1,4 +1,4 @@
-import { HASH_TO, PATH_TO } from "../constants/paths";
+import { HASH_TO, PATH_TO } from "../../constants/paths";
 
 export const openWelcomePageOnInstalled = () => {
   chrome.runtime.onInstalled.addListener(async ({ reason }) => {
