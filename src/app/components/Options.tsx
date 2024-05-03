@@ -1,5 +1,6 @@
 import { clsx } from "clsx";
 import { Suspense, useCallback, useEffect } from "react";
+import { redirect } from "react-router-dom";
 import { isNonEmpty } from "ts-array-length";
 import useAsyncEffect from "use-async-effect";
 import { storage as wxtStorage } from "wxt/storage";
@@ -8,10 +9,12 @@ import { useSections } from "../../api/sections/useSections";
 import { useTasks } from "../../api/tasks/useTasks";
 import { INTERVAL_MINUTES } from "../../background/tasks/activate_tasksCacheRefresh_andBadgeCountUpdates/refreshTasksCache_andUpdateBadgeCount/refreshTasksCache_andUpdateBadgeCount_regularly";
 import { SECTION_ID_FOR } from "../../constants/options";
+import { PATH_TO } from "../../constants/paths";
 import { setBadgeText } from "../../fn/setBadgeText";
 import { STORAGE_KEY_FOR } from "../../storage/storageKeys";
 import * as storage from "../../storage/useStorage";
 import type { ProjectId, Section, Task } from "../../types";
+import { isPopup } from "../fn/isPopup";
 import { Spinner } from "./Spinner";
 
 const api = { useProjects, useTasks, useSections };
@@ -167,7 +170,11 @@ const Main_Suspended = () => {
               "btn-primary",
               (!areProjectsLoaded || !areSectionsLoaded) && "btn-disabled",
             )}
-            onClick={async () => setIsInitialized(true)}
+            onClick={async () =>
+              setIsInitialized(true, {
+                onSuccess: () => redirect(isPopup() ? PATH_TO.POPUP : PATH_TO.WELCOME),
+              })
+            }
           >
             Save
           </button>

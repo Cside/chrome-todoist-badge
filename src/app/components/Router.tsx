@@ -1,7 +1,8 @@
 import { Suspense, useEffect } from "react";
 import { Outlet, RouterProvider, createHashRouter, redirect } from "react-router-dom";
 import { name as TITLE } from "../../../package.json";
-import { HASH_TO, PATH_TO } from "../../constants/paths";
+import { PATH_TO } from "../../constants/paths";
+import { isPopup } from "../fn/isPopup";
 import Options from "./Options";
 import PinExtensionToToolbar from "./PinExtensionToToolbar";
 import Popup_Suspended from "./Popup/Popup";
@@ -45,33 +46,23 @@ export const Router = () => (
         children: [
           {
             index: true,
-            loader: () => {
-              switch (location.pathname) {
-                case PATH_TO.OPTIONS:
-                  // コンポーネントを直接 return すると、loader が実行されないため
-                  return redirect(HASH_TO.OPTIONS);
-                case PATH_TO.POPUP:
-                  return redirect(HASH_TO.POPUP);
-                default:
-                  throw new Error(`Unknown pathname: ${location.pathname}`);
-              }
-            },
+            loader: () => redirect(isPopup() ? PATH_TO.POPUP : PATH_TO.OPTIONS),
           },
           {
-            path: HASH_TO.OPTIONS,
+            path: PATH_TO.OPTIONS,
             element: <Options />,
           },
           {
-            path: HASH_TO.POPUP,
+            path: PATH_TO.POPUP,
             loader: PopupLoader,
             element: <Popup_Suspended />,
           },
           {
-            path: HASH_TO.WELCOME,
+            path: PATH_TO.WELCOME,
             element: <Welcome />,
           },
           {
-            path: HASH_TO.PIN_EXTENSION_TO_TOOLBAR,
+            path: PATH_TO.PIN_EXTENSION_TO_TOOLBAR,
             element: <PinExtensionToToolbar />,
           },
           {

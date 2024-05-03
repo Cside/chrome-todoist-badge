@@ -47,6 +47,7 @@ export const _buildTasksApiQueryString = async ({
   ]
     .filter(Boolean)
     .join(" & ");
+  console.debug(filters);
 
   return `?${new URLSearchParams({
     filter: filters,
