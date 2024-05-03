@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom/client";
 import { Router } from "./components/Router";
 
-import "../../globalUtils";
+import "../globalUtils";
 import "./sentry";
 
 const root = document.getElementById("root");
