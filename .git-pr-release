@@ -1,0 +1,7 @@
+[pr-release]
+  token = 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
+  labels = release
+
+[pr-release "branch"]
+  staging = develop
+  production = main
