@@ -1,4 +1,4 @@
-import _ky from "ky";
+import _ky, { TimeoutError } from "ky";
 import { camelCase, isObject, transform } from "lodash-es";
 
 // これだとリクエストがパラで飛んだ時駄目。
@@ -29,7 +29,15 @@ const kyInstance = _ky.create({
 });
 
 export const ky = {
-  getCamelized: async <T>(url: string) => normalizeApiObject(await kyInstance.get(url).json()) as T,
+  getCamelized: async <T>(url: string) => {
+    try {
+      return normalizeApiObject(await kyInstance.get(url).json()) as T;
+    } catch (error) {
+      // TimeoutError の場合、ky の beforeError 等が発火しないため、ここでやる
+      if (error instanceof TimeoutError) error.message += ` (url: ${url})`;
+      throw error;
+    }
+  },
 };
 
 export const normalizeApiObject = (obj: unknown): unknown =>
