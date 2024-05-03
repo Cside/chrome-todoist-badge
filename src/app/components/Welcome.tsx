@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { name as TITLE } from "../../../package.json";
-import { HASH_TO } from "../../constants/paths";
+import { PATH_TO } from "../../constants/paths";
 import { useIsOnToolbar_Suspended } from "../../hooks/useIsOnToolbar";
 import * as storage from "../../storage/useStorage";
 import { Spinner } from "./Spinner";
@@ -27,14 +27,14 @@ const Main_Suspended = () => {
         {isOnToolbar ? (
           <Checked>{MESSAGE_FOR.PIN_EXTENSION_TO_TOOLBAR}</Checked>
         ) : (
-          <NavLink to={HASH_TO.PIN_EXTENSION_TO_TOOLBAR} className="btn btn-primary">
+          <NavLink to={PATH_TO.PIN_EXTENSION_TO_TOOLBAR} className="btn btn-primary">
             {MESSAGE_FOR.PIN_EXTENSION_TO_TOOLBAR}
           </NavLink>
         )}
         {isConfigInitialized ? (
           <Checked>{MESSAGE_FOR.OPTIONS}</Checked>
         ) : (
-          <NavLink to={HASH_TO.OPTIONS} className="btn btn-primary">
+          <NavLink to={PATH_TO.OPTIONS} className="btn btn-primary">
             {MESSAGE_FOR.OPTIONS}
           </NavLink>
         )}

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { HASH_TO } from "../../constants/paths";
+import { PATH_TO } from "../../constants/paths";
 import { useIsOnToolbar_Suspended } from "../../hooks/useIsOnToolbar";
 
 export default function PinExtensionToToolbar() {
@@ -8,7 +8,7 @@ export default function PinExtensionToToolbar() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isOnToolbar) navigate(HASH_TO.WELCOME);
+    if (isOnToolbar) navigate(PATH_TO.WELCOME);
   }, [isOnToolbar]);
 
   return (
@@ -22,7 +22,7 @@ export default function PinExtensionToToolbar() {
           icon)
         </li>
       </ol>
-      <NavLink to={HASH_TO.WELCOME} className="btn btn-secondary">
+      <NavLink to={PATH_TO.WELCOME} className="btn btn-secondary">
         Back
       </NavLink>
     </>
