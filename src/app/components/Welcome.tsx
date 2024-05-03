@@ -17,12 +17,26 @@ const Main_Suspended = () => {
   const [isConfigInitialized] = storage.useIsConfigInitialized_Suspended();
   const isOnToolbar = useIsOnToolbar_Suspended();
 
+  if (isConfigInitialized && isOnToolbar)
+    return (
+      <>
+        <h1>All done!</h1>
+        <p>Enjoy {TITLE}!</p>
+        <div>
+          <button type="button" className="btn btn-secondary" onClick={() => window.close()}>
+            Close
+          </button>
+        </div>
+      </>
+    );
+
   const MESSAGE_FOR = {
     PIN_EXTENSION_TO_TOOLBAR: "Pin extension to toolbar",
     OPTIONS: "Configure extension",
   };
   return (
     <>
+      <h1>Let's set up {TITLE}!</h1>
       <div className="flex flex-col items-start gap-y-3">
         {isOnToolbar ? (
           <Checked>{MESSAGE_FOR.PIN_EXTENSION_TO_TOOLBAR}</Checked>
@@ -45,11 +59,8 @@ const Main_Suspended = () => {
 
 export default function Welcome() {
   return (
-    <>
-      <h1>Let's set up {TITLE}!</h1>
-      <Suspense fallback={<Spinner className="ml-16" />}>
-        <Main_Suspended />
-      </Suspense>
-    </>
+    <Suspense fallback={<Spinner className="ml-16" />}>
+      <Main_Suspended />
+    </Suspense>
   );
 }

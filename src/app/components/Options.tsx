@@ -1,6 +1,6 @@
 import { clsx } from "clsx";
 import { Suspense, useCallback, useEffect } from "react";
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { isNonEmpty } from "ts-array-length";
 import useAsyncEffect from "use-async-effect";
 import { storage as wxtStorage } from "wxt/storage";
@@ -22,6 +22,7 @@ const api = { useProjects, useTasks, useSections };
 const Main_Suspended = () => {
   const [isInitialized, setIsInitialized] = storage.useIsConfigInitialized_Suspended();
   const [filterByDueByToday, setFilterByDueByToday] = storage.useFilterByDueByToday_Suspended();
+  const navigate = useNavigate();
 
   // ==================================================
   // All projects && Filtering projectId
@@ -161,6 +162,20 @@ const Main_Suspended = () => {
         )}
       </div>
 
+      <pre>
+        <code>
+          {JSON.stringify(
+            {
+              areTasksLoaded: areTasksLoaded && undefined,
+              areProjectsLoaded: areProjectsLoaded && undefined,
+              areSectionsLoaded: areSectionsLoaded && undefined,
+            },
+            null,
+            "  ",
+          )}
+        </code>
+      </pre>
+
       {isInitialized || (
         <div>
           <button
@@ -172,7 +187,9 @@ const Main_Suspended = () => {
             )}
             onClick={async () =>
               setIsInitialized(true, {
-                onSuccess: () => redirect(isPopup() ? PATH_TO.POPUP : PATH_TO.WELCOME),
+                onSuccess: () => {
+                  navigate(isPopup() ? PATH_TO.POPUP : PATH_TO.WELCOME);
+                },
               })
             }
           >
