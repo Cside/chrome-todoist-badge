@@ -10,10 +10,10 @@ registries:
     url: https://npm.pkg.github.com
     token: ${{ secrets.WRITABLE_TOKEN }}
 updates:
-  - package-ecosystem: 'npm' # See documentation for possible values
-    directory: '/' # Location of package manifests
+  - package-ecosystem: "npm" # See documentation for possible values
+    directory: "/" # Location of package manifests
     registries:
       - npm-github
     schedule:
-      interval: 'monthly'
-    target-branch: 'develop'
+      interval: "monthly"
+    target-branch: "develop"
