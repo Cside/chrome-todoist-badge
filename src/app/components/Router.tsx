@@ -12,8 +12,6 @@ import { QueryClientProvider } from "./Providers/QueryClientProvider";
 import { Spinner } from "./Spinner";
 import Welcome from "./Welcome";
 
-import "../../globalUtils";
-
 // sync import にしても初期描画速度遅くならないので。
 // 逆に、dynamic import にすると、Spinner がしばらく表示されて体験が悪くなる。
 

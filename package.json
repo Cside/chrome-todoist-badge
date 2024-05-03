@@ -33,6 +33,8 @@
     "fix": "pnpm run lint-fix && pnpm run format-fix"
   },
   "dependencies": {
+    "@sentry/integrations": "^7.113.0",
+    "@sentry/react": "^7.113.0",
     "@tanstack/react-query": "^5.29.2",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
