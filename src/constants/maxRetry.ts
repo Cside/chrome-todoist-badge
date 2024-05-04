@@ -1,1 +1,1 @@
-export const MAX_RETRY = 2;
+export const MAX_RETRY = 1;

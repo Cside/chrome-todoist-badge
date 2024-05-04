@@ -8,6 +8,8 @@ import { setBadgeColor } from "./tasks/setBadgeColor";
 export const startBackground =
   // async にすると警告が出る
   () => {
+    openWelcomePageOnInstalled(); // async の中に入れたら動かないので注意
+    addMessageListeners();
     (async () => {
       await setBadgeColor();
       // たかだか chrome.storage の読み込みなので、Promise.all は使わない
@@ -15,8 +17,5 @@ export const startBackground =
         activate_tasksCacheRefresh_andBadgeCountUpdates();
         activate_sectionsCacheRefresh();
       }
-
-      openWelcomePageOnInstalled();
-      addMessageListeners();
     })();
   };

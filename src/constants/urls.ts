@@ -25,4 +25,5 @@ export const API_URL_MATCH_PATTERN_FOR = {
 // ==================================================
 export const WEB_APP_URL_FOR = {
   PROJECT_BY: (projectId: ProjectId) => `${WEB_APP_BASE_URL}/app/project/${projectId}`,
+  LOGIN: `${WEB_APP_BASE_URL}/auth/login`,
 };
