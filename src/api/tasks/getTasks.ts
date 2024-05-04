@@ -1,4 +1,8 @@
-import { DEFAULT_FILTER_BY_DUE_BY_TODAY } from "../../constants/options";
+import {
+  DEFAULT_FILTER_BY_DUE_BY_TODAY,
+  SECTION_ID_FOR,
+  SECTION_ID_TO_FILTER,
+} from "../../constants/options";
 import { API_REST_BASE_URL, API_URL_FOR } from "../../constants/urls";
 import { STORAGE_KEY_FOR } from "../../storage/storageKeys";
 import type { ProjectId, Section, Task, TaskFilters } from "../../types";
@@ -57,16 +61,18 @@ export const _buildTasksApiQueryString = async ({
 import * as self from "./getTasks";
 
 const projectIdToFilter = async (projectId: ProjectId) =>
-  `#${_escapeFilter(await self._projectIdToName(projectId))}`;
+  `#${_escapeFilter(await self._getProjectName(projectId))}`;
 
 const sectionIdToFilter = async (sectionId: ProjectId) =>
-  `/${_escapeFilter(await self._sectionIdToName(sectionId))}`;
+  sectionId === SECTION_ID_FOR.NO_PARENT
+    ? SECTION_ID_TO_FILTER.NO_PARENT
+    : `/${_escapeFilter(await self._getSectionName(sectionId))}`;
 
 // TODO: キャッシュ…
-export const _sectionIdToName = async (sectionId: ProjectId) =>
+export const _getSectionName = async (sectionId: ProjectId) =>
   (await ky.getCamelized<Section>(`${API_REST_BASE_URL}/sections/${sectionId}`)).name;
 
-export const _projectIdToName = async (projectId: ProjectId) =>
+export const _getProjectName = async (projectId: ProjectId) =>
   (await ky.getCamelized<Section>(`${API_REST_BASE_URL}/projects/${projectId}`)).name;
 
 export const _escapeFilter = (filter: string) => filter.replace(/([&])/g, "\\$1");

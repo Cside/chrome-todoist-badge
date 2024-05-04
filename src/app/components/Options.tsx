@@ -124,7 +124,7 @@ const Main_Suspended = () => {
                   className="select select-bordered"
                 >
                   <option value={SECTION_ID_FOR.ALL}>(All)</option>
-                  <option value={SECTION_ID_FOR.ALL}>(No parent section)</option>
+                  <option value={SECTION_ID_FOR.NO_PARENT}>(No parent section)</option>
                   {sections.map((section) => (
                     <option key={section.id} value={section.id}>
                       {section.name}

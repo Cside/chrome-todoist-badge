@@ -1,10 +1,13 @@
 import _ky, { TimeoutError } from "ky";
 import { camelCase, isObject, transform } from "lodash-es";
 
+const TIMEOUT = 10 * 1000; // same as default
+
 // これだとリクエストがパラで飛んだ時駄目。
 // req id があれば一番楽だが...
 const requestStartedAt: Map<string, number | undefined> = new Map();
 const kyInstance = _ky.create({
+  timeout: TIMEOUT,
   hooks: {
     beforeRequest: [
       (req) => {
@@ -25,6 +28,14 @@ const kyInstance = _ky.create({
         );
       },
     ],
+    beforeError: [
+      async (error) => {
+        error.message +=
+          `\n    url: ${error.request.url}` +
+          `\n    body: ${error.response.bodyUsed ? "" : await error.response.text()}`;
+        return error;
+      },
+    ],
   },
 });
 
@@ -34,7 +45,7 @@ export const ky = {
       return normalizeApiObject(await kyInstance.get(url).json()) as T;
     } catch (error) {
       // TimeoutError の場合、ky の beforeError 等が発火しないため、ここでやる
-      if (error instanceof TimeoutError) error.message += ` (url: ${url})`;
+      if (error instanceof TimeoutError) error.message += `\n    url: ${url}, timeout: ${TIMEOUT}`;
       throw error;
     }
   },
