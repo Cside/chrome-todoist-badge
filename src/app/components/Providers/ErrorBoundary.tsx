@@ -1,7 +1,34 @@
+import { HTTPError } from "ky";
 import { useRouteError } from "react-router-dom";
+import { WEB_APP_URL_FOR } from "../../../constants/urls";
+import { isPopup } from "../../fn/isPopup";
+
+const STATUS_CODE_UNAUTHORIZED = 401;
 
 export const ErrorBoundary = (): JSX.Element => {
   const error = useRouteError();
+
+  if (error instanceof HTTPError && error.response.status === STATUS_CODE_UNAUTHORIZED)
+    return (
+      <>
+        <h1 className="text-3xl text-error">You are not logged in to Todoist</h1>
+        <p>
+          Please login to{" "}
+          <a href={WEB_APP_URL_FOR.LOGIN} target="_blank" rel="noreferrer">
+            Todoist on Web
+          </a>
+          .
+        </p>
+        {!isPopup() && (
+          <div>
+            <button type="button" className="btn btn-outline" onClick={() => location.reload()}>
+              I have logged in.
+            </button>
+          </div>
+        )}
+      </>
+    );
+
   return (
     <>
       <h1 className="text-error">
