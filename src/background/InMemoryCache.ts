@@ -9,11 +9,8 @@ export class InMemoryCache<T = never> {
 
   private cleanExpiredCache(): void {
     const now = Date.now();
-    for (const [key, { expiresAt: expireAt }] of this.cache.entries()) {
-      if (now > expireAt) {
-        this.cache.delete(key);
-      }
-    }
+    for (const [key, { expiresAt: expireAt }] of this.cache.entries())
+      if (now > expireAt) this.cache.delete(key);
   }
 
   set(key: string, value: T): void {

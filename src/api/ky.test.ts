@@ -63,11 +63,10 @@ describe(`${normalizeApiObject.name}()`, () => {
       },
     ],
   };
-  for (const [description, cases] of Object.entries(groupedCases)) {
+  for (const [description, cases] of Object.entries(groupedCases))
     describe(description, () => {
       test.each(cases)("$name", ({ input, expected }) =>
         expect(normalizeApiObject(input)).toEqual(expected),
       );
     });
-  }
 });
