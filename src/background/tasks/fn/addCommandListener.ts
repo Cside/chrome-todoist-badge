@@ -11,7 +11,7 @@ export const addCommandListener = (commandRegexp: RegExp, callback: () => unknow
     chrome.webRequest.onBeforeRequest.addListener(
       (details) => {
         const requestBody = details.requestBody?.raw?.[0]?.bytes;
-        if (requestBody) {
+        if (requestBody)
           try {
             const parsed = JSON.parse(decoder.decode(requestBody)) as {
               commands: { type: string }[];
@@ -21,7 +21,6 @@ export const addCommandListener = (commandRegexp: RegExp, callback: () => unknow
           } catch (error) {
             console.error(`Failed to parse request body. error: ${error}`);
           }
-        }
       },
       { urls: [API_URL_MATCH_PATTERN_FOR.SYNC] },
       ["requestBody"],
