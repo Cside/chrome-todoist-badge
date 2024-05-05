@@ -30,9 +30,12 @@ const kyInstance = _ky.create({
     ],
     beforeError: [
       async (error) => {
+        const url = error.request.url;
         error.message +=
-          `\n    url: ${error.request.url}` +
-          `\n    body: ${error.response.bodyUsed ? "" : await error.response.text()}`;
+          // biome-ignore lint/style/useTemplate:
+          `\n    url: ${url}` +
+          extractFilter(url) +
+          +`\n    body: ${error.response.bodyUsed ? "" : await error.response.text()}`;
         return error;
       },
     ],
@@ -45,7 +48,13 @@ export const ky = {
       return normalizeApiObject(await kyInstance.get(url).json()) as T;
     } catch (error) {
       // TimeoutError の場合、ky の beforeError 等が発火しないため、ここでやる
-      if (error instanceof TimeoutError) error.message += `\n    url: ${url}, timeout: ${TIMEOUT}`;
+      if (error instanceof TimeoutError)
+        error.message +=
+          // biome-ignore format:
+          // biome-ignore lint/style/useTemplate:
+          `\n    url: ${url}` +
+          extractFilter(url) +
+          `\n    timeout: ${TIMEOUT}`;
       throw error;
     }
   },
@@ -56,3 +65,12 @@ export const normalizeApiObject = (obj: unknown): unknown =>
     const camelKey = Array.isArray(target) ? key : camelCase(key as string);
     acc[camelKey] = isObject(value) ? normalizeApiObject(value) : value ?? undefined;
   });
+
+// ==================================================
+// Utils
+// ==================================================
+
+const extractFilter = (url: string) => {
+  const filter = new URL(url).searchParams.get("filter");
+  return filter !== null ? `\n    filter: ${filter}` : "";
+};
