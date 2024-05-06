@@ -1,4 +1,4 @@
-import { addAlarmListener } from "../../fn/addAlarmListener";
+import { addAlarmListener } from "../fn/addAlarmListener";
 import * as api from "./fn/refreshTasksCache_andUpdateBadgeCount";
 
 export const INTERVAL_MINUTES = 15;

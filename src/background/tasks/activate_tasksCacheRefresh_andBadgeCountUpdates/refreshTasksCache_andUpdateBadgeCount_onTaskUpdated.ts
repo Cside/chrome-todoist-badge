@@ -1,4 +1,4 @@
-import { addCommandListener } from "../../fn/addCommandListener";
+import { addCommandListener } from "../fn/addCommandListener";
 import * as api from "./fn/refreshTasksCache_andUpdateBadgeCount";
 
 const REGEXP = [
