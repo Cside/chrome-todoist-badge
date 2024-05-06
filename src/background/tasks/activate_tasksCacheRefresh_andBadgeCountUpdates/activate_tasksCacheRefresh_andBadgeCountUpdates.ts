@@ -3,6 +3,7 @@ import { refreshTasksCache_andUpdateBadgeCount_onTaskUpdated } from "./refreshTa
 import { refreshTasksCache_andUpdateBadgeCount_regularly } from "./refreshTasksCache_andUpdateBadgeCount_regularly";
 
 export const activate_tasksCacheRefresh_andBadgeCountUpdates = async () => {
+  console.log(`[task start] ${activate_tasksCacheRefresh_andBadgeCountUpdates.name}`);
   refreshTasksCache_andUpdateBadgeCount_onTaskUpdated();
   refreshTasksCache_andUpdateBadgeCount_onActive();
   await refreshTasksCache_andUpdateBadgeCount_regularly();
