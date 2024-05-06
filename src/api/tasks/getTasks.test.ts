@@ -6,8 +6,8 @@ describe(`${_buildTasksApiQueryString.name}()`, () => {
   const sectionName = "Section";
 
   beforeEach(() => {
-    vi.spyOn(module, "_projectIdToName").mockResolvedValue(projectName);
-    vi.spyOn(module, "_sectionIdToName").mockResolvedValue(sectionName);
+    vi.spyOn(module, "_getProjectName").mockResolvedValue(projectName);
+    vi.spyOn(module, "_getSectionName").mockResolvedValue(sectionName);
   });
   const cases: {
     name: string;

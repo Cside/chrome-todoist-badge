@@ -17,5 +17,5 @@
   "paths": {
     "@/*": ["./*"]
   },
-  "ignoreDependencies": ["@types/chrome"]
+  "ignoreDependencies": ["@types/chrome", "@sentry/integrations"]
 }

@@ -3,7 +3,7 @@ name: Sentry Release
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
 
 jobs:
   sentry-release:
@@ -31,9 +31,9 @@ jobs:
           status: ${{ job.status }}
           fields: repo,message,ref,workflow,took
           username: Github Actions
-          icon_emoji: ':github:'
+          icon_emoji: ":github:"
           text: ${{ job.status }}
-          author_name: ''
+          author_name: ""
           mention: channel
           if_mention: failure
         env:
