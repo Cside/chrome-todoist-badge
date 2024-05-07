@@ -9,10 +9,8 @@ const REGEXP = [
 ];
 
 export const refreshTasksCache_andUpdateBadgeCount_onTaskUpdated = () =>
-  addCommandListener(
-    new RegExp(REGEXP.join("|")),
-    async () =>
-      await api.refreshTasksCache_andUpdateBadgeCount_withRetry({
-        via: "on task updated on Todoist Web App",
-      }),
-  );
+  addCommandListener({
+    name: api.refreshTasksCache_andUpdateBadgeCount_withRetry.name,
+    commandRegExp: new RegExp(REGEXP.join("|")),
+    listener: async () => await api.refreshTasksCache_andUpdateBadgeCount_withRetry(),
+  });

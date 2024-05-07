@@ -1,5 +1,6 @@
 import _ky, { TimeoutError } from "ky";
 import { camelCase, isObject, transform } from "lodash-es";
+import { getLocaleTime } from "../fn/getLocaleTime";
 
 const TIMEOUT = 10 * 1000; // same as default
 
@@ -24,7 +25,7 @@ const kyInstance = _ky.create({
         const elapsed = `${((Date.now() - startedAt) / 1_000).toFixed(2)}ms`;
         console.info(
           // biome-ignore format:
-          `(${elapsed}) ${res.status} ${req.method} ${req.url} ${new Date().toLocaleTimeString("ja-JP")}`,
+          `(${elapsed}) ${res.status} ${req.method} ${req.url} ${getLocaleTime()}`,
         );
       },
     ],

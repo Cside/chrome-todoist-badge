@@ -19,6 +19,7 @@
     "@typescript-eslint/no-floating-promises": ["error", { "ignoreIIFE": true }],
     "@typescript-eslint/strict-boolean-expressions": "error",
     "@typescript-eslint/prefer-nullish-coalescing": "error", // || でなく ??
+    "react/display-name": "error",
     "react-refresh/only-export-components": ["error", { "allowConstantExport": true }],
     "react/jsx-no-bind": ["error", { "ignoreDOMComponents": true }], // onClick={location.reload} みたいな this バグを防ぐ
     "react/jsx-no-useless-fragment": "error" // 不要な <></> を削除

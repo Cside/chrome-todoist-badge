@@ -7,11 +7,13 @@ import { useIsOnToolbar_Suspended } from "../../hooks/useIsOnToolbar";
 import * as storage from "../../storage/useStorage";
 import { Spinner } from "./Spinner";
 
-const Checked = React.memo(({ children }: { children: string }) => (
-  <div>
-    ✅ <span className="text-neutral-400 line-through">{children}</span>
-  </div>
-));
+const Checked = React.memo(function Checked({ children }: { children: string }) {
+  return (
+    <div>
+      ✅ <span className="text-neutral-400 line-through">{children}</span>
+    </div>
+  );
+});
 
 const Main_Suspended = () => {
   const [isConfigInitialized] = storage.useIsConfigInitialized_Suspended();
