@@ -31,7 +31,7 @@ export const addAlarmListener = async ({
             `    Next execution is at ${getLocaleTime(alarm.scheduledTime)}.`,
         );
       } catch (error) {
-        console.info(`[${name}] Alarm: Failed to execute. error: `, error);
+        console.error(`[${name}] Alarm: Failed to execute. error: `, error);
       }
   });
 
@@ -41,7 +41,7 @@ export const addAlarmListener = async ({
         await listener();
         console.info(`[${name}] onActive: Executed at ${getLocaleTime()}.`);
       } catch (error) {
-        console.info(`[${name}] onActive: Failed to execute. error: `, error);
+        console.error(`[${name}] onActive: Failed to execute. error: `, error);
       }
   });
 };
