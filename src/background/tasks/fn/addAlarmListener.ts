@@ -22,12 +22,16 @@ export const addAlarmListener = async ({
   }
 
   chrome.alarms.onAlarm.addListener(async (alarm) => {
-    if (alarm.name !== name) {
+    if (alarm.name === name && (await chrome.idle.queryState(10_000)) === "active") {
       await listener();
       console.info(
-        `Executed the alarm at ${new Date().toLocaleTimeString("ja-JP")}.\n` +
-          `Next execution is at ${new Date(alarm.scheduledTime).toLocaleTimeString("ja-JP")}.`,
+        `[${name}] Executed the alarm at ${new Date().toLocaleTimeString("ja-JP")}.\n` +
+          `    Next execution is at ${new Date(alarm.scheduledTime).toLocaleTimeString("ja-JP")}.`,
       );
     }
+  });
+
+  chrome.idle.onStateChanged.addListener(async (idleState) => {
+    if (idleState === "active") await listener();
   });
 };
