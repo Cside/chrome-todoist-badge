@@ -1,4 +1,5 @@
 import { formatDistance } from "date-fns";
+import { getLocaleTime } from "../../../fn/getLocaleTime";
 
 type Name = "refresh-tasks-cache-and-update-badge-count" | "refresh-sections-cache";
 
@@ -12,7 +13,7 @@ export const addAlarmListener = async ({
     const nextTime = formatDistance(new Date(alarm.scheduledTime), new Date(), {
       addSuffix: true,
     });
-    console.info(`[${name}] Next execution is ${nextTime}.`);
+    console.info(`[${name}] Alarm exists. Next execution is ${nextTime}.`);
   } else {
     await chrome.alarms.create(name, {
       delayInMinutes: 0,
@@ -22,16 +23,25 @@ export const addAlarmListener = async ({
   }
 
   chrome.alarms.onAlarm.addListener(async (alarm) => {
-    if (alarm.name === name && (await chrome.idle.queryState(10_000)) === "active") {
-      await listener();
-      console.info(
-        `[${name}] Executed the alarm at ${new Date().toLocaleTimeString("ja-JP")}.\n` +
-          `    Next execution is at ${new Date(alarm.scheduledTime).toLocaleTimeString("ja-JP")}.`,
-      );
-    }
+    if (alarm.name === name && (await chrome.idle.queryState(10_000)) === "active")
+      try {
+        await listener();
+        console.info(
+          `[${name}] Alarm: Executed at ${getLocaleTime()}.\n` +
+            `    Next execution is at ${getLocaleTime(alarm.scheduledTime)}.`,
+        );
+      } catch (error) {
+        console.info(`[${name}] Alarm: Failed to execute. error: `, error);
+      }
   });
 
   chrome.idle.onStateChanged.addListener(async (idleState) => {
-    if (idleState === "active") await listener();
+    if (idleState === "active")
+      try {
+        await listener();
+        console.info(`[${name}] onActive: Executed at ${getLocaleTime()}.`);
+      } catch (error) {
+        console.info(`[${name}] onActive: Failed to execute. error: `, error);
+      }
   });
 };

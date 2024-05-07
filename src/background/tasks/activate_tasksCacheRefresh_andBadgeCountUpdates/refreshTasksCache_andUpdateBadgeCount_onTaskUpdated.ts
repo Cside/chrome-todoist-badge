@@ -11,8 +11,5 @@ const REGEXP = [
 export const refreshTasksCache_andUpdateBadgeCount_onTaskUpdated = () =>
   addCommandListener(
     new RegExp(REGEXP.join("|")),
-    async () =>
-      await api.refreshTasksCache_andUpdateBadgeCount_withRetry({
-        via: "on task updated on Todoist Web App",
-      }),
+    async () => await api.refreshTasksCache_andUpdateBadgeCount_withRetry(),
   );
