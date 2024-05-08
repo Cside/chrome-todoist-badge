@@ -6,7 +6,8 @@ import { useSectionsCache } from "../../../api/sections/useSections";
 import { useTasksCache } from "../../../api/tasks/useTasks";
 import { useBadgeUpdate_andCacheSet } from "../../hooks/useBadgeUpdate_andCacheSet";
 import { Spinner } from "../Spinner";
-import { getUnknownSectionIds, groupTasksBySectionId, useWebAppUrl } from "./fn/utils";
+import { getUnknownSectionIds, groupTasksBySectionId } from "./fn/utils";
+import { useWebAppUrl } from "./hooks";
 
 const api = { useTasksCache, useSectionsCache };
 
