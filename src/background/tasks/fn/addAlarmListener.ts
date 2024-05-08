@@ -1,13 +1,17 @@
 import { formatDistance } from "date-fns";
 import { getLocaleTime } from "../../../fn/getLocaleTime";
 
-type Name = "refresh-tasks-cache-and-update-badge-count" | "refresh-sections-cache";
+const prevStateMap = new Map<string, chrome.idle.IdleState>();
 
 export const addAlarmListener = async ({
   name,
   intervalMinutes,
   listener,
-}: { name: Name; intervalMinutes: number; listener: () => Promise<void> }) => {
+}: {
+  name: string;
+  intervalMinutes: number;
+  listener: () => Promise<void>;
+}) => {
   const alarm = await chrome.alarms.get(name);
   if (alarm) {
     const nextTime = formatDistance(new Date(alarm.scheduledTime), new Date(), {
@@ -36,7 +40,11 @@ export const addAlarmListener = async ({
   });
 
   chrome.idle.onStateChanged.addListener(async (idleState) => {
-    if (idleState === "active")
+    const prevState = prevStateMap.get(name);
+    prevStateMap.set(name, idleState);
+
+    // idle -> active の時に発火してほしくないので currentState === 'active' じゃ駄目
+    if (prevState === "locked")
       try {
         await listener();
         console.info(`[${name}] onActive: Executed at ${getLocaleTime()}.`);
