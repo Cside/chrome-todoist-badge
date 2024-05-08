@@ -2,13 +2,9 @@ import todoistIcon from "@/assets/images/todoist.webp";
 import Markdown from "markdown-to-jsx";
 import React, { useEffect, useState, useMemo } from "react";
 import { NavLink } from "react-router-dom";
-import useAsyncEffect from "use-async-effect";
-import { storage as wxtStorage } from "wxt/storage";
 import { useSectionsCache } from "../../../api/sections/useSections";
 import { useTasksCache } from "../../../api/tasks/useTasks";
-import { setBadgeText } from "../../../fn/setBadgeText";
-import { STORAGE_KEY_FOR } from "../../../storage/storageKeys";
-import type { Task } from "../../../types";
+import { useBadgeUpdate_andCacheSet } from "../../hooks/useBadgeUpdate_andCacheSet";
 import { Spinner } from "../Spinner";
 import { getUnknownSectionIds, groupTasksBySectionId, useWebAppUrl } from "./fn/utils";
 
@@ -22,7 +18,6 @@ export default function Popup_Suspended() {
   } = api.useTasksCache(); // 内部で storage を suspended している
   const webAppUrl = useWebAppUrl();
   const [isCacheAvailable, setIsCacheAvailable] = useState(true);
-  // FIXME これ projectId が無い場合、isSuccess になんのけ・・・
   const {
     data: sections,
     isSuccess: areSectionsLoaded,
@@ -40,13 +35,7 @@ export default function Popup_Suspended() {
     }
   }, [areTasksLoaded, tasks, areSectionsLoaded, sections]);
 
-  useAsyncEffect(async () => {
-    // バッヂ更新。あえて共通化してない
-    if (areTasksLoaded) {
-      await setBadgeText(tasks.length);
-      await wxtStorage.setItem<Task[]>(STORAGE_KEY_FOR.CACHE.TASKS, tasks); // retry サボる
-    }
-  }, [tasks, areTasksLoaded]);
+  useBadgeUpdate_andCacheSet({ tasks, areTasksLoaded });
 
   const GroupedTasks = useMemo(
     () =>

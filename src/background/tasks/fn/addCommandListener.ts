@@ -40,7 +40,7 @@ export const addCommandListener = ({
         if (matched)
           try {
             await listener();
-            console.log(`[command: ${command}] ${name}`);
+            console.info(`[command: ${command}] ${name}`);
           } catch (error) {
             console.error(`[command: ${command}] Failed to executer. error: `, error);
           }

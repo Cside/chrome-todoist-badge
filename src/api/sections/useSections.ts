@@ -18,7 +18,8 @@ export const useSections = ({ cache }: { cache?: Section[] | undefined } = {}) =
       return sections;
     },
     ...(cache && {
-      placeholderData: (prevData) => (prevData ? undefined : cache),
+      placeholderData: (prevData: Section[] | undefined) =>
+        prevData !== undefined ? undefined : cache,
     }),
     enabled: projectId !== undefined,
   });

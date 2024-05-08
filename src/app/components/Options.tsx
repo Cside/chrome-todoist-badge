@@ -10,11 +10,11 @@ import { useTasks } from "../../api/tasks/useTasks";
 import { INTERVAL_MINUTES } from "../../background/tasks/activate_tasksCacheRefresh_andBadgeCountUpdates/refreshTasksCache_andUpdateBadgeCount_regularly";
 import { SECTION_ID_FOR } from "../../constants/options";
 import { PATH_TO } from "../../constants/paths";
-import { setBadgeText } from "../../fn/setBadgeText";
 import { STORAGE_KEY_FOR } from "../../storage/storageKeys";
 import * as storage from "../../storage/useStorage";
-import type { ProjectId, Section, Task } from "../../types";
+import type { ProjectId, Section } from "../../types";
 import { isPopup } from "../fn/isPopup";
+import { useBadgeUpdate_andCacheSet } from "../hooks/useBadgeUpdate_andCacheSet";
 import { Spinner } from "./Spinner";
 
 const api = { useProjects, useTasks, useSections };
@@ -71,13 +71,7 @@ const Main_Suspended = () => {
     enabled: projectId !== undefined || areProjectsLoaded,
     deps: [projectId, filterByDueByToday, sectionId],
   });
-  useAsyncEffect(async () => {
-    // あえて共通化してない
-    if (areTasksLoaded) {
-      await setBadgeText(tasks.length);
-      await wxtStorage.setItem<Task[]>(STORAGE_KEY_FOR.CACHE.TASKS, tasks);
-    }
-  }, [tasks, areTasksLoaded]);
+  useBadgeUpdate_andCacheSet({ tasks, areTasksLoaded });
 
   return (
     <div className="flex flex-col gap-y-3">
