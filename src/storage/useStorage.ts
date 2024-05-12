@@ -1,6 +1,10 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import { HTTPError } from "ky";
 import { useCallback } from "react";
+import useAsyncEffect from "use-async-effect";
 import { storage } from "wxt/storage";
+import { getProject } from "../api/projects/getProject";
+import { getSection } from "../api/sections/getSection";
 import {
   DEFAULT_FILTER_BY_DUE_BY_TODAY,
   DEFAULT_IS_CONFIG_INITIALIZED,
@@ -8,10 +12,63 @@ import {
 import type { ProjectId, Section, SectionId, Task } from "../types";
 import { STORAGE_KEY_FOR } from "./storageKeys";
 
-export const useFilteringProjectId_Suspended = () =>
-  useStorage_Suspended<ProjectId>({
-    storageKey: STORAGE_KEY_FOR.CONFIG.FILTER_BY.PROJECT_ID,
-  });
+const projectIdHasChecked = new Map<ProjectId, true>();
+
+export const useFilteringProjectId_Suspended = () => {
+  const queryClient = useQueryClient();
+  const key = STORAGE_KEY_FOR.CONFIG.FILTER_BY.PROJECT_ID;
+  const results = useStorage_Suspended<ProjectId>({ storageKey: key });
+  const [projectId] = results;
+
+  // 共通化してない
+  useAsyncEffect(async () => {
+    if (projectIdHasChecked.has(key)) return;
+    projectIdHasChecked.set(key, true);
+
+    try {
+      if (projectId !== undefined) await getProject(projectId);
+    } catch (error) {
+      if (error instanceof HTTPError && String(error.response.status).startsWith("4")) {
+        console.warn(`Invalidate project: ${projectId}, status code: ${error.response.status}`);
+        await Promise.all([
+          storage.removeItem(key),
+          queryClient.invalidateQueries({ queryKey: [key] }),
+        ]);
+      }
+    }
+  }, [projectId]);
+
+  return results;
+};
+
+const sectionIdHasChecked = new Map<SectionId, true>();
+
+export const useFilteringSectionId_Suspended = () => {
+  const queryClient = useQueryClient();
+  const key = STORAGE_KEY_FOR.CONFIG.FILTER_BY.SECTION_ID;
+  const results = useStorage_Suspended<SectionId>({ storageKey: key });
+  const [sectionId] = results;
+
+  // 共通化してない
+  useAsyncEffect(async () => {
+    if (sectionIdHasChecked.has(key)) return;
+    sectionIdHasChecked.set(key, true);
+
+    try {
+      if (sectionId !== undefined) await getSection(sectionId);
+    } catch (error) {
+      if (error instanceof HTTPError && String(error.response.status).startsWith("4")) {
+        console.warn(`Invalidate section: ${sectionId}, status code: ${error.response.status}`);
+        await Promise.all([
+          storage.removeItem(key),
+          queryClient.invalidateQueries({ queryKey: [key] }),
+        ]);
+      }
+    }
+  }, [sectionId]);
+
+  return results;
+};
 
 export const useFilterByDueByToday_Suspended = () => {
   const [value = DEFAULT_FILTER_BY_DUE_BY_TODAY, mutate] = useStorage_Suspended<boolean>({
@@ -20,11 +77,6 @@ export const useFilterByDueByToday_Suspended = () => {
   });
   return [value, mutate] as const;
 };
-
-export const useFilteringSectionId_Suspended = () =>
-  useStorage_Suspended<SectionId>({
-    storageKey: STORAGE_KEY_FOR.CONFIG.FILTER_BY.SECTION_ID,
-  });
 
 export const useIsConfigInitialized_Suspended = () => {
   const [value = DEFAULT_IS_CONFIG_INITIALIZED, mutate] = useStorage_Suspended<boolean>({

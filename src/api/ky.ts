@@ -29,6 +29,7 @@ const kyInstance = _ky.create({
         );
       },
     ],
+    // HTTPError を modify するもの。Timeout では呼ばれない
     beforeError: [
       async (error) => {
         const url = error.request.url;
@@ -36,7 +37,7 @@ const kyInstance = _ky.create({
           // biome-ignore lint/style/useTemplate:
           `\n    url: ${url}` +
           extractFilter(url) +
-          +`\n    body: ${error.response.bodyUsed ? "" : await error.response.text()}`;
+          `\n    body: ${error.response.bodyUsed ? "" : await error.response.text()}`;
         return error;
       },
     ],
@@ -56,6 +57,7 @@ export const ky = {
           `\n    url: ${url}` +
           extractFilter(url) +
           `\n    timeout: ${TIMEOUT}`;
+
       throw error;
     }
   },
@@ -71,7 +73,7 @@ export const normalizeApiObject = (obj: unknown): unknown =>
 // Utils
 // ==================================================
 
-const extractFilter = (url: string) => {
+const extractFilter = (url: string): string => {
   const filter = new URL(url).searchParams.get("filter");
   return filter !== null ? `\n    filter: ${filter}` : "";
 };
