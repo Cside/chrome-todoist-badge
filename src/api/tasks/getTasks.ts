@@ -3,10 +3,12 @@ import {
   SECTION_ID_FOR,
   SECTION_ID_TO_FILTER,
 } from "../../constants/options";
-import { API_REST_BASE_URL, API_URL_FOR } from "../../constants/urls";
+import { API_URL_FOR } from "../../constants/urls";
 import { STORAGE_KEY_FOR } from "../../storage/storageKeys";
-import type { ProjectId, Section, Task, TaskFilters } from "../../types";
+import type { ProjectId, Task, TaskFilters } from "../../types";
 import { ky } from "../ky";
+import { getProject } from "../projects/getProject";
+import { getSection } from "../sections/getSection";
 
 // for TQ
 export const getTasksByParams = async (filters: TaskFilters): Promise<Task[]> => {
@@ -58,21 +60,15 @@ export const _buildTasksApiQueryString = async ({
   })}`;
 };
 
-import * as self from "./getTasks";
-
 const projectIdToFilter = async (projectId: ProjectId) =>
-  `#${_escapeFilter(await self._getProjectName(projectId))}`;
+  // TODO キャッシュ。。
+  // FIXME 404 だったときどうすんのよ
+  `#${_escapeFilter((await getProject(projectId)).name)}`;
 
 const sectionIdToFilter = async (sectionId: ProjectId) =>
   sectionId === SECTION_ID_FOR.NO_PARENT
     ? SECTION_ID_TO_FILTER.NO_PARENT
-    : `/${_escapeFilter(await self._getSectionName(sectionId))}`;
-
-// TODO: キャッシュ…
-export const _getSectionName = async (sectionId: ProjectId) =>
-  (await ky.getCamelized<Section>(`${API_REST_BASE_URL}/sections/${sectionId}`)).name;
-
-export const _getProjectName = async (projectId: ProjectId) =>
-  (await ky.getCamelized<Section>(`${API_REST_BASE_URL}/projects/${projectId}`)).name;
+    : // TODO キャッシュ。。
+      `/${_escapeFilter((await getSection(sectionId)).name)}`;
 
 export const _escapeFilter = (filter: string) => filter.replace(/([&])/g, "\\$1");
