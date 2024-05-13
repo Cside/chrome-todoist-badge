@@ -22,7 +22,7 @@ const Main_Suspended = () => {
   if (isConfigInitialized && isOnToolbar)
     return (
       <>
-        <h1>All done!</h1>
+        <h1>All done! ✅</h1>
         <p>Enjoy {TITLE}!</p>
         <div>
           <button type="button" className="btn btn-secondary" onClick={() => window.close()}>

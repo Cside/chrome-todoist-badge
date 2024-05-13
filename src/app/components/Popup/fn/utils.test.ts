@@ -27,7 +27,7 @@ describe(`${groupTasksBySectionId.name}()`, () => {
           toTask({ id: "id-500", order: 50, sectionId: "sec-200" }),
           toTask({ id: "id-600", order: 6, sectionId: "sec-200" }),
         ],
-        sections: [SECTION1, SECTION2],
+        sections: [SECTION2, SECTION1],
       },
       expected: [
         {
