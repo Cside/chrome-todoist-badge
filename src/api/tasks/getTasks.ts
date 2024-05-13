@@ -18,11 +18,9 @@ export const getTasksByParams = async (filters: TaskFilters): Promise<Task[]> =>
 };
 
 // for BG worker 。Retry は呼び出し元で行うので、ここではやらない
-export const getTasks = async (): Promise<Task[]> => getTasksByParams(await getTaskFilters());
-
-// 初期化が終わった後に呼ばれる前提の関数なので、projectId == null の場合はエラーにしている
-const getTaskFilters = async (): Promise<TaskFilters> => {
+export const getTasks = async (): Promise<Task[]> => {
   const projectId = await storage.getItem<ProjectId>(STORAGE_KEY_FOR.CONFIG.FILTER_BY.PROJECT_ID);
+  // 初期化が終わった後に呼ばれる前提の関数なので、projectId == null の場合はエラーにしている
   if (projectId === null) throw new Error("projectId is null");
 
   const filterByDueByToday =
@@ -30,8 +28,7 @@ const getTaskFilters = async (): Promise<TaskFilters> => {
     DEFAULT_FILTER_BY_DUE_BY_TODAY;
   const sectionId =
     (await storage.getItem<ProjectId>(STORAGE_KEY_FOR.CONFIG.FILTER_BY.SECTION_ID)) ?? undefined;
-
-  return { projectId, filterByDueByToday, sectionId };
+  return getTasksByParams({ projectId, filterByDueByToday, sectionId });
 };
 
 // ==================================================

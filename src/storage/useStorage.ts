@@ -20,7 +20,7 @@ export const useFilteringProjectId_Suspended = () => {
   const results = useStorage_Suspended<ProjectId>({ storageKey: key });
   const [projectId] = results;
 
-  // 共通化してない
+  // 削除済みの project は invalidate する (共通化してない)
   useAsyncEffect(async () => {
     if (projectIdHasChecked.has(key)) return;
     projectIdHasChecked.set(key, true);
@@ -49,7 +49,7 @@ export const useFilteringSectionId_Suspended = () => {
   const results = useStorage_Suspended<SectionId>({ storageKey: key });
   const [sectionId] = results;
 
-  // 共通化してない
+  // 削除済みの section は invalidate する (共通化してない)
   useAsyncEffect(async () => {
     if (sectionIdHasChecked.has(key)) return;
     sectionIdHasChecked.set(key, true);
