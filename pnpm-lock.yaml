@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@oieduardorabelo/use-user-agent':
+        specifier: ^5.0.1
+        version: 5.0.1(react-dom@18.3.0(react@18.3.0))(react@18.3.0)
       '@sentry/integrations':
         specifier: ^7.113.0
         version: 7.113.0
@@ -565,6 +568,12 @@ packages:
   '@npmcli/promise-spawn@7.0.1':
     resolution: {integrity: sha512-P4KkF9jX3y+7yFUxgcUdDtLy+t4OlDGuEBLNs57AZsfSfg+uV6MLndqGpnl4831ggaEdXwR50XFoZP4VFtHolg==}
     engines: {node: ^16.14.0 || >=18.0.0}
+
+  '@oieduardorabelo/use-user-agent@5.0.1':
+    resolution: {integrity: sha512-dmoIMC4tMlK01slckw5ha5gDTYCYmXCL/HHslQSUd2kEU2s2wnBB66x1W0cvNBVZLutCdENsDZv9LE5YtP1EAQ==}
+    peerDependencies:
+      react: 16.8 - 18
+      react-dom: 16.8 - 18
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -3618,6 +3627,9 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
+  ua-parser-js@1.0.2:
+    resolution: {integrity: sha512-00y/AXhx0/SsnI51fTc0rLRmafiGOM4/O+ny10Ps7f+j/b8p/ZY11ytMgznXkOVo4GQ+KwQG5UQLkLGirsACRg==}
+
   ufo@1.5.1:
     resolution: {integrity: sha512-HGyF79+/qZ4soRvM+nHERR2pJ3VXDZ/8sL1uLahdgEDf580NkgiWOxLk33FetExqOWp352JZRsgXbG/4MaGOSg==}
 
@@ -4360,6 +4372,12 @@ snapshots:
   '@npmcli/promise-spawn@7.0.1':
     dependencies:
       which: 4.0.0
+
+  '@oieduardorabelo/use-user-agent@5.0.1(react-dom@18.3.0(react@18.3.0))(react@18.3.0)':
+    dependencies:
+      react: 18.3.0
+      react-dom: 18.3.0(react@18.3.0)
+      ua-parser-js: 1.0.2
 
   '@pkgjs/parseargs@0.11.0':
     optional: true
@@ -7665,6 +7683,8 @@ snapshots:
   typedarray@0.0.6: {}
 
   typescript@5.4.2: {}
+
+  ua-parser-js@1.0.2: {}
 
   ufo@1.5.1: {}
 
