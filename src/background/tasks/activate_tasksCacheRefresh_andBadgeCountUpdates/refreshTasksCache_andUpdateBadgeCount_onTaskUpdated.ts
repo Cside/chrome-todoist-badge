@@ -12,5 +12,6 @@ export const refreshTasksCache_andUpdateBadgeCount_onTaskUpdated = () =>
   addCommandListener({
     name: api.refreshTasksCache_andUpdateBadgeCount_withRetry.name,
     commandRegExp: new RegExp(REGEXP.join("|")),
-    listener: async () => await api.refreshTasksCache_andUpdateBadgeCount_withRetry(),
+    listener: async () =>
+      await api.refreshTasksCache_andUpdateBadgeCount_withRetry(),
   });

@@ -13,7 +13,11 @@ export const startBackground =
     (async () => {
       await setBadgeColor();
       // たかだか chrome.storage の読み込みなので、Promise.all は使わない
-      if ((await storage.getItem<boolean>(STORAGE_KEY_FOR.CONFIG.IS_INITIALIZED)) === true)
+      if (
+        (await storage.getItem<boolean>(
+          STORAGE_KEY_FOR.CONFIG.IS_INITIALIZED,
+        )) === true
+      )
         await Promise.all([
           activate_tasksCacheRefresh_andBadgeCountUpdates(),
           activate_sectionsCacheRefresh(),

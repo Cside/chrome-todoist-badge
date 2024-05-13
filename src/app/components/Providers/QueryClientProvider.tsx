@@ -1,4 +1,7 @@
-import { QueryClient, QueryClientProvider as _QueryClientProvider } from "@tanstack/react-query";
+import {
+  QueryClient,
+  QueryClientProvider as _QueryClientProvider,
+} from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import { MAX_RETRY } from "../../../constants/maxRetry";
 

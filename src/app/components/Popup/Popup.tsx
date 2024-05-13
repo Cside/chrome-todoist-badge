@@ -30,7 +30,11 @@ export default function Popup_Suspended() {
     if (areTasksLoaded && areSectionsLoaded) {
       const notIncluded = getUnknownSectionIds({ tasks, sections });
       if (notIncluded.length > 0) {
-        console.error(`task.sectionId were found in sections. ids: ${JSON.stringify(notIncluded)}`);
+        console.error(
+          `task.sectionId were found in sections. ids: ${JSON.stringify(
+            notIncluded,
+          )}`,
+        );
         setIsCacheAvailable(false);
       }
     }
@@ -43,7 +47,9 @@ export default function Popup_Suspended() {
       areTasksLoaded && areSectionsLoaded ? (
         groupTasksBySectionId({ tasks, sections }).map((group) => (
           <React.Fragment key={group.section?.id ?? ""}>
-            {group.section !== undefined && <h2 className="my-4">{group.section.name}</h2>}
+            {group.section !== undefined && (
+              <h2 className="my-4">{group.section.name}</h2>
+            )}
             <ul>
               {group.tasks.map((task) => (
                 <li key={task.id}>
@@ -59,7 +65,11 @@ export default function Popup_Suspended() {
                       window.open(task.url);
                     }}
                   >
-                    {/^-+$/.test(task.content) ? task.content : <Markdown>{task.content}</Markdown>}
+                    {/^-+$/.test(task.content) ? (
+                      task.content
+                    ) : (
+                      <Markdown>{task.content}</Markdown>
+                    )}
                   </div>
                 </li>
               ))}
@@ -78,7 +88,12 @@ export default function Popup_Suspended() {
 
       <div className="flex gap-x-3">
         <div>
-          <a href={webAppUrl} className="btn btn-primary" target="_blank" rel="noreferrer">
+          <a
+            href={webAppUrl}
+            className="btn btn-primary"
+            target="_blank"
+            rel="noreferrer"
+          >
             <img src={todoistIcon} width="35" height="35" className="m-0" />
             Open Todoist on Web
           </a>
@@ -87,7 +102,9 @@ export default function Popup_Suspended() {
           Change task filters
         </NavLink>
       </div>
-      {(areTasksFetching || areSectionsFetching) && <Spinner className="fixed top-7 right-7" />}
+      {(areTasksFetching || areSectionsFetching) && (
+        <Spinner className="fixed top-7 right-7" />
+      )}
     </>
   );
 }

@@ -1,4 +1,8 @@
-import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { HTTPError } from "ky";
 import { useCallback } from "react";
 import useAsyncEffect from "use-async-effect";
@@ -28,8 +32,13 @@ export const useFilteringProjectId_Suspended = () => {
     try {
       if (projectId !== undefined) await getProject(projectId);
     } catch (error) {
-      if (error instanceof HTTPError && String(error.response.status).startsWith("4")) {
-        console.warn(`Invalidate project: ${projectId}, status code: ${error.response.status}`);
+      if (
+        error instanceof HTTPError &&
+        String(error.response.status).startsWith("4")
+      ) {
+        console.warn(
+          `Invalidate project: ${projectId}, status code: ${error.response.status}`,
+        );
         await Promise.all([
           storage.removeItem(key),
           queryClient.invalidateQueries({ queryKey: [key] }),
@@ -57,8 +66,13 @@ export const useFilteringSectionId_Suspended = () => {
     try {
       if (sectionId !== undefined) await getSection(sectionId);
     } catch (error) {
-      if (error instanceof HTTPError && String(error.response.status).startsWith("4")) {
-        console.warn(`Invalidate section: ${sectionId}, status code: ${error.response.status}`);
+      if (
+        error instanceof HTTPError &&
+        String(error.response.status).startsWith("4")
+      ) {
+        console.warn(
+          `Invalidate section: ${sectionId}, status code: ${error.response.status}`,
+        );
         await Promise.all([
           storage.removeItem(key),
           queryClient.invalidateQueries({ queryKey: [key] }),
@@ -71,27 +85,29 @@ export const useFilteringSectionId_Suspended = () => {
 };
 
 export const useFilterByDueByToday_Suspended = () => {
-  const [value = DEFAULT_FILTER_BY_DUE_BY_TODAY, mutate] = useStorage_Suspended<boolean>({
-    storageKey: STORAGE_KEY_FOR.CONFIG.FILTER_BY.DUE_BY_TODAY,
-    defaultValue: DEFAULT_FILTER_BY_DUE_BY_TODAY,
-  });
+  const [value = DEFAULT_FILTER_BY_DUE_BY_TODAY, mutate] =
+    useStorage_Suspended<boolean>({
+      storageKey: STORAGE_KEY_FOR.CONFIG.FILTER_BY.DUE_BY_TODAY,
+      defaultValue: DEFAULT_FILTER_BY_DUE_BY_TODAY,
+    });
   return [value, mutate] as const;
 };
 
 export const useIsConfigInitialized_Suspended = () => {
-  const [value = DEFAULT_IS_CONFIG_INITIALIZED, mutate] = useStorage_Suspended<boolean>({
-    storageKey: STORAGE_KEY_FOR.CONFIG.IS_INITIALIZED,
-    defaultValue: false,
-    onMutationSuccess: async () =>
-      await Promise.all([
-        chrome.runtime.sendMessage({
-          action: "activate-tasks-cache-refresh-and-badge-count-updates",
-        }),
-        chrome.runtime.sendMessage({
-          action: "activate-sections-cache-refresh",
-        }),
-      ]),
-  });
+  const [value = DEFAULT_IS_CONFIG_INITIALIZED, mutate] =
+    useStorage_Suspended<boolean>({
+      storageKey: STORAGE_KEY_FOR.CONFIG.IS_INITIALIZED,
+      defaultValue: false,
+      onMutationSuccess: async () =>
+        await Promise.all([
+          chrome.runtime.sendMessage({
+            action: "activate-tasks-cache-refresh-and-badge-count-updates",
+          }),
+          chrome.runtime.sendMessage({
+            action: "activate-sections-cache-refresh",
+          }),
+        ]),
+    });
   return [value, mutate] as const;
 };
 
@@ -104,7 +120,8 @@ export const useCachedSections_Suspended = () =>
   // Mutation 使わないので素の useSuspenseQuery
   useSuspenseQuery({
     queryKey: [STORAGE_KEY_FOR.CACHE.SECTIONS],
-    queryFn: async () => await storage.getItem<Section[]>(STORAGE_KEY_FOR.CACHE.SECTIONS),
+    queryFn: async () =>
+      await storage.getItem<Section[]>(STORAGE_KEY_FOR.CACHE.SECTIONS),
   }).data ?? undefined;
 
 // ==================================================
@@ -129,7 +146,8 @@ const useStorage_Suspended = <StorageValue = never>({
     if (onMutationSuccess) await onMutationSuccess();
   }, []);
   const mutate = useMutation({
-    mutationFn: (value: StorageValue) => storage.setItem<StorageValue>(storageKey, value),
+    mutationFn: (value: StorageValue) =>
+      storage.setItem<StorageValue>(storageKey, value),
     onSuccess,
   }).mutate;
   const remove = useMutation({

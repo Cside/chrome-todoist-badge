@@ -17,10 +17,18 @@ export default function PinExtensionToToolbar() {
 
   return (
     <>
-      <p className="mb-0 font-medium text-xl">Pin this extension to your toolbar to get started.</p>
+      <p className="mb-0 font-medium text-xl">
+        Pin this extension to your toolbar to get started.
+      </p>
       <div>
         {usDetails !== null && (
-          <img src={usDetails.browser.name === "Edge" ? edgeThumbnail : chromeThumbnail} />
+          <img
+            src={
+              usDetails.browser.name === "Edge"
+                ? edgeThumbnail
+                : chromeThumbnail
+            }
+          />
         )}
       </div>
 

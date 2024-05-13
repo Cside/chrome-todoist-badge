@@ -7,10 +7,15 @@ import { isPopup } from "../../fn/isPopup";
 export const ErrorBoundary = (): JSX.Element => {
   const error = useRouteError();
 
-  if (error instanceof HTTPError && error.response.status === STATUS_CODE_FOR.UNAUTHORIZED)
+  if (
+    error instanceof HTTPError &&
+    error.response.status === STATUS_CODE_FOR.UNAUTHORIZED
+  )
     return (
       <>
-        <h1 className="text-3xl text-error">You are not logged in to Todoist</h1>
+        <h1 className="text-3xl text-error">
+          You are not logged in to Todoist
+        </h1>
         <p>
           Please login to{" "}
           <a href={WEB_APP_URL_FOR.LOGIN} target="_blank" rel="noreferrer">
@@ -20,7 +25,11 @@ export const ErrorBoundary = (): JSX.Element => {
         </p>
         {!isPopup() && (
           <div>
-            <button type="button" className="btn btn-outline" onClick={() => location.reload()}>
+            <button
+              type="button"
+              className="btn btn-outline"
+              onClick={() => location.reload()}
+            >
               I have logged in.
             </button>
           </div>

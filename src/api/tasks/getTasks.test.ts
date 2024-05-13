@@ -8,8 +8,12 @@ describe(`${_buildTasksApiQueryString.name}()`, () => {
   const sectionName = "Section";
 
   beforeEach(() => {
-    vi.spyOn(getProject, "getProject").mockResolvedValue({ name: projectName } as Project);
-    vi.spyOn(getSection, "getSection").mockResolvedValue({ name: sectionName } as Section);
+    vi.spyOn(getProject, "getProject").mockResolvedValue({
+      name: projectName,
+    } as Project);
+    vi.spyOn(getSection, "getSection").mockResolvedValue({
+      name: sectionName,
+    } as Section);
   });
   const cases: {
     name: string;
@@ -18,18 +22,30 @@ describe(`${_buildTasksApiQueryString.name}()`, () => {
   }[] = [
     {
       name: "filterByDueByToday === false && sectionId === undefined",
-      input: { projectId: "100", filterByDueByToday: false, sectionId: undefined },
+      input: {
+        projectId: "100",
+        filterByDueByToday: false,
+        sectionId: undefined,
+      },
       expected: `?${new URLSearchParams({ filter: `#${projectName}` })}`,
     },
     {
       name: "sectionId is a string",
       input: { projectId: "100", filterByDueByToday: false, sectionId: "200" },
-      expected: `?${new URLSearchParams({ filter: `#${projectName} & /${sectionName}` })}`,
+      expected: `?${new URLSearchParams({
+        filter: `#${projectName} & /${sectionName}`,
+      })}`,
     },
     {
       name: "filterByDueByToday is true",
-      input: { projectId: "100", filterByDueByToday: true, sectionId: undefined },
-      expected: `?${new URLSearchParams({ filter: `(today | overdue) & #${projectName}` })}`,
+      input: {
+        projectId: "100",
+        filterByDueByToday: true,
+        sectionId: undefined,
+      },
+      expected: `?${new URLSearchParams({
+        filter: `(today | overdue) & #${projectName}`,
+      })}`,
     },
   ];
   test.each(cases)("$name", async ({ input, expected }) =>

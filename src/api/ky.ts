@@ -37,7 +37,9 @@ const kyInstance = _ky.create({
           // biome-ignore lint/style/useTemplate:
           `\n    url: ${url}` +
           extractFilter(url) +
-          `\n    body: ${error.response.bodyUsed ? "" : await error.response.text()}`;
+          `\n    body: ${
+            error.response.bodyUsed ? "" : await error.response.text()
+          }`;
         return error;
       },
     ],
@@ -64,10 +66,15 @@ export const ky = {
 };
 
 export const normalizeApiObject = (obj: unknown): unknown =>
-  transform(obj as object, (acc: Record<string, unknown>, value: unknown, key: string, target) => {
-    const camelKey = Array.isArray(target) ? key : camelCase(key as string);
-    acc[camelKey] = isObject(value) ? normalizeApiObject(value) : value ?? undefined;
-  });
+  transform(
+    obj as object,
+    (acc: Record<string, unknown>, value: unknown, key: string, target) => {
+      const camelKey = Array.isArray(target) ? key : camelCase(key as string);
+      acc[camelKey] = isObject(value)
+        ? normalizeApiObject(value)
+        : value ?? undefined;
+    },
+  );
 
 // ==================================================
 // Utils

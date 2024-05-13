@@ -7,7 +7,9 @@ import { useIsOnToolbar_Suspended } from "../../hooks/useIsOnToolbar";
 import * as storage from "../../storage/useStorage";
 import { Spinner } from "./Spinner";
 
-const Checked = React.memo(function Checked({ children }: { children: string }) {
+const Checked = React.memo(function Checked({
+  children,
+}: { children: string }) {
   return (
     <div>
       ✅ <span className="text-neutral-400 line-through">{children}</span>
@@ -25,7 +27,11 @@ const Main_Suspended = () => {
         <h1>All done! ✅</h1>
         <p>Enjoy {TITLE}!</p>
         <div>
-          <button type="button" className="btn btn-secondary" onClick={() => window.close()}>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => window.close()}
+          >
             Close
           </button>
         </div>
@@ -43,7 +49,10 @@ const Main_Suspended = () => {
         {isOnToolbar ? (
           <Checked>{MESSAGE_FOR.PIN_EXTENSION_TO_TOOLBAR}</Checked>
         ) : (
-          <NavLink to={PATH_TO.PIN_EXTENSION_TO_TOOLBAR} className="btn btn-primary">
+          <NavLink
+            to={PATH_TO.PIN_EXTENSION_TO_TOOLBAR}
+            className="btn btn-primary"
+          >
             {MESSAGE_FOR.PIN_EXTENSION_TO_TOOLBAR}
           </NavLink>
         )}

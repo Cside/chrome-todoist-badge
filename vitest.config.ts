@@ -4,7 +4,7 @@ import { WxtVitest } from "wxt/testing";
 export default defineConfig({
   test: {
     globals: true,
-    setupFiles: ['./test/setup.ts'],
+    setupFiles: ["./test/setup.ts"],
     mockReset: true,
     restoreMocks: true,
     chaiConfig: {

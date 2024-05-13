@@ -28,7 +28,8 @@ export const useTasksCache = () => {
 
   return useQuery({
     queryKey: [QUERY_KEY_FOR.API.TASKS, projectId, filterByDueByToday],
-    queryFn: async () => await api.getTasksByParams({ projectId, filterByDueByToday, sectionId }),
+    queryFn: async () =>
+      await api.getTasksByParams({ projectId, filterByDueByToday, sectionId }),
     placeholderData: (prevData) => (prevData ? undefined : cache),
   }) as UseQueryResult<Task[]>;
 };

@@ -1,12 +1,19 @@
 import { difference } from "lodash-es";
-import type { Section, SectionId, Task, TasksGroupedBySection } from "../../../../types";
+import type {
+  Section,
+  SectionId,
+  Task,
+  TasksGroupedBySection,
+} from "../../../../types";
 
 const undefinedKey = "undefined";
 export const groupTasksBySectionId = ({
   tasks,
   sections,
 }: { tasks: Task[]; sections: Section[] }): TasksGroupedBySection => {
-  const sectionIdToSection = new Map(sections.map((section) => [section.id, section] as const));
+  const sectionIdToSection = new Map(
+    sections.map((section) => [section.id, section] as const),
+  );
 
   const grouped = tasks.reduce((acc: Record<SectionId, Task[]>, task) => {
     const key = task.sectionId ?? undefinedKey;
@@ -20,7 +27,8 @@ export const groupTasksBySectionId = ({
   const sortedKeys = Object.keys(grouped).sort((a, b) =>
     a === undefinedKey
       ? -1
-      : (sectionIdToSection.get(a)?.order ?? 0) - (sectionIdToSection.get(b)?.order ?? 0),
+      : (sectionIdToSection.get(a)?.order ?? 0) -
+        (sectionIdToSection.get(b)?.order ?? 0),
   );
 
   return sortedKeys.map((key) => ({
@@ -35,8 +43,13 @@ export const groupTasksBySectionId = ({
   }));
 };
 
-export const getUnknownSectionIds = ({ tasks, sections }: { tasks: Task[]; sections: Section[] }) =>
+export const getUnknownSectionIds = ({
+  tasks,
+  sections,
+}: { tasks: Task[]; sections: Section[] }) =>
   difference(
-    tasks.map((task) => task.sectionId).filter((id) => id !== undefined) as string[],
+    tasks
+      .map((task) => task.sectionId)
+      .filter((id) => id !== undefined) as string[],
     sections.map((section) => section.id),
   );

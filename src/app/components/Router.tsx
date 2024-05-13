@@ -1,5 +1,10 @@
 import { Suspense, useEffect } from "react";
-import { Outlet, RouterProvider, createHashRouter, redirect } from "react-router-dom";
+import {
+  Outlet,
+  RouterProvider,
+  createHashRouter,
+  redirect,
+} from "react-router-dom";
 import { name as TITLE } from "../../../package.json";
 import { PATH_TO } from "../../constants/paths";
 import { isPopup } from "../fn/isPopup";

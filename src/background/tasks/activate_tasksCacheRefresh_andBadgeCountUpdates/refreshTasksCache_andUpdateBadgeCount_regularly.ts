@@ -7,5 +7,6 @@ export const refreshTasksCache_andUpdateBadgeCount_regularly = () =>
   addAlarmListener({
     name: "refresh-tasks-cache-and-update-badge-count",
     intervalMinutes: INTERVAL_MINUTES,
-    listener: async () => await api.refreshTasksCache_andUpdateBadgeCount_withRetry(),
+    listener: async () =>
+      await api.refreshTasksCache_andUpdateBadgeCount_withRetry(),
   });

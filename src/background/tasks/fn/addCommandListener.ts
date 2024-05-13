@@ -14,7 +14,8 @@ chrome.webRequest.onBeforeRequest.addListener(
           commands: { type: string }[];
         };
         const firstCommand = parsed.commands[0]?.type;
-        if (firstCommand !== undefined) cache.set(details.requestId, firstCommand);
+        if (firstCommand !== undefined)
+          cache.set(details.requestId, firstCommand);
       } catch (error) {
         console.error(`Failed to parse request body. error: ${error}`);
       }
@@ -42,7 +43,10 @@ export const addCommandListener = ({
             await listener();
             console.info(`[command: ${command}] ${name}`);
           } catch (error) {
-            console.error(`[command: ${command}] Failed to executer. error: `, error);
+            console.error(
+              `[command: ${command}] Failed to executer. error: `,
+              error,
+            );
           }
       }
     },

@@ -7,14 +7,19 @@ import { QUERY_KEY_FOR } from "../queryKeys";
 import * as api from "./getSections";
 
 // from Options
-export const useSections = ({ cache }: { cache?: Section[] | undefined } = {}) => {
+export const useSections = ({
+  cache,
+}: { cache?: Section[] | undefined } = {}) => {
   const [projectId] = storage.useFilteringProjectId_Suspended();
   return useQuery({
     queryKey: [QUERY_KEY_FOR.API.SECTIONS, projectId],
     queryFn: async () => {
       if (projectId === undefined) throw new Error("projectId is undefined");
       const sections = await api.getSections({ projectId });
-      await wxtStorage.setItem<Section[]>(STORAGE_KEY_FOR.CACHE.SECTIONS, sections); // retry はサボる
+      await wxtStorage.setItem<Section[]>(
+        STORAGE_KEY_FOR.CACHE.SECTIONS,
+        sections,
+      ); // retry はサボる
       return sections;
     },
     ...(cache && {
@@ -26,7 +31,9 @@ export const useSections = ({ cache }: { cache?: Section[] | undefined } = {}) =
 };
 
 // from Popup
-export const useSectionsCache = ({ isCacheAvailable }: { isCacheAvailable: boolean }) => {
+export const useSectionsCache = ({
+  isCacheAvailable,
+}: { isCacheAvailable: boolean }) => {
   const cache = storage.useCachedSections_Suspended();
   return useSections({ cache: isCacheAvailable ? cache : undefined });
 };

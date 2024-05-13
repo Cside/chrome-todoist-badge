@@ -27,7 +27,10 @@ export const addAlarmListener = async ({
   }
 
   chrome.alarms.onAlarm.addListener(async (alarm) => {
-    if (alarm.name === name && (await chrome.idle.queryState(10_000)) === "active")
+    if (
+      alarm.name === name &&
+      (await chrome.idle.queryState(10_000)) === "active"
+    )
       try {
         await listener();
         console.info(

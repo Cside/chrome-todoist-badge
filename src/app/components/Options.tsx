@@ -20,8 +20,10 @@ import { Spinner } from "./Spinner";
 const api = { useProjects, useTasks, useSections };
 
 const Main_Suspended = () => {
-  const [isInitialized, setIsInitialized] = storage.useIsConfigInitialized_Suspended();
-  const [filterByDueByToday, setFilterByDueByToday] = storage.useFilterByDueByToday_Suspended();
+  const [isInitialized, setIsInitialized] =
+    storage.useIsConfigInitialized_Suspended();
+  const [filterByDueByToday, setFilterByDueByToday] =
+    storage.useFilterByDueByToday_Suspended();
   const navigate = useNavigate();
 
   // ==================================================
@@ -41,19 +43,24 @@ const Main_Suspended = () => {
 
   // set initial projectId to storage
   useEffect(() => {
-    if (areProjectsLoaded && projectId === undefined) setProjectId(getFirstProjectId_WithAssert());
+    if (areProjectsLoaded && projectId === undefined)
+      setProjectId(getFirstProjectId_WithAssert());
   }, [areProjectsLoaded, projectId]);
 
   // ==================================================
   // All sections && Filtering sectionId
   // ==================================================
   const { data: sections, isSuccess: areSectionsLoaded } = api.useSections();
-  const [sectionId, setSectionId, removeSectionId] = storage.useFilteringSectionId_Suspended();
+  const [sectionId, setSectionId, removeSectionId] =
+    storage.useFilteringSectionId_Suspended();
 
   useAsyncEffect(async () => {
     if (areSectionsLoaded)
       // Popup とは別 Window なので TQ は使う意味ない。
-      await wxtStorage.setItem<Section[]>(STORAGE_KEY_FOR.CACHE.SECTIONS, sections); // retry はサボる
+      await wxtStorage.setItem<Section[]>(
+        STORAGE_KEY_FOR.CACHE.SECTIONS,
+        sections,
+      ); // retry はサボる
   }, [sections, areSectionsLoaded]);
 
   // ==================================================
@@ -114,12 +121,16 @@ const Main_Suspended = () => {
                   value={sectionId ?? SECTION_ID_FOR.ALL}
                   onChange={(event) => {
                     const value = event.target.value;
-                    value === SECTION_ID_FOR.ALL ? removeSectionId() : setSectionId(value);
+                    value === SECTION_ID_FOR.ALL
+                      ? removeSectionId()
+                      : setSectionId(value);
                   }}
                   className="select select-bordered"
                 >
                   <option value={SECTION_ID_FOR.ALL}>(All)</option>
-                  <option value={SECTION_ID_FOR.NO_PARENT}>(No parent section)</option>
+                  <option value={SECTION_ID_FOR.NO_PARENT}>
+                    (No parent section)
+                  </option>
                   {sections.map((section) => (
                     <option key={section.id} value={section.id}>
                       {section.name}
@@ -132,7 +143,10 @@ const Main_Suspended = () => {
 
           <tr className="border-none">
             <th className="w-48 font-normal">
-              <label htmlFor="filter-by-due-by-today" className="label cursor-pointer">
+              <label
+                htmlFor="filter-by-due-by-today"
+                className="label cursor-pointer"
+              >
                 Due by today
               </label>
             </th>
@@ -140,7 +154,9 @@ const Main_Suspended = () => {
               <input
                 type="checkbox"
                 checked={filterByDueByToday}
-                onChange={(event) => setFilterByDueByToday(event.target.checked)}
+                onChange={(event) =>
+                  setFilterByDueByToday(event.target.checked)
+                }
                 id="filter-by-due-by-today"
                 className="toggle toggle-primary"
               />
