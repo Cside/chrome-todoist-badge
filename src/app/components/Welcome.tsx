@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { name as TITLE } from "../../../package.json";
+import { name as EXTENSION_NAME } from "../../../package.json";
 import { PATH_TO } from "../../constants/paths";
 import { useIsOnToolbar_Suspended } from "../../hooks/useIsOnToolbar";
 import * as storage from "../../storage/useStorage";
@@ -25,7 +25,7 @@ const Main_Suspended = () => {
     return (
       <>
         <h1>All done! ✅</h1>
-        <p>Enjoy {TITLE}!</p>
+        <p>Enjoy {EXTENSION_NAME}!</p>
         <div>
           <button
             type="button"
@@ -44,7 +44,7 @@ const Main_Suspended = () => {
   };
   return (
     <>
-      <h1>Let's set up {TITLE}!</h1>
+      <h1>Let's set up {EXTENSION_NAME}!</h1>
       <div className="flex flex-col items-start gap-y-3">
         {isOnToolbar ? (
           <Checked>{MESSAGE_FOR.PIN_EXTENSION_TO_TOOLBAR}</Checked>

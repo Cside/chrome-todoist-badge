@@ -44,7 +44,7 @@ export const getTasks = async (): Promise<Task[]> => {
 // Utils
 // ==================================================
 
-// Spec: https://todoist.com/help/articles/introduction-to-filters-V98wIH
+// Filter の仕様: https://todoist.com/help/articles/introduction-to-filters-V98wIH
 export const _buildTasksApiQueryString = async ({
   projectId,
   filterByDueByToday,
@@ -68,7 +68,6 @@ export const _buildTasksApiQueryString = async ({
 
 const projectIdToFilter = async (projectId: ProjectId) =>
   // TODO キャッシュ。。
-  // FIXME 404 だったときどうすんのよ
   `#${_escapeFilter((await getProject(projectId)).name)}`;
 
 const sectionIdToFilter = async (sectionId: ProjectId) =>

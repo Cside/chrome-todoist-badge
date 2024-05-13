@@ -16,6 +16,8 @@ import {
 import type { ProjectId, Section, SectionId, Task } from "../types";
 import { STORAGE_KEY_FOR } from "./storageKeys";
 
+const api = { getProject, getSection };
+
 const projectIdHasChecked = new Map<ProjectId, true>();
 
 export const useFilteringProjectId_Suspended = () => {
@@ -30,7 +32,7 @@ export const useFilteringProjectId_Suspended = () => {
     projectIdHasChecked.set(key, true);
 
     try {
-      if (projectId !== undefined) await getProject(projectId);
+      if (projectId !== undefined) await api.getProject(projectId);
     } catch (error) {
       if (
         error instanceof HTTPError &&
@@ -64,7 +66,7 @@ export const useFilteringSectionId_Suspended = () => {
     sectionIdHasChecked.set(key, true);
 
     try {
-      if (sectionId !== undefined) await getSection(sectionId);
+      if (sectionId !== undefined) await api.getSection(sectionId);
     } catch (error) {
       if (
         error instanceof HTTPError &&

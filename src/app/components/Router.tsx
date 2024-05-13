@@ -5,7 +5,7 @@ import {
   createHashRouter,
   redirect,
 } from "react-router-dom";
-import { name as TITLE } from "../../../package.json";
+import { name as EXTENSION_NAME } from "../../../package.json";
 import { PATH_TO } from "../../constants/paths";
 import { isPopup } from "../fn/isPopup";
 import Options from "./Options";
@@ -22,7 +22,7 @@ import Welcome from "./Welcome";
 
 const Container = () => {
   useEffect(() => {
-    document.title = TITLE;
+    document.title = EXTENSION_NAME;
   }, []);
 
   return (
