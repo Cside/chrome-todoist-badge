@@ -2,8 +2,8 @@ import { activate_sectionsCacheRefresh } from "./activate_sectionsCacheRefresh/a
 import { activate_tasksCacheRefresh_andBadgeCountUpdates } from "./activate_tasksCacheRefresh_andBadgeCountUpdates/activate_tasksCacheRefresh_andBadgeCountUpdates";
 
 export const addMessageListeners = () => {
-  chrome.runtime.onMessage.addListener(async (req) => {
-    switch (req.action) {
+  chrome.runtime.onMessage.addListener(async (message) => {
+    switch (message.action) {
       case "activate-tasks-cache-refresh-and-badge-count-updates":
         await activate_tasksCacheRefresh_andBadgeCountUpdates();
         break;
@@ -11,7 +11,7 @@ export const addMessageListeners = () => {
         await activate_sectionsCacheRefresh();
         break;
       default:
-        throw new Error(`Unknown action: ${JSON.stringify(req)}`);
+        throw new Error(`Unknown action: ${JSON.stringify(message)}`);
     }
   });
 };
