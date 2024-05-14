@@ -16,13 +16,7 @@ export default defineConfig({
       `${API_BASE_URL}/*`, // Tasks API, Projects API, etc...
       `${WEB_APP_BASE_URL}/*`, // Sync API
     ],
-    permissions: [
-      "storage",
-      "unlimitedStorage",
-      "webRequest",
-      "alarms",
-      "idle",
-    ],
+    permissions: ["storage", "unlimitedStorage", "webRequest", "alarms", "idle"],
     action: {},
   },
 });

@@ -23,11 +23,7 @@ export default function PinExtensionToToolbar() {
       <div>
         {usDetails !== null && (
           <img
-            src={
-              usDetails.browser.name === "Edge"
-                ? edgeThumbnail
-                : chromeThumbnail
-            }
+            src={usDetails.browser.name === "Edge" ? edgeThumbnail : chromeThumbnail}
           />
         )}
       </div>

@@ -13,9 +13,7 @@ export const ErrorBoundary = (): JSX.Element => {
   )
     return (
       <>
-        <h1 className="text-3xl text-error">
-          You are not logged in to Todoist
-        </h1>
+        <h1 className="text-3xl text-error">You are not logged in to Todoist</h1>
         <p>
           Please login to{" "}
           <a href={WEB_APP_URL_FOR.LOGIN} target="_blank" rel="noreferrer">

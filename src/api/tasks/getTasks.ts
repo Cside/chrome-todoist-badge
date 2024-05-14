@@ -11,12 +11,8 @@ import { getProject } from "../projects/getProject";
 import { getSection } from "../sections/getSection";
 
 // for TQ
-export const getTasksByParams = async (
-  filters: TaskFilters,
-): Promise<Task[]> => {
-  const url = `${API_URL_FOR.GET_TASKS}${await _buildTasksApiQueryString(
-    filters,
-  )}`;
+export const getTasksByParams = async (filters: TaskFilters): Promise<Task[]> => {
+  const url = `${API_URL_FOR.GET_TASKS}${await _buildTasksApiQueryString(filters)}`;
   const tasks = await ky.getCamelized<Task[]>(url);
   return tasks;
 };
@@ -76,5 +72,4 @@ const sectionIdToFilter = async (sectionId: ProjectId) =>
     : // TODO キャッシュ。。
       `/${_escapeFilter((await getSection(sectionId)).name)}`;
 
-export const _escapeFilter = (filter: string) =>
-  filter.replace(/([&])/g, "\\$1");
+export const _escapeFilter = (filter: string) => filter.replace(/([&])/g, "\\$1");

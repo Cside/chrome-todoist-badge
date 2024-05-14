@@ -8,9 +8,16 @@ export const STORAGE_KEY_FOR = {
     },
     IS_INITIALIZED: "local:config:isInitialized",
   },
+  // biome-ignore format:
   CACHE: {
-    // biome-ignore format:
-    TASKS:    "local:cache:tasks",
+    PROJECTS: "local:cache:projects",
     SECTIONS: "local:cache:sections",
+    TASKS:    "local:cache:tasks",
+    /*         | popup | options | background fetch
+      ---------|-------|---------|------------------
+      projects |       |         | o
+      sections | o     |         | o
+      tasks    | o     |         | o
+    */
   },
 };

@@ -57,10 +57,7 @@ const Main_Suspended = () => {
   useAsyncEffect(async () => {
     if (areSectionsLoaded)
       // Popup とは別 Window なので TQ は使う意味ない。
-      await wxtStorage.setItem<Section[]>(
-        STORAGE_KEY_FOR.CACHE.SECTIONS,
-        sections,
-      ); // retry はサボる
+      await wxtStorage.setItem<Section[]>(STORAGE_KEY_FOR.CACHE.SECTIONS, sections); // retry はサボる
   }, [sections, areSectionsLoaded]);
 
   // ==================================================
@@ -154,9 +151,7 @@ const Main_Suspended = () => {
               <input
                 type="checkbox"
                 checked={filterByDueByToday}
-                onChange={(event) =>
-                  setFilterByDueByToday(event.target.checked)
-                }
+                onChange={(event) => setFilterByDueByToday(event.target.checked)}
                 id="filter-by-due-by-today"
                 className="toggle toggle-primary"
               />

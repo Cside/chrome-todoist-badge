@@ -118,7 +118,7 @@ export const useTasksCache_Suspended = () =>
     storageKey: STORAGE_KEY_FOR.CACHE.TASKS,
   });
 
-export const useCachedSections_Suspended = () =>
+export const useSectionsCache_Suspended = () =>
   // Mutation 使わないので素の useSuspenseQuery
   useSuspenseQuery({
     queryKey: [STORAGE_KEY_FOR.CACHE.SECTIONS],

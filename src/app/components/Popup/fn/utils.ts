@@ -48,8 +48,6 @@ export const getUnknownSectionIds = ({
   sections,
 }: { tasks: Task[]; sections: Section[] }) =>
   difference(
-    tasks
-      .map((task) => task.sectionId)
-      .filter((id) => id !== undefined) as string[],
+    tasks.map((task) => task.sectionId).filter((id) => id !== undefined) as string[],
     sections.map((section) => section.id),
   );
