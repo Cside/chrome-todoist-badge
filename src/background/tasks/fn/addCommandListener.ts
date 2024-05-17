@@ -34,6 +34,10 @@ export const addCommandListener = ({
 }) => {
   chrome.webRequest.onCompleted.addListener(
     async (details) => {
+      /* NOTE: リクエストが開始してからレスポンスが返ってくるまでの間に
+         拡張が update されると、キャッシュが消し飛ぶので見つからない。
+         まぁそのケースがマシだし、万が一起こったとしても、次に Popup を開けば生合成が取れる。
+      */
       const command = cache.get(details.requestId);
       if (command !== undefined) {
         const matched = commandRegExp.test(command);

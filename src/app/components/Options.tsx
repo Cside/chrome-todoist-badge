@@ -34,7 +34,6 @@ const Main_Suspended = () => {
   // TODO: projectId が projects に含まれているかチェックする
   // (project がアーカイブ/削除されていれば、含まれない)
   const [projectId, setProjectId] = storage.useFilteringProjectId_Suspended();
-  console.log(`>>> (in Options) ${projectId}`);
   const getFirstProjectId_WithAssert = useCallback((): ProjectId => {
     if (!areProjectsLoaded) throw new Error("projects are not loaded");
     if (!isNonEmpty(projects)) throw new Error("projects are empty");

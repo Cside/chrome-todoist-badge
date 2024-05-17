@@ -1,3 +1,7 @@
+/* NOTE:
+   拡張が update されると消し飛ぶ。（ちなみに storage を chrome.storage.session に替えても同じ）
+   あくまでキャッシュなので、キャッシュが消えても困らない用途で使うこと。
+*/
 export class InMemoryCache<T = never> {
   private cache: Map<string, { value: T; expiresAt: number }>;
   private ttl: number;
