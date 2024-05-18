@@ -15,7 +15,7 @@ export const groupTasksBySectionId = ({
     sections.map((section) => [section.id, section] as const),
   );
 
-  const grouped = tasks.reduce((acc: Record<SectionId, Task[]>, task) => {
+  const groupedTasks = tasks.reduce((acc: Record<SectionId, Task[]>, task) => {
     const key = task.sectionId ?? undefinedKey;
 
     acc[key] ??= [];
@@ -24,7 +24,7 @@ export const groupTasksBySectionId = ({
     return acc;
   }, {});
 
-  const sortedKeys = Object.keys(grouped).sort((a, b) =>
+  const sortedKeys = Object.keys(groupedTasks).sort((a, b) =>
     a === undefinedKey
       ? -1
       : (sectionIdToSection.get(a)?.order ?? 0) -
@@ -32,14 +32,8 @@ export const groupTasksBySectionId = ({
   );
 
   return sortedKeys.map((key) => ({
-    section:
-      key === undefinedKey
-        ? undefined
-        : sectionIdToSection.get(key) ??
-          (() => {
-            throw new Error(`section was not found. id: ${key}`);
-          })(),
-    tasks: (grouped[key] ?? []).sort((a, b) => a.order - b.order),
+    section: key === undefinedKey ? undefined : sectionIdToSection.get(key),
+    tasks: (groupedTasks[key] ?? []).sort((a, b) => a.order - b.order),
   }));
 };
 

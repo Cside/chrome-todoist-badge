@@ -84,6 +84,26 @@ describe(`${groupTasksBySectionId.name}()`, () => {
         },
       ],
     },
+    {
+      name: "section doesn't exist",
+      input: {
+        tasks: [
+          toTask({ id: "id-100", order: 0, sectionId: undefined }),
+          toTask({ id: "id-200", order: 1, sectionId: "nullSection" }),
+        ],
+        sections: [],
+      },
+      expected: [
+        {
+          section: undefined,
+          tasks: [toTask({ id: "id-100", order: 0, sectionId: undefined })],
+        },
+        {
+          section: undefined,
+          tasks: [toTask({ id: "id-200", order: 1, sectionId: "nullSection" })],
+        },
+      ],
+    },
   ];
   test.each(cases)("$name", ({ input, expected }) =>
     expect(groupTasksBySectionId(input)).toEqual(expected),
