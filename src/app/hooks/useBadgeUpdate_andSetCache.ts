@@ -3,7 +3,7 @@ import { setBadgeText } from "../../fn/setBadgeText";
 import { STORAGE_KEY_FOR } from "../../storage/storageKeys";
 import type { Task } from "../../types";
 
-export const useBadgeUpdate_andCacheSet = (params: {
+export const useBadgeUpdate_andSetCache = (params: {
   tasks: Task[] | undefined;
   areTasksLoaded: boolean;
 }) => {

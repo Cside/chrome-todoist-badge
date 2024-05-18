@@ -14,7 +14,7 @@ import { STORAGE_KEY_FOR } from "../../storage/storageKeys";
 import * as storage from "../../storage/useStorage";
 import type { ProjectId, Section } from "../../types";
 import { isPopup } from "../fn/isPopup";
-import { useBadgeUpdate_andCacheSet } from "../hooks/useBadgeUpdate_andCacheSet";
+import { useBadgeUpdate_andSetCache } from "../hooks/useBadgeUpdate_andSetCache";
 import { Spinner } from "./Spinner";
 
 const api = { useProjects, useTasks, useSections };
@@ -75,7 +75,7 @@ const Main_Suspended = () => {
     enabled: projectId !== undefined || areProjectsLoaded,
     deps: [projectId, filterByDueByToday, sectionId],
   });
-  useBadgeUpdate_andCacheSet({ tasks, areTasksLoaded });
+  useBadgeUpdate_andSetCache({ tasks, areTasksLoaded });
 
   return (
     <div className="flex flex-col gap-y-3">

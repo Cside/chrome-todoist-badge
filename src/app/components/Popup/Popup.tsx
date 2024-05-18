@@ -4,7 +4,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import { NavLink } from "react-router-dom";
 import { useSectionsCache } from "../../../api/sections/useSections";
 import { useTasksCache } from "../../../api/tasks/useTasks";
-import { useBadgeUpdate_andCacheSet } from "../../hooks/useBadgeUpdate_andCacheSet";
+import { useBadgeUpdate_andSetCache } from "../../hooks/useBadgeUpdate_andSetCache";
 import { Spinner } from "../Spinner";
 import { getUnknownSectionIds, groupTasksBySectionId } from "./fn/utils";
 import { useWebAppUrl } from "./hooks";
@@ -12,35 +12,45 @@ import { useWebAppUrl } from "./hooks";
 const api = { useTasksCache, useSectionsCache };
 
 export default function Popup_Suspended() {
+  const [areCachesAvailable, setAreCachesAvailable] = useState(true);
   const {
     data: tasks,
     isSuccess: areTasksLoaded,
     isFetching: areTasksFetching,
-  } = api.useTasksCache(); // 内部で storage を suspended している
+  } = api.useTasksCache({ isCacheAvailable: areCachesAvailable });
   const webAppUrl = useWebAppUrl();
-  const [isCacheAvailable, setIsCacheAvailable] = useState(true);
   const {
     data: sections,
     isSuccess: areSectionsLoaded,
     isFetching: areSectionsFetching,
-  } = api.useSectionsCache({ isCacheAvailable });
+  } = api.useSectionsCache({ isCacheAvailable: areCachesAvailable });
 
-  // TODO: これ useSectionsCache に押し込めても良いかも
+  /*
+    tasks.sectionId の中に、sections.id に含まれていないものがある場合、cache を再 set する。
+      tasks:    a, X
+      sections, a, b
+    逆に、sections.id の中に、tasks.sectionId に含まれていないものがある場合もあるが
+    実害は無いのでスルーする。
+      tasks:    a
+      sections, a, X
+
+    cache の再 set：sections, tasks どちらが古い場合もありうるので、どっちも再 set する。
+    ( invalidate しないでいい。キャッシュを使わないだけで、再 set される）
+  */
   useEffect(() => {
-    if (areTasksLoaded && areSectionsLoaded) {
+    if (areTasksLoaded && areSectionsLoaded && areCachesAvailable) {
       const notIncluded = getUnknownSectionIds({ tasks, sections });
       if (notIncluded.length > 0) {
         console.error(
-          `task.sectionId were found in sections. ids: ${JSON.stringify(
-            notIncluded,
-          )}`,
+          // biome-ignore format:
+          `task.sectionId were found in sections. ids: ${JSON.stringify(notIncluded)}`,
         );
-        setIsCacheAvailable(false);
+        setAreCachesAvailable(false);
       }
     }
   }, [areTasksLoaded, tasks, areSectionsLoaded, sections]);
 
-  useBadgeUpdate_andCacheSet({ tasks, areTasksLoaded });
+  useBadgeUpdate_andSetCache({ tasks, areTasksLoaded });
 
   const GroupedTasks = useMemo(
     () =>
