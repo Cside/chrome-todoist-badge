@@ -1,4 +1,5 @@
 import todoistIcon from "@/assets/images/todoist.webp";
+import { uniq } from "lodash-es";
 import Markdown from "markdown-to-jsx";
 import React, { useEffect, useState, useMemo } from "react";
 import { NavLink } from "react-router-dom";
@@ -43,7 +44,11 @@ export default function Popup_Suspended() {
       if (notIncluded.length > 0) {
         console.error(
           // biome-ignore format:
-          `task.sectionId were found in sections. ids: ${JSON.stringify(notIncluded)}`,
+          `task.sectionId were found in sections. ids: ${JSON.stringify({
+            notIncluded,
+            tasksIds: uniq(tasks.map((task) => task.sectionId).sort()),
+            sectionIds: uniq(sections.map((section) => section.id).sort()),
+          }, null, 2)}`,
         );
         setAreCachesAvailable(false);
       }
@@ -55,8 +60,8 @@ export default function Popup_Suspended() {
   const GroupedTasks = useMemo(
     () =>
       areTasksLoaded && areSectionsLoaded ? (
-        groupTasksBySectionId({ tasks, sections }).map((group) => (
-          <React.Fragment key={group.section?.id ?? ""}>
+        groupTasksBySectionId({ tasks, sections }).map((group, index) => (
+          <React.Fragment key={group.section?.id ?? `undefinedSection-${index}`}>
             {group.section !== undefined && (
               <h2 className="my-4">{group.section.name}</h2>
             )}

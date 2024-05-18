@@ -10,16 +10,25 @@ import * as api from "./getTasks";
 export const useTasks = ({
   filters,
   deps,
-  enabled,
-}: { filters: TaskFilters; deps: unknown[]; enabled: boolean }) =>
+  cache,
+  enabled = true,
+}: {
+  filters: TaskFilters;
+  deps: unknown[];
+  cache?: Task[] | undefined;
+  enabled?: boolean;
+}) =>
   useQuery({
     queryKey: [QUERY_KEY_FOR.API.TASKS, ...deps],
     queryFn: async () => {
       const tasks = await api.getTasksByParams(filters);
-      await wxtStorage.setItem<Task[]>(STORAGE_KEY_FOR.CACHE.SECTIONS, tasks); // retry はサボる
+      await wxtStorage.setItem<Task[]>(STORAGE_KEY_FOR.CACHE.TASKS, tasks); // retry はサボる
       return tasks;
     },
     enabled,
+    ...(cache && {
+      placeholderData: (prevData) => (prevData !== undefined ? undefined : cache),
+    }),
   });
 
 // from Popup
@@ -34,20 +43,9 @@ export const useTasksCache = ({
 
   const [cache] = storage.useTasksCache_Suspended();
 
-  return useQuery({
-    queryKey: [QUERY_KEY_FOR.API.TASKS, projectId, filterByDueByToday],
-    queryFn: async () => {
-      const tasks = await api.getTasksByParams({
-        projectId,
-        filterByDueByToday,
-        sectionId,
-      });
-      await wxtStorage.setItem<Task[]>(STORAGE_KEY_FOR.CACHE.SECTIONS, tasks); // retry はサボる
-      return tasks;
-    },
-    placeholderData: (prevData) => (prevData ? undefined : cache),
-    ...(isCacheAvailable && {
-      placeholderData: (prevData) => (prevData !== undefined ? undefined : cache),
-    }),
+  return useTasks({
+    filters: { projectId, filterByDueByToday, sectionId },
+    deps: [projectId, filterByDueByToday, sectionId],
+    cache: isCacheAvailable ? cache : undefined,
   }) as UseQueryResult<Task[]>;
 };
