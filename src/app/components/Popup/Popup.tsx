@@ -82,6 +82,7 @@ export default function Popup_Suspended() {
                       window.open(task.url);
                     }}
                   >
+                    {/* 「------------」は Markdown にしない */}
                     {/^-+$/.test(task.content) ? (
                       task.content
                     ) : (

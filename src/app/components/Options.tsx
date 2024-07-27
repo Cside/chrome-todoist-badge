@@ -117,6 +117,14 @@ const Main_Suspended = () => {
                   value={sectionId ?? SECTION_ID_FOR.ALL}
                   onChange={(event) => {
                     const value = event.target.value;
+                    // TODO 後で消す
+                    console.log(
+                      `${
+                        value === SECTION_ID_FOR.ALL
+                          ? "removeSectionId"
+                          : "setSectionId"
+                      }(${value})`,
+                    );
                     value === SECTION_ID_FOR.ALL
                       ? removeSectionId()
                       : setSectionId(value);
@@ -206,7 +214,7 @@ const Main_Suspended = () => {
       <hr className="my-1" />
       <div className="text-neutral-400">
         * Badge number are updated{" "}
-        <span className="underline">every {INTERVAL_MINUTES} minutes</span>.
+        <span className="font-bold italic">every {INTERVAL_MINUTES} minutes</span>.
       </div>
     </div>
   );

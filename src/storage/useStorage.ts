@@ -12,6 +12,7 @@ import { getSection } from "../api/sections/getSection";
 import {
   DEFAULT_FILTER_BY_DUE_BY_TODAY,
   DEFAULT_IS_CONFIG_INITIALIZED,
+  SECTION_ID_FOR,
 } from "../constants/options";
 import type { ProjectId, Section, SectionId, Task } from "../types";
 import { STORAGE_KEY_FOR } from "./storageKeys";
@@ -66,12 +67,11 @@ export const useFilteringSectionId_Suspended = () => {
     sectionIdHasChecked.set(key, true);
 
     try {
-      if (sectionId !== undefined) await api.getSection(sectionId);
+      if (sectionId !== SECTION_ID_FOR.NO_PARENT && sectionId !== undefined)
+        await api.getSection(sectionId);
     } catch (error) {
-      if (
-        error instanceof HTTPError &&
-        String(error.response.status).startsWith("4")
-      ) {
+      // 既に fetch/ky がエラーを吐いているので、ここではエラー吐かない
+      if (isBadRequestError(error)) {
         console.warn(
           `Invalidate section: ${sectionId}, status code: ${error.response.status}`,
         );
@@ -79,6 +79,9 @@ export const useFilteringSectionId_Suspended = () => {
           storage.removeItem(key),
           queryClient.invalidateQueries({ queryKey: [key] }),
         ]);
+        // eslint-disable-next-line curly
+      } else {
+        console.error(error);
       }
     }
   }, [sectionId]);
@@ -168,3 +171,6 @@ const useStorage_Suspended = <StorageValue = never>({
     remove,
   ] as const;
 };
+
+const isBadRequestError = (error: unknown): error is HTTPError =>
+  error instanceof HTTPError && String(error.response.status).startsWith("4");
