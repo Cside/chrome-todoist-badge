@@ -11,6 +11,7 @@ export const refreshTasksCache_andUpdateBadgeCount_withRetry = async () => {
     async () => {
       const tasks = await api.getTasks();
       await storage.setItem<Task[]>(STORAGE_KEY_FOR.CACHE.TASKS, tasks);
+
       await setBadgeText(tasks.length);
     },
     { retries: MAX_RETRY },

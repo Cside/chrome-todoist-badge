@@ -1,4 +1,5 @@
 import { formatDistance } from "date-fns";
+import { ONE_MINUTE } from "../../../constants/time";
 import { getLocaleTime } from "../../../fn/getLocaleTime";
 
 const prevStateMap = new Map<string, chrome.idle.IdleState>();
@@ -31,8 +32,9 @@ export const addAlarmListener = async ({
       try {
         await listener();
         console.info(
-          `[${name}] Alarm: Executed at ${getLocaleTime()}.\n` +
-            `    Next execution is at ${getLocaleTime(alarm.scheduledTime)}.`,
+          // biome-ignore format:
+          `[${name}] Alarm: Executed at ${getLocaleTime(alarm.scheduledTime)}.` +
+            `\n    Next execution is at ${getLocaleTime(alarm.scheduledTime + intervalMinutes * ONE_MINUTE)}.`,
         );
       } catch (error) {
         console.error(`[${name}] Alarm: Failed to execute. error: `, error);

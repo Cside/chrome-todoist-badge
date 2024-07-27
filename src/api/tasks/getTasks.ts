@@ -41,6 +41,9 @@ export const getTasks = async (): Promise<Task[]> => {
 // ==================================================
 
 // Filter の仕様: https://todoist.com/help/articles/introduction-to-filters-V98wIH
+/* NOTE: section_id, project_id クエリパラメータを使わない理由：
+  - filter: (today|overdue) と併用できないから
+*/
 export const _buildTasksApiQueryString = async ({
   projectId,
   filterByDueByToday,
@@ -49,17 +52,16 @@ export const _buildTasksApiQueryString = async ({
   const filters = [
     filterByDueByToday === true && "(today | overdue)",
     ...(await Promise.all([
-      await projectIdToFilter(projectId),
-      sectionId !== undefined && (await sectionIdToFilter(sectionId)),
+      projectIdToFilter(projectId),
+      sectionId !== undefined && sectionIdToFilter(sectionId),
     ])),
   ]
     .filter(Boolean)
     .join(" & ");
+
   console.info(`[filters] ${filters}`);
 
-  return `?${new URLSearchParams({
-    filter: filters,
-  })}`;
+  return `?${new URLSearchParams({ filter: filters })}`;
 };
 
 const projectIdToFilter = async (projectId: ProjectId) =>
