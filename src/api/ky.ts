@@ -31,8 +31,12 @@ const kyInstance = _ky.create({
         const elapsed = `${((Date.now() - startedAt) / 1_000).toFixed(2)}ms`;
 
         console.info(
-          // biome-ignore format:
-          [`%c${getLocaleTime()}`, `(${elapsed})`, `${res.status}`, `${req.method} ${req.url}${getFilter(req.url)}`].join("\t"),
+          [
+            `%c${getLocaleTime()}`,
+            `(${elapsed})`,
+            `${res.status}`,
+            `${req.method} ${req.url}${getFilter(req.url)}`,
+          ].join("\t"),
           `color: ${
             String(res.status).startsWith("2") ? "darkcyan" : "darkgoldenrod"
           }`,

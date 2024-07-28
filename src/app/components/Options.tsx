@@ -117,14 +117,6 @@ const Main_Suspended = () => {
                   value={sectionId ?? SECTION_ID_FOR.ALL}
                   onChange={(event) => {
                     const value = event.target.value;
-                    // TODO 後で消す
-                    console.log(
-                      `${
-                        value === SECTION_ID_FOR.ALL
-                          ? "removeSectionId"
-                          : "setSectionId"
-                      }(${value})`,
-                    );
                     value === SECTION_ID_FOR.ALL
                       ? removeSectionId()
                       : setSectionId(value);
