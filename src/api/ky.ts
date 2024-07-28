@@ -66,15 +66,19 @@ export const ky = {
       return normalizeApiObject(await kyInstance.get(url).json()) as T;
     } catch (error) {
       // TimeoutError の場合、ky の beforeError 等が発火しないため、ここでやる
-      if (error instanceof TimeoutError)
-        error.message +=
-          // biome-ignore format:
-          // biome-ignore lint/style/useTemplate:
-          `\n    url: ${url}` +
-          extractFilter(url) +
-          `\n    timeout: ${TIMEOUT}`;
-
-      throw error;
+      /* NOTE: error.message の最後に追加する、をやらない理由：
+         TimeoutError オブジェクトを throw すると、
+         なぜか、変更した error.message が無視される */
+      throw error instanceof TimeoutError
+        ? new Error(
+            // biome-ignore format:
+            // biome-ignore lint/style/useTemplate:
+            "Request timed out" +
+            `\n  url: ${url}` +
+            extractFilter(url) +
+            `\n  timeout: ${TIMEOUT}ms`,
+          )
+        : error;
     }
   },
 };
