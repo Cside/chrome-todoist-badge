@@ -11,7 +11,9 @@
     "tailwindcss",
     "daisyui",
     "clsx",
-    "camelcase"
+    "camelcase",
+    "darkcyan",
+    "darkgoldenrod"
   ],
   "emeraldwalk.runonsave": {
     "commands": [

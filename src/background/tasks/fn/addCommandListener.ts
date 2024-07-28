@@ -1,5 +1,6 @@
 import { ONE_MINUTE } from "../../../constants/time";
 import { API_URL_MATCH_PATTERN_FOR } from "../../../constants/urls";
+import { label } from "../../../fn/label";
 import { InMemoryCache } from "../../InMemoryCache";
 
 const decoder = new TextDecoder("utf-8");
@@ -36,7 +37,7 @@ export const addCommandListener = ({
     async (details) => {
       /* NOTE: リクエストが開始してからレスポンスが返ってくるまでの間に
          拡張が update されると、キャッシュが消し飛ぶので見つからない。
-         まぁそのケースがマシだし、万が一起こったとしても、次に Popup を開けば生合成が取れる。
+         まぁそのケースがマシだし、万が一起こったとしても、次に Popup を開けば整合性は取れる。
       */
       const command = cache.get(details.requestId);
       if (command !== undefined) {
@@ -44,10 +45,10 @@ export const addCommandListener = ({
         if (matched)
           try {
             await listener();
-            console.info(`[command: ${command}] ${name}`);
+            console.info(`${label(`command: ${command}`)} ${name}`);
           } catch (error) {
             console.error(
-              `[command: ${command}] Failed to executer. error: `,
+              `${label(`command: ${command}`)} Failed to executer. error: `,
               error,
             );
           }

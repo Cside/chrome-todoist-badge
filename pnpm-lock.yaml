@@ -20,6 +20,9 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.29.2
         version: 5.29.2(react@18.3.1)
+      chalk:
+        specifier: ^5.3.0
+        version: 5.3.0
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -2891,6 +2894,9 @@ packages:
   picocolors@1.0.0:
     resolution: {integrity: sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==}
 
+  picocolors@1.0.1:
+    resolution: {integrity: sha512-anP1Z8qwhkbmu7MFP5iTt+wQKXgwzf7zTyGlcdzabySa9vd0Xt392U0rVmz9poOaBj0uHJKyyo9/upk0HrEQew==}
+
   picomatch@2.3.1:
     resolution: {integrity: sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==}
     engines: {node: '>=8.6'}
@@ -4958,7 +4964,7 @@ snapshots:
       caniuse-lite: 1.0.30001606
       fraction.js: 4.3.7
       normalize-range: 0.1.2
-      picocolors: 1.0.0
+      picocolors: 1.0.1
       postcss: 8.4.38
       postcss-value-parser: 4.2.0
 
@@ -5282,7 +5288,7 @@ snapshots:
     dependencies:
       css-selector-tokenizer: 0.8.0
       culori: 3.3.0
-      picocolors: 1.0.0
+      picocolors: 1.0.1
       postcss-js: 4.0.1(postcss@8.4.38)
     transitivePeerDependencies:
       - postcss
@@ -6914,6 +6920,8 @@ snapshots:
 
   picocolors@1.0.0: {}
 
+  picocolors@1.0.1: {}
+
   picomatch@2.3.1: {}
 
   picomatch@4.0.1: {}
@@ -6969,7 +6977,7 @@ snapshots:
   postcss@8.4.38:
     dependencies:
       nanoid: 3.3.7
-      picocolors: 1.0.0
+      picocolors: 1.0.1
       source-map-js: 1.2.0
 
   prelude-ls@1.2.1: {}
@@ -7507,7 +7515,7 @@ snapshots:
       micromatch: 4.0.5
       normalize-path: 3.0.0
       object-hash: 3.0.0
-      picocolors: 1.0.0
+      picocolors: 1.0.1
       postcss: 8.4.38
       postcss-import: 15.1.0(postcss@8.4.38)
       postcss-js: 4.0.1(postcss@8.4.38)
@@ -7700,7 +7708,7 @@ snapshots:
     dependencies:
       browserslist: 4.23.0
       escalade: 3.1.2
-      picocolors: 1.0.0
+      picocolors: 1.0.1
 
   update-notifier@6.0.2:
     dependencies:
@@ -7978,7 +7986,7 @@ snapshots:
       normalize-path: 3.0.0
       nypm: 0.3.8
       ora: 7.0.1
-      picocolors: 1.0.0
+      picocolors: 1.0.1
       prompts: 2.4.2
       publish-browser-extension: 2.1.3
       unimport: 3.7.1(rollup@4.13.0)

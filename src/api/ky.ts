@@ -7,6 +7,12 @@ const TIMEOUT = 10 * 1000; // same as default
 // これだとリクエストがパラで飛んだ時駄目。
 // req id があれば一番楽だが...
 const requestStartedAt: Map<string, number | undefined> = new Map();
+const getFilter = (url: string) => {
+  const filter = new URL(url).searchParams.get("filter");
+  if (filter === null) return "";
+  return `  ${filter}`;
+};
+
 const kyInstance = _ky.create({
   timeout: TIMEOUT,
   hooks: {
@@ -23,9 +29,13 @@ const kyInstance = _ky.create({
           return;
         }
         const elapsed = `${((Date.now() - startedAt) / 1_000).toFixed(2)}ms`;
+
         console.info(
           // biome-ignore format:
-          `(${elapsed}) ${res.status} ${req.method} ${req.url} ${getLocaleTime()}`,
+          [`%c${getLocaleTime()}`, `(${elapsed})`, `${res.status}`, `${req.method} ${req.url}${getFilter(req.url)}`].join("\t"),
+          `color: ${
+            String(res.status).startsWith("2") ? "darkcyan" : "darkgoldenrod"
+          }`,
         );
       },
     ],
