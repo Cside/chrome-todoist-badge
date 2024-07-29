@@ -7,7 +7,7 @@ import { storage as wxtStorage } from "wxt/storage";
 import { useProjects } from "../../api/projects/useProjects";
 import { useSections } from "../../api/sections/useSections";
 import { useTasks } from "../../api/tasks/useTasks";
-import { INTERVAL_MINUTES } from "../../background/tasks/activate_tasksCacheRefresh_andBadgeCountUpdates/refreshTasksCache_andUpdateBadgeCount_regularly";
+import { INTERVAL_MINUTES } from "../../background/tasks/watch_tasksCacheRefresh_andBadgeCountUpdates/refreshTasksCache_andUpdateBadgeCount_regularly";
 import { SECTION_ID_FOR } from "../../constants/options";
 import { PATH_TO } from "../../constants/paths";
 import { STORAGE_KEY_FOR } from "../../storage/storageKeys";

@@ -1,9 +1,9 @@
 import { STORAGE_KEY_FOR } from "../storage/storageKeys";
-import { activate_sectionsCacheRefresh } from "./tasks/activate_sectionsCacheRefresh/activate_sectionsCacheRefresh";
-import { activate_tasksCacheRefresh_andBadgeCountUpdates } from "./tasks/activate_tasksCacheRefresh_andBadgeCountUpdates/activate_tasksCacheRefresh_andBadgeCountUpdates";
 import { addMessageListeners } from "./tasks/addMessageListeners";
 import { openWelcomePageOnInstalled } from "./tasks/openWelcomePage";
 import { setBadgeColor } from "./tasks/setBadgeColor";
+import { watch_sectionsCacheRefresh } from "./tasks/watch_sectionsCacheRefresh/watch_sectionsCacheRefresh";
+import { watch_tasksCacheRefresh_andBadgeCountUpdates } from "./tasks/watch_tasksCacheRefresh_andBadgeCountUpdates/watch_tasksCacheRefresh_andBadgeCountUpdates";
 
 export const startBackground =
   // async にすると警告が出る
@@ -18,8 +18,8 @@ export const startBackground =
         true
       )
         await Promise.all([
-          activate_tasksCacheRefresh_andBadgeCountUpdates(),
-          activate_sectionsCacheRefresh(),
+          watch_tasksCacheRefresh_andBadgeCountUpdates(),
+          watch_sectionsCacheRefresh(),
         ]);
     })();
   };

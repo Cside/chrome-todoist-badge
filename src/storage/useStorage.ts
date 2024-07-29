@@ -106,10 +106,10 @@ export const useIsConfigInitialized_Suspended = () => {
       onMutationSuccess: async () =>
         await Promise.all([
           chrome.runtime.sendMessage({
-            action: "activate-tasks-cache-refresh-and-badge-count-updates",
+            action: "watch-tasks-cache-refresh-and-badge-count-updates",
           }),
           chrome.runtime.sendMessage({
-            action: "activate-sections-cache-refresh",
+            action: "watch-sections-cache-refresh",
           }),
         ]),
     });

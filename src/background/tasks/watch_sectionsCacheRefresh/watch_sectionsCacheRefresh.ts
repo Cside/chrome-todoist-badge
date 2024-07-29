@@ -3,8 +3,8 @@ import { refreshSectionsCache_withRetry } from "./fn/refreshSectionsCache_withRe
 import { refreshSectionsCache_onSectionsUpdated } from "./refreshSectionsCache_onSectionsUpdated";
 import { refreshSectionsCache_regularly } from "./refreshSectionsCache_regularly";
 
-export const activate_sectionsCacheRefresh = async () => {
-  console.info(`${label(activate_sectionsCacheRefresh.name)} task start`);
+export const watch_sectionsCacheRefresh = async () => {
+  console.info(`${label(watch_sectionsCacheRefresh.name)} task start`);
   refreshSectionsCache_onSectionsUpdated();
   await refreshSectionsCache_regularly();
   await refreshSectionsCache_withRetry();
