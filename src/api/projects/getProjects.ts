@@ -1,13 +1,14 @@
-import pRetry from "p-retry";
-import { MAX_RETRY } from "../../constants/maxRetry";
 import { API_URL_FOR } from "../../constants/urls";
-import { STORAGE_KEY_FOR } from "../../storage/storageKeys";
-import type { Project, ProjectId } from "../../types";
+import type { Project } from "../../types";
 import { ky } from "../ky";
+// import pRetry from "p-retry";
+// import { MAX_RETRY } from "../../constants/maxRetry";
+// import { STORAGE_KEY_FOR } from "../../storage/storageKeys";
 
 export const getProjects = async () =>
   await ky.getCamelized<Project[]>(API_URL_FOR.GET_PROJECTS);
 
+/* WIP
 // from BG worker
 const getProjectFromCacheOrApi = async (id: ProjectId) => {
   const projectsCache = await storage.getItem<Project[]>(
@@ -31,3 +32,4 @@ const getProjectFromCacheOrApi = async (id: ProjectId) => {
     );
   } catch (error) {}
 };
+*/
