@@ -19,7 +19,7 @@ export const groupTasksBySectionId = ({
     const key = task.sectionId ?? undefinedKey;
 
     acc[key] ??= [];
-    acc[key]?.push(task);
+    acc[key].push(task);
 
     return acc;
   }, {});
