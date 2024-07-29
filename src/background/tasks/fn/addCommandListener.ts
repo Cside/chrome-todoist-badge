@@ -11,9 +11,14 @@ chrome.webRequest.onBeforeRequest.addListener(
     const requestBody = details.requestBody?.raw?.[0]?.bytes;
     if (requestBody)
       try {
-        const parsed = JSON.parse(decoder.decode(requestBody)) as {
-          commands: { type: string }[];
+        const requestBodyJson = decoder.decode(requestBody);
+        const parsed = JSON.parse(requestBodyJson) as {
+          commands?: { type: string }[];
         };
+        if (parsed.commands === undefined) {
+          console.error(`commands is undefined. requestBody: ${requestBodyJson}`);
+          return;
+        }
         const firstCommand = parsed.commands[0]?.type;
         if (firstCommand !== undefined) cache.set(details.requestId, firstCommand);
       } catch (error) {

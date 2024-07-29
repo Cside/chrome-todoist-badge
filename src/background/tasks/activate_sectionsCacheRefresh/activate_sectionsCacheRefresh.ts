@@ -4,7 +4,7 @@ import { refreshSectionsCache_onSectionsUpdated } from "./refreshSectionsCache_o
 import { refreshSectionsCache_regularly } from "./refreshSectionsCache_regularly";
 
 export const activate_sectionsCacheRefresh = async () => {
-  console.info(`${label("task start")} ${activate_sectionsCacheRefresh.name}`);
+  console.info(`${label(activate_sectionsCacheRefresh.name)} task start`);
   refreshSectionsCache_onSectionsUpdated();
   await refreshSectionsCache_regularly();
   await refreshSectionsCache_withRetry();
