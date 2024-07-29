@@ -62,38 +62,47 @@ export default function Popup_Suspended() {
   const GroupedTasks = useMemo(
     () =>
       areTasksLoaded && areSectionsLoaded ? (
-        groupTasksBySectionId({ tasks, sections }).map((group, index) => (
-          <React.Fragment key={group.section?.id ?? `undefinedSection-${index}`}>
-            {group.section !== undefined && (
-              <h2 className="my-4">{group.section.name}</h2>
-            )}
-            <ul>
-              {group.tasks.map((task) => (
-                <li key={task.id}>
-                  {/* Markdown の中に a タグが入り込みうるため、div にする */}
-                  <div
-                    className="link link-hover m-0"
-                    onClick={(event) => {
-                      if (event.target instanceof HTMLAnchorElement) {
-                        event.preventDefault();
-                        window.open(event.target.href);
-                        return;
-                      }
-                      window.open(task.url);
-                    }}
-                  >
-                    {/* 「------------」は Markdown にしない */}
-                    {/^-+$/.test(task.content) ? (
-                      task.content
-                    ) : (
-                      <Markdown>{task.content}</Markdown>
-                    )}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </React.Fragment>
-        ))
+        (() => {
+          const groupedTasks = groupTasksBySectionId({ tasks, sections }).map(
+            (group, index) => (
+              <React.Fragment key={group.section?.id ?? `undefinedSection-${index}`}>
+                {group.section !== undefined && (
+                  <h2 className="my-4">{group.section.name}</h2>
+                )}
+                <ul>
+                  {group.tasks.map((task) => (
+                    <li key={task.id}>
+                      {/* Markdown の中に a タグが入り込みうるため、div にする */}
+                      <div
+                        className="link link-hover m-0"
+                        onClick={(event) => {
+                          if (event.target instanceof HTMLAnchorElement) {
+                            event.preventDefault();
+                            window.open(event.target.href);
+                            return;
+                          }
+                          window.open(task.url);
+                        }}
+                      >
+                        {/* 「------------」は Markdown にしない */}
+                        {/^-+$/.test(task.content) ? (
+                          task.content
+                        ) : (
+                          <Markdown>{task.content}</Markdown>
+                        )}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </React.Fragment>
+            ),
+          );
+          return groupedTasks.length > 0 ? (
+            groupedTasks
+          ) : (
+            <div className="mt-3 mb-5 ml-1">All done!</div>
+          );
+        })()
       ) : (
         <Spinner className="m-5" />
       ),
