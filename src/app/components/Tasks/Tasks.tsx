@@ -14,7 +14,7 @@ const api = { useTasksCache, useSectionsCache };
 
 const ICON_LENGTH = 30;
 
-export default function Popup_Suspended() {
+export default function Tasks_Suspended() {
   const [areCachesAvailable, setAreCachesAvailable] = useState(true);
   const {
     data: tasks,

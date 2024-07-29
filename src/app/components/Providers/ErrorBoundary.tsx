@@ -2,7 +2,7 @@ import { HTTPError } from "ky";
 import { useRouteError } from "react-router-dom";
 import { STATUS_CODE_FOR } from "../../../constants/statusCodes";
 import { WEB_APP_URL_FOR } from "../../../constants/urls";
-import { isPopup } from "../../fn/isPopup";
+import { isTasks } from "../../fn/isTasks";
 
 export const ErrorBoundary = (): JSX.Element => {
   const error = useRouteError();
@@ -21,7 +21,7 @@ export const ErrorBoundary = (): JSX.Element => {
           </a>
           .
         </p>
-        {!isPopup() && (
+        {!isTasks() && (
           <div>
             <button
               type="button"

@@ -25,7 +25,7 @@ export const useSections = ({ cache }: { cache?: Section[] | undefined } = {}) =
   });
 };
 
-// from Popup
+// from Tasks
 export const useSectionsCache = ({
   isCacheAvailable,
 }: { isCacheAvailable: boolean }) => {
