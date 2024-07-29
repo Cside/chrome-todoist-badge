@@ -7,14 +7,14 @@ import {
 } from "react-router-dom";
 import { name as EXTENSION_NAME } from "../../../package.json";
 import { PATH_TO } from "../../constants/paths";
-import { isPopup } from "../fn/isPopup";
+import { isTasks } from "../fn/isTasks";
 import Options from "./Options";
 import PinExtensionToToolbar from "./PinExtensionToToolbar";
-import Popup_Suspended from "./Popup/Popup";
-import { PopupLoader } from "./Popup/PopupLoader";
 import { ErrorBoundary } from "./Providers/ErrorBoundary";
 import { QueryClientProvider } from "./Providers/QueryClientProvider";
 import { Spinner } from "./Spinner";
+import Tasks_Suspended from "./Tasks/Tasks";
+import { TasksLoader } from "./Tasks/TasksLoader";
 import Welcome from "./Welcome";
 
 // sync import にしても初期描画速度遅くならないので。
@@ -42,23 +42,23 @@ export const Router = () => (
         element: (
           // これはどうなんだろ...？
           // TQ 使わないなら無駄なわけだし…
-          // かといって、Popup.tsx, Options.tsx それぞれで Provider で囲むのは
+          // かといって、Tasks.tsx, Options.tsx それぞれで Provider で囲むのは
           // DRY じゃないし…( TQ 以外にも Provider が増えたら地獄)
           <Container />
         ),
         children: [
           {
             index: true,
-            loader: () => redirect(isPopup() ? PATH_TO.POPUP : PATH_TO.OPTIONS),
+            loader: () => redirect(isTasks() ? PATH_TO.TASKS : PATH_TO.OPTIONS),
           },
           {
             path: PATH_TO.OPTIONS,
             element: <Options />,
           },
           {
-            path: PATH_TO.POPUP,
-            loader: PopupLoader,
-            element: <Popup_Suspended />,
+            path: PATH_TO.TASKS,
+            loader: TasksLoader,
+            element: <Tasks_Suspended />,
           },
           {
             path: PATH_TO.WELCOME,
