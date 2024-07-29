@@ -167,7 +167,8 @@ const Main_Suspended = () => {
         )}
       </div>
 
-      <pre>
+      {/* Debug */}
+      {/* <pre>
         <code>
           {JSON.stringify(
             {
@@ -179,7 +180,7 @@ const Main_Suspended = () => {
             "  ",
           )}
         </code>
-      </pre>
+      </pre> */}
 
       {isInitialized || (
         <div>
