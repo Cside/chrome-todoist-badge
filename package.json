@@ -16,11 +16,11 @@
     "compile": "tsc --noEmit",
     "format:prettier": "prettier --check .",
     "format-fix:prettier": "prettier --list-different --write .",
-    "format:biome": "biome format .",
+    "format:biome": "rm vitest.config.ts.timestamp-*; biome format .",
     "format-fix:biome": "biome format --write .",
     "format": "pnpm run '/^format:.+/'",
     "format-fix": "pnpm run '/^format-fix:.+/'",
-    "lint:biome": "biome lint .",
+    "lint:biome": "rm vitest.config.ts.timestamp-*; biome lint .",
     "lint-fix:biome": "biome check --apply-unsafe .",
     "lint:unused-code": "knip",
     "lint-fix:unused-code": "knip --fix-type exports",
@@ -29,7 +29,7 @@
     "lint": "pnpm run '/^lint:.+/'",
     "lint-fix": "pnpm run '/^lint-fix:.+/'",
     "check:ng-word": "./scripts/check-ng-words.sh",
-    "check": "pnpm run '/^(compile$|lint$|format$|check:)/'",
+    "check": "pnpm run '/^(compile$|lint$|format$|test$|check:)/'",
     "fix": "pnpm run lint-fix && pnpm run format-fix"
   },
   "dependencies": {
