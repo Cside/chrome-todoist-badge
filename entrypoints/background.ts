@@ -1,3 +1,4 @@
-export default defineBackground(() => {
-  console.log('Hello background!', { id: browser.runtime.id });
-});
+import "@/src/globalUtils";
+import { startBackground } from "@/src/background/startBackground";
+
+export default defineBackground(() => startBackground());

@@ -1,0 +1,21 @@
+{
+  "entry": ["./wxt.config.ts", "./entrypoints/*.ts", "./src/**/main.tsx"],
+  "project": ["./src/**/*.{ts,tsx}"],
+  "ignore": [],
+  "include": [
+    "files",
+    "dependencies",
+    "unlisted",
+    "unresolved",
+    "exports",
+    "nsExports",
+    "types",
+    "nsTypes",
+    "enumMembers",
+    "classMembers"
+  ],
+  "paths": {
+    "@/*": ["./*"]
+  },
+  "ignoreDependencies": ["@types/chrome", "@sentry/integrations"]
+}

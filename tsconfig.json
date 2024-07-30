@@ -2,6 +2,20 @@
   "extends": "./.wxt/tsconfig.json",
   "compilerOptions": {
     "allowImportingTsExtensions": true,
-    "jsx": "react-jsx"
-  }
+    "jsx": "react-jsx",
+    // https://github.com/tsconfig/bases/blob/main/bases/strictest.json
+    "allowUnusedLabels": false,
+    "allowUnreachableCode": false,
+    "exactOptionalPropertyTypes": false, // optional な引数に undefined を許容しないオプション
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "isolatedModules": true,
+    "checkJs": true
+  },
+  "exclude": ["./tailwind.config.js"]
 }

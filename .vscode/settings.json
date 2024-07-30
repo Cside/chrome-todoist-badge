@@ -1,0 +1,52 @@
+{
+  "cSpell.words": [
+    "extpay",
+    "hookz",
+    "uidotdev",
+    "usehooks",
+    "webp",
+    "knip",
+    "tanstack",
+    "noreferrer",
+    "tailwindcss",
+    "daisyui",
+    "clsx",
+    "camelcase",
+    "darkcyan",
+    "darkgoldenrod"
+  ],
+  "emeraldwalk.runonsave": {
+    "commands": [
+      {
+        "match": "\\.tsx$",
+        "cmd": "npx biome check --apply-unsafe ${file}"
+      }
+    ]
+  },
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[javascript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "editor.codeActionsOnSave": {
+    "quickfix.biome": "explicit",
+    "source.organizeImports.biome": "explicit",
+    "source.organizeImports": "never"
+  },
+  "runCurrentTest.run": "npm run test -- ${relativeTestPath} --testNamePattern \"${fullTestName}\""
+}

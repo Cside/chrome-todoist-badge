@@ -1,0 +1,36 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.6.1/schema.json",
+  "organizeImports": {
+    "enabled": true
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "lineWidth": 85
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "correctness": {
+        "noUnusedImports": "error",
+        "useExhaustiveDependencies": "off",
+        "useJsxKeyInIterable": "error"
+      },
+      "suspicious": {
+        "useAwait": "error"
+      },
+      "nursery": {
+        "useSortedClasses": "error"
+      },
+      "a11y": {
+        "noSvgWithoutTitle": "off",
+        "useAltText": "off",
+        "useKeyWithClickEvents": "off"
+      }
+    }
+  },
+  "files": {
+    "ignore": [".output/**/*", ".wxt/**/*"]
+  }
+}
