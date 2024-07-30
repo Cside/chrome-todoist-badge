@@ -5,7 +5,7 @@ import { label } from "../../../fn/label";
 
 const prevStateMap = new Map<string, chrome.idle.IdleState>();
 
-export const addAlarmListener = async ({
+export const addAlarmListener_andIdleStateListener = async ({
   name,
   intervalMinutes,
   listener,
@@ -14,6 +14,9 @@ export const addAlarmListener = async ({
   intervalMinutes: number;
   listener: () => Promise<void>;
 }) => {
+  // ==================================================
+  // Create Alarm
+  // ==================================================
   const alarm = await chrome.alarms.get(name);
   if (alarm) {
     const nextTime = formatDistance(new Date(alarm.scheduledTime), new Date(), {
@@ -42,6 +45,9 @@ export const addAlarmListener = async ({
       }
   });
 
+  // ==================================================
+  // Idle State Listener
+  // ==================================================
   chrome.idle.onStateChanged.addListener(async (idleState) => {
     const prevState = prevStateMap.get(name);
     prevStateMap.set(name, idleState);
