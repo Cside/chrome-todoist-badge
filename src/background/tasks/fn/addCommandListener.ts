@@ -1,3 +1,4 @@
+import color from "chalk";
 import { ONE_MINUTE } from "../../../constants/time";
 import { API_URL_MATCH_PATTERN_FOR } from "../../../constants/urls";
 import { label } from "../../../fn/label";
@@ -50,10 +51,10 @@ export const addCommandListener = ({
         if (matched)
           try {
             await listener();
-            console.info(`${label(`command: ${command}`)} ${name}`);
+            console.info(`${label(name)} ${labelForCommand(command)}`);
           } catch (error) {
             console.error(
-              `${label(`command: ${command}`)} Failed to executer. error: `,
+              `${labelForCommand(command)} Failed to executer. error: `,
               error,
             );
           }
@@ -63,3 +64,6 @@ export const addCommandListener = ({
     ["responseHeaders"],
   );
 };
+
+export const labelForCommand = (name: string) =>
+  color.bgHex("#00a381").black(` command: ${name} `);
