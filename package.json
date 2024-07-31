@@ -1,5 +1,5 @@
 {
-  "name": "Todoist Badge",
+  "name": "Todoist Counter",
   "version": "0.0.1",
   "description": "Displays the number of uncompleted tasks in Todoist on the toolbar.",
   "private": true,
