@@ -1,6 +1,6 @@
 {
   "name": "Todoist Badge",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Display the count of Todoist tasks as a badge",
   "private": true,
   "type": "module",
