@@ -1,7 +1,7 @@
 {
   "name": "Todoist Badge",
   "version": "0.0.1",
-  "description": "Displays the number of uncompleted tasks in Todoist as a badge on the toolbar.",
+  "description": "Displays the number of uncompleted tasks in Todoist on the toolbar.",
   "private": true,
   "type": "module",
   "scripts": {
