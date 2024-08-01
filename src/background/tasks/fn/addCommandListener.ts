@@ -10,21 +10,30 @@ const cache = new InMemoryCache<string>({ ttl: ONE_MINUTE });
 chrome.webRequest.onBeforeRequest.addListener(
   (details) => {
     const requestBody = details.requestBody?.raw?.[0]?.bytes;
-    if (requestBody)
-      try {
-        const requestBodyJson = decoder.decode(requestBody);
-        const parsed = JSON.parse(requestBodyJson) as {
-          commands?: { type: string }[];
-        };
-        if (parsed.commands === undefined) {
-          console.error(`commands is undefined. requestBody: ${requestBodyJson}`);
-          return;
-        }
-        const firstCommand = parsed.commands[0]?.type;
-        if (firstCommand !== undefined) cache.set(details.requestId, firstCommand);
-      } catch (error) {
-        console.error(`Failed to parse request body. error: ${error}`);
+    if (requestBody === undefined) {
+      console.info("requestBody is undefined");
+      return;
+    }
+    try {
+      const requestBodyJson = decoder.decode(requestBody);
+      const parsed = JSON.parse(requestBodyJson) as {
+        commands?: { type: string }[];
+      };
+      if (parsed.commands === undefined) {
+        // command 無しで Sync API が叩かれることはあるだろうから、これは正常系。
+        console.info(`commands is undefined. requestBody: ${requestBodyJson}`);
+        return;
       }
+      const firstCommand = parsed.commands[0]?.type;
+      if (firstCommand === undefined) {
+        console.error(`parsed.commands[] is empty. requestBody: ${requestBodyJson}`);
+        return;
+      }
+      cache.set(details.requestId, firstCommand);
+    } catch (error) {
+      // FIXME: このスコープもっと縮めたい。。
+      console.error(`Failed to parse request body. error: ${error}`);
+    }
   },
   { urls: [API_URL_MATCH_PATTERN_FOR.SYNC] },
   ["requestBody"],
