@@ -74,5 +74,5 @@ export const addCommandListener = ({
   );
 };
 
-export const labelForCommand = (name: string) =>
+const labelForCommand = (name: string) =>
   color.bgHex("#00a381").black(` command: ${name} `);
