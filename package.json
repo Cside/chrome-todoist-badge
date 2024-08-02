@@ -1,8 +1,5 @@
 {
-  "name": "Todoist Counter",
-  "version": "0.0.1",
-  "description": "Displays the number of uncompleted tasks in Todoist on the toolbar.",
-  "private": true,
+  "version": "0.0.2",
   "type": "module",
   "scripts": {
     "dev": "wxt || terminal-notifier -message 'wxt failed' -sound Sosumi",
