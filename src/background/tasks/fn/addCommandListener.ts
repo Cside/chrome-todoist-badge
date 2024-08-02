@@ -34,7 +34,8 @@ chrome.webRequest.onBeforeRequest.addListener(
     }
     const firstCommand = parsed.commands[0]?.type;
     if (firstCommand === undefined) {
-      console.error(`parsed.commands[] is empty. requestBody: ${requestBodyJson}`);
+      // 普通にある https://gist.github.com/Cside/e3c9208e9011b53d28154d5dffd9da87
+      console.info("parsed.commands[] is empty");
       return;
     }
     cache.set(details.requestId, firstCommand);
