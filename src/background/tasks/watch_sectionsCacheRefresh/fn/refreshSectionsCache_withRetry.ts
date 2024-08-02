@@ -15,8 +15,6 @@ export const refreshSectionsCache_withRetry = async () =>
       if (projectId === null) throw new Error("projectId is null");
 
       const sections = await api.getSections({ projectId });
-      // FIXME: これ、sections が 0 の場合は問題にならんの…？
-      // TODO interval の検証
       await storage.setItem<Section[]>(STORAGE_KEY_FOR.CACHE.SECTIONS, sections);
     },
     { retries: MAX_RETRY },
