@@ -116,12 +116,12 @@ export const useIsConfigInitialized_Suspended = () => {
   return [value, mutate] as const;
 };
 
-export const useTasksCache_Suspended = () =>
+export const useCachedTasks_Suspended = () =>
   useStorage_Suspended<Task[]>({
     storageKey: STORAGE_KEY_FOR.CACHE.TASKS,
   });
 
-export const useSectionsCache_Suspended = () =>
+export const useCachedSections_Suspended = () =>
   // Mutation 使わないので素の useSuspenseQuery
   useSuspenseQuery({
     queryKey: [STORAGE_KEY_FOR.CACHE.SECTIONS],

@@ -32,7 +32,7 @@ export const useTasks = ({
   });
 
 // from Tasks
-export const useTasksCache = ({
+export const useCachedTasks = ({
   isCacheAvailable,
 }: { isCacheAvailable: boolean }) => {
   // NOTE: 現状 ここでしか使ってない関数。共通関数化して良かったのだろうか…
@@ -41,7 +41,7 @@ export const useTasksCache = ({
   const [filterByDueByToday] = storage.useFilterByDueByToday_Suspended();
   const [sectionId] = storage.useFilteringSectionId_Suspended();
 
-  const [cache] = storage.useTasksCache_Suspended();
+  const [cache] = storage.useCachedTasks_Suspended();
 
   return useTasks({
     filters: { projectId, filterByDueByToday, sectionId },

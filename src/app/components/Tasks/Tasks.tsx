@@ -3,14 +3,14 @@ import { uniq } from "lodash-es";
 import Markdown from "markdown-to-jsx";
 import React, { useEffect, useState, useMemo } from "react";
 import { NavLink } from "react-router-dom";
-import { useSectionsCache } from "../../../api/sections/useSections";
-import { useTasksCache } from "../../../api/tasks/useTasks";
+import { useCachedSections } from "../../../api/sections/useSections";
+import { useCachedTasks } from "../../../api/tasks/useTasks";
 import { useBadgeUpdate_andSetCache } from "../../hooks/useBadgeUpdate_andSetCache";
 import { Spinner } from "../Spinner";
 import { getUnknownSectionIds, groupTasksBySectionId } from "./fn/utils";
 import { useWebAppUrl } from "./hooks";
 
-const api = { useTasksCache, useSectionsCache };
+const api = { useCachedTasks, useCachedSections };
 
 const ICON_LENGTH = 30;
 
@@ -20,13 +20,13 @@ export default function Tasks_Suspended() {
     data: tasks,
     isSuccess: areTasksLoaded,
     isFetching: areTasksFetching,
-  } = api.useTasksCache({ isCacheAvailable: areCachesAvailable });
+  } = api.useCachedTasks({ isCacheAvailable: areCachesAvailable });
   const webAppUrl = useWebAppUrl();
   const {
     data: sections,
     isSuccess: areSectionsLoaded,
     isFetching: areSectionsFetching,
-  } = api.useSectionsCache({ isCacheAvailable: areCachesAvailable });
+  } = api.useCachedSections({ isCacheAvailable: areCachesAvailable });
 
   /*
     tasks.sectionId の中に、sections.id に含まれていないものがある場合、cache を再 set する。

@@ -26,9 +26,9 @@ export const useSections = ({ cache }: { cache?: Section[] | undefined } = {}) =
 };
 
 // from Tasks
-export const useSectionsCache = ({
+export const useCachedSections = ({
   isCacheAvailable,
 }: { isCacheAvailable: boolean }) => {
-  const cache = storage.useSectionsCache_Suspended();
+  const cache = storage.useCachedSections_Suspended();
   return useSections({ cache: isCacheAvailable ? cache : undefined });
 };
