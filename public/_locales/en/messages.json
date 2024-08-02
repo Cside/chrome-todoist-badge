@@ -1,0 +1,8 @@
+{
+  "extensionName": {
+    "message": "Todoist Counter"
+  },
+  "extensionDescription": {
+    "message": "Displays the number of uncompleted tasks in Todoist on the toolbar."
+  }
+}
