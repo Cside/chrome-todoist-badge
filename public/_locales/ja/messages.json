@@ -1,0 +1,8 @@
+{
+  "extensionName": {
+    "message": "Todoist Counter：未完了のタスクの数を表示"
+  },
+  "extensionDescription": {
+    "message": "Todoist の未完了のタスクの数をツールバーに表示"
+  }
+}
