@@ -5,6 +5,7 @@ import {
   createHashRouter,
   redirect,
 } from "react-router-dom";
+import { EXTENSION_NAME } from "../../constants/basic";
 import { PATH_TO } from "../../constants/paths";
 import { isTasks } from "../fn/isTasks";
 import Options from "./Options";
@@ -21,7 +22,7 @@ import Welcome from "./Welcome";
 
 const Container = () => {
   useEffect(() => {
-    document.title = chrome.i18n.getMessage("extensionName");
+    document.title = EXTENSION_NAME;
   }, []);
 
   return (
