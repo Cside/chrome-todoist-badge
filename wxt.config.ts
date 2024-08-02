@@ -12,9 +12,9 @@ export default defineConfig({
     ],
   }),
   manifest: {
-    name: '__MSG_extensionName__',
-    description: '__MSG_extensionDescription__',
-    default_locale: 'en',
+    name: "__MSG_extensionName__",
+    description: "__MSG_extensionDescription__",
+    default_locale: "en",
     host_permissions: [
       `${API_BASE_URL}/*`, // Tasks API, Projects API, etc...
       `${WEB_APP_BASE_URL}/*`, // Sync API

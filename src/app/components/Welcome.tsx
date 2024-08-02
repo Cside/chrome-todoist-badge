@@ -1,7 +1,6 @@
-import { Suspense } from "react";
+import { Suspense, useMemo } from "react";
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { name as EXTENSION_NAME } from "../../../package.json";
 import { PATH_TO } from "../../constants/paths";
 import { useIsOnToolbar_Suspended } from "../../hooks/useIsOnToolbar";
 import * as storage from "../../storage/useStorage";
@@ -18,12 +17,13 @@ const Checked = React.memo(function Checked({ children }: { children: string }) 
 const Main_Suspended = () => {
   const [isConfigInitialized] = storage.useIsConfigInitialized_Suspended();
   const isOnToolbar = useIsOnToolbar_Suspended();
+  const extensionName = useMemo(() => chrome.i18n.getMessage("extensionName"), []);
 
   if (isConfigInitialized && isOnToolbar)
     return (
       <>
         <h1>All done! ✅</h1>
-        <p>Enjoy {EXTENSION_NAME}!</p>
+        <p>Enjoy {extensionName}!</p>
         <div>
           <button
             type="button"
@@ -42,7 +42,7 @@ const Main_Suspended = () => {
   };
   return (
     <>
-      <h1>Let's set up {EXTENSION_NAME}!</h1>
+      <h1>Let's set up {extensionName}!</h1>
       <div className="flex flex-col items-start gap-y-3">
         {isOnToolbar ? (
           <Checked>{MESSAGE_FOR.PIN_EXTENSION_TO_TOOLBAR}</Checked>
