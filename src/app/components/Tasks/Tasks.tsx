@@ -14,6 +14,7 @@ import { useWebAppUrl } from "./hooks";
 const api = { useCachedTasks, useCachedSections };
 
 const ICON_LENGTH = 30;
+const PATH_TO_OPTIONS = addFromParam(PATH_TO.OPTIONS);
 
 export default function Tasks_Suspended() {
   const [areCachesAvailable, setAreCachesAvailable] = useState(true);
@@ -129,7 +130,7 @@ export default function Tasks_Suspended() {
           />
           Open Todoist
         </a>
-        <NavLink to={PATH_TO.OPTIONS} className="btn btn-primary px-3">
+        <NavLink to={PATH_TO_OPTIONS} className="btn btn-primary px-3">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width={ICON_LENGTH}
@@ -164,4 +165,11 @@ export default function Tasks_Suspended() {
       )}
     </>
   );
+}
+
+// 2 回以上同じうような関数を作るなら、共通化する
+function addFromParam(path: string): string {
+  const url = new URL(path, "https://null");
+  url.searchParams.set("from", "tasks");
+  return url.pathname + url.search;
 }
