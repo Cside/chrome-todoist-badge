@@ -5,6 +5,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import { NavLink } from "react-router-dom";
 import { useCachedSections } from "../../../api/sections/useSections";
 import { useCachedTasks } from "../../../api/tasks/useTasks";
+import { PATH_TO } from "../../../constants/paths";
 import { useBadgeUpdate_andSetCache } from "../../hooks/useBadgeUpdate_andSetCache";
 import { Spinner } from "../Spinner";
 import { getUnknownSectionIds, groupTasksBySectionId } from "./fn/utils";
@@ -128,7 +129,7 @@ export default function Tasks_Suspended() {
           />
           Open Todoist
         </a>
-        <NavLink to="/options" className="btn btn-primary px-3">
+        <NavLink to={PATH_TO.OPTIONS} className="btn btn-primary px-3">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width={ICON_LENGTH}
