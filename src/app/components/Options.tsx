@@ -1,6 +1,6 @@
 import { clsx } from "clsx";
 import { Suspense, useCallback, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useSearchParams } from "react-router-dom";
 import { isNonEmpty } from "ts-array-length";
 import useAsyncEffect from "use-async-effect";
 import { storage as wxtStorage } from "wxt/storage";
@@ -214,8 +214,28 @@ const Main_Suspended = () => {
 };
 
 export default function Options() {
+  const [searchParams] = useSearchParams();
+  const from = searchParams.get("from") ?? "";
   return (
     <>
+      {from === "tasks" && (
+        <NavLink to={PATH_TO.TASKS}>
+          <div className="inline-flex items-center justify-center gap-x-1 text-neutral-400">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 16 16"
+              style={{ width: "1lh", height: "1lh" }}
+            >
+              <path
+                fill-rule="evenodd"
+                d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5"
+              />
+            </svg>
+            Back to tasks
+          </div>
+        </NavLink>
+      )}
       <h1>Filtering Tasks</h1>
       <Suspense fallback={<Spinner className="ml-16" />}>
         <Main_Suspended />
