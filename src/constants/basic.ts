@@ -1,8 +1,2 @@
-import messages from "../../public/_locales/en/messages.json";
-
-export const EXTENSION_NAME = (() => {
-  const name = messages.extensionName.message;
-  if (/[-:：]/.test(name))
-    throw new Error(`Invalid character in extension name: "${name}"`);
-  return name;
-})();
+// messages.json と重複しているが、/public/* のファイルは import できないため。まぁもう変わらないだろうし⋯
+export const EXTENSION_NAME = "Counter for Todoist";
