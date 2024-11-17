@@ -14,6 +14,7 @@ import {
   DEFAULT_IS_CONFIG_INITIALIZED,
   SECTION_ID_FOR,
 } from "../constants/options";
+import { STATUS_CODE_FOR } from "../constants/statusCodes";
 import type { ProjectId, Section, SectionId, Task } from "../types";
 import { STORAGE_KEY_FOR } from "./storageKeys";
 
@@ -169,6 +170,6 @@ const useStorage_Suspended = <StorageValue = never>({
   ] as const;
 };
 
-const STATUS_BAD_REQUEST = 400;
 const isBadRequestError = (error: unknown): error is HTTPError =>
-  error instanceof HTTPError && error.response.status === STATUS_BAD_REQUEST;
+  error instanceof HTTPError &&
+  error.response.status === STATUS_CODE_FOR.BAD_REQUEST;
