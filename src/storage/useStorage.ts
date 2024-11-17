@@ -35,10 +35,7 @@ export const useFilteringProjectId_Suspended = () => {
     try {
       if (projectId !== undefined) await api.getProject(projectId);
     } catch (error) {
-      if (
-        error instanceof HTTPError &&
-        String(error.response.status).startsWith("4")
-      ) {
+      if (isBadRequestError(error)) {
         console.warn(
           `Invalidate project: ${projectId}, status code: ${error.response.status}`,
         );
@@ -172,5 +169,6 @@ const useStorage_Suspended = <StorageValue = never>({
   ] as const;
 };
 
+const STATUS_BAD_REQUEST = 400;
 const isBadRequestError = (error: unknown): error is HTTPError =>
-  error instanceof HTTPError && String(error.response.status).startsWith("4");
+  error instanceof HTTPError && error.response.status === STATUS_BAD_REQUEST;
