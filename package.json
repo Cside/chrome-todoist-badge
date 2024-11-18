@@ -27,7 +27,10 @@
     "lint-fix": "pnpm run '/^lint-fix:.+/'",
     "check:ng-word": "./scripts/check-ng-words.sh",
     "check": "pnpm run '/^(compile$|lint$|format$|test$|check:)/'",
-    "fix": "pnpm run lint-fix && pnpm run format-fix"
+    "fix": "pnpm run lint-fix && pnpm run format-fix",
+    "predev": "pnpm run _put-symlink",
+    "prebuild": "pnpm run _put-symlink",
+    "_put-symlink": "cp -f public/_locales/en/messages.json src/localizationMessages.json"
   },
   "dependencies": {
     "@oieduardorabelo/use-user-agent": "^5.0.1",

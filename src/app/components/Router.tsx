@@ -5,7 +5,7 @@ import {
   createHashRouter,
   redirect,
 } from "react-router-dom";
-import { EXTENSION_NAME } from "../../constants/basic";
+import { EXTENSION_NAME } from "../../constants/extensionName";
 import { PATH_TO } from "../../constants/paths";
 import { isTasks } from "../fn/isTasks";
 import Options from "./Options";

@@ -1,4 +1,4 @@
-import messages from "@/public/_locales/en/messages.json";
+import messages from "../localizationMessages.json";
 
 export const EXTENSION_NAME = (() => {
   const name = messages.extensionName.message;
