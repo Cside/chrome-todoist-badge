@@ -13,12 +13,11 @@ export const API_REST_BASE_URL = `${API_BASE_URL}/rest/v2`;
 export const API_URL_FOR = {
   GET_PROJECTS: `${API_REST_BASE_URL}/projects`,
   GET_TASKS:    `${API_REST_BASE_URL}/tasks`,
-  GET_SECTIONS_BY: (projectId:ProjectId) => `${API_REST_BASE_URL}/sections?${new URLSearchParams({ project_id: projectId })}`,
-};
+} as const;
 
 export const API_URL_MATCH_PATTERN_FOR = {
   SYNC: `${WEB_APP_BASE_URL}/api/v*/sync*`,
-};
+} as const;
 
 // ==================================================
 // Web App
@@ -27,4 +26,4 @@ export const WEB_APP_URL_FOR = {
   PROJECT_BY: (projectId: ProjectId) =>
     `${WEB_APP_BASE_URL}/app/project/${projectId}`,
   LOGIN: `${WEB_APP_BASE_URL}/auth/login`,
-};
+} as const;

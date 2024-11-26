@@ -8,7 +8,7 @@ import { useProjects } from "../../api/projects/useProjects";
 import { useSections } from "../../api/sections/useSections";
 import { useTasks } from "../../api/tasks/useTasks";
 import { INTERVAL_MINUTES } from "../../background/tasks/watch_tasksCacheRefresh_andBadgeCountUpdates/refreshTasksCache_andUpdateBadgeCount_regularly";
-import { SECTION_ID_FOR } from "../../constants/options";
+import { SECTION_ID_FOR_STORAGE } from "../../constants/options";
 import { PATH_TO } from "../../constants/paths";
 import { STORAGE_KEY_FOR } from "../../storage/storageKeys";
 import * as storage from "../../storage/useStorage";
@@ -114,17 +114,17 @@ const Main_Suspended = () => {
               </th>
               <td>
                 <select
-                  value={sectionId ?? SECTION_ID_FOR.ALL}
+                  value={sectionId ?? SECTION_ID_FOR_STORAGE.ALL}
                   onChange={(event) => {
                     const value = event.target.value;
-                    value === SECTION_ID_FOR.ALL
+                    value === SECTION_ID_FOR_STORAGE.ALL
                       ? removeSectionId()
                       : setSectionId(value);
                   }}
                   className="select select-bordered"
                 >
-                  <option value={SECTION_ID_FOR.ALL}>(All)</option>
-                  <option value={SECTION_ID_FOR.NO_PARENT}>
+                  <option value={SECTION_ID_FOR_STORAGE.ALL}>(All)</option>
+                  <option value={SECTION_ID_FOR_STORAGE.NO_PARENT}>
                     (No parent section)
                   </option>
                   {sections.map((section) => (

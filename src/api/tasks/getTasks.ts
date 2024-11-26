@@ -1,6 +1,6 @@
 import {
   DEFAULT_FILTER_BY_DUE_BY_TODAY,
-  SECTION_ID_FOR,
+  SECTION_ID_FOR_STORAGE,
   SECTION_ID_TO_FILTER,
 } from "../../constants/options";
 import { API_URL_FOR } from "../../constants/urls";
@@ -67,7 +67,7 @@ const projectIdToFilter = async (projectId: ProjectId) =>
   `#${_escapeFilter((await getProject(projectId)).name)}`;
 
 const sectionIdToFilter = async (sectionId: ProjectId) =>
-  sectionId === SECTION_ID_FOR.NO_PARENT
+  sectionId === SECTION_ID_FOR_STORAGE.NO_PARENT
     ? SECTION_ID_TO_FILTER.NO_PARENT
     : // TODO キャッシュ。。
       `/${_escapeFilter((await getSection(sectionId)).name)}`;

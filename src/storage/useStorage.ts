@@ -12,7 +12,7 @@ import { getSection } from "../api/sections/getSection";
 import {
   DEFAULT_FILTER_BY_DUE_BY_TODAY,
   DEFAULT_IS_CONFIG_INITIALIZED,
-  SECTION_ID_FOR,
+  SECTION_ID_FOR_STORAGE,
 } from "../constants/options";
 import { STATUS_CODE_FOR } from "../constants/statusCodes";
 import type { ProjectId, Section, SectionId, Task } from "../types";
@@ -65,7 +65,7 @@ export const useFilteringSectionId_Suspended = () => {
     sectionIdHasChecked.set(key, true);
 
     try {
-      if (sectionId !== SECTION_ID_FOR.NO_PARENT && sectionId !== undefined)
+      if (sectionId !== SECTION_ID_FOR_STORAGE.NO_PARENT && sectionId !== undefined)
         await api.getSection(sectionId);
     } catch (error) {
       // 既に fetch/ky がエラーを吐いているので、ここではエラー吐かない
