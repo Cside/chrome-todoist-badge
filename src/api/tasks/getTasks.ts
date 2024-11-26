@@ -13,7 +13,7 @@ import { getSection } from "../sections/getSection";
 // for TQ
 export const getTasksByParams = async (filters: TaskFilters): Promise<Task[]> => {
   const url = `${API_URL_FOR.GET_TASKS}${await _buildTasksApiQueryString(filters)}`;
-  const tasks = await ky.getCamelized<Task[]>(url);
+  const tasks = await ky.fetchAndNormalize<Task[]>(url);
   return tasks;
 };
 

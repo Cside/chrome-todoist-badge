@@ -7,7 +7,7 @@ export const getSection = async (sectionId: SectionId) => {
   if (sectionId === SECTION_ID_FOR_STORAGE.NO_PARENT)
     throw new Error(`sectionId is ${sectionId}`);
 
-  return await ky.getCamelized<Section>(
+  return await ky.fetchAndNormalize<Section>(
     `${API_REST_BASE_URL}/sections/${sectionId}`,
   );
 };

@@ -6,7 +6,7 @@ import { ky } from "../ky";
 // import { STORAGE_KEY_FOR } from "../../storage/storageKeys";
 
 export const getProjects = async () =>
-  await ky.getCamelized<Project[]>(API_URL_FOR.GET_PROJECTS);
+  await ky.fetchAndNormalize<Project[]>(API_URL_FOR.GET_PROJECTS);
 
 /* WIP
 // from BG worker

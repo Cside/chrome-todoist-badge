@@ -61,7 +61,7 @@ const kyInstance = _ky.create({
 });
 
 export const ky = {
-  getCamelized: async <T>(url: string) => {
+  fetchAndNormalize: async <T>(url: string) => {
     try {
       return normalizeApiObject(await kyInstance.get(url).json()) as T;
     } catch (error) {
@@ -83,6 +83,8 @@ export const ky = {
   },
 };
 
+// 1. camelize
+// 2. null -> undefined
 export const normalizeApiObject = (obj: unknown): unknown =>
   transform(
     obj as object,
