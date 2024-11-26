@@ -2,10 +2,22 @@ import { HTTPError } from "ky";
 import { useRouteError } from "react-router-dom";
 import { STATUS_CODE_FOR } from "../../../constants/statusCodes";
 import { WEB_APP_URL_FOR } from "../../../constants/urls";
-import { isTasks } from "../../fn/isTasks";
+import { isTasksPage } from "../../fn/isTasks";
 
 export const ErrorBoundary = (): JSX.Element => {
   const error = useRouteError();
+
+  if (
+    error instanceof HTTPError &&
+    error.response.status === STATUS_CODE_FOR.BAD_REQUEST
+  )
+    /*
+      useEffect(() => navigate('/options'), [error]);
+        だと、無限ループになってしまうため、リロードする⋯。
+      useEffect で reload すると、一瞬エラー画面が見えてしまうので、
+        お行儀悪いけど useEffect 使わない⋯
+    */
+    location.reload();
 
   if (
     error instanceof HTTPError &&
@@ -21,7 +33,7 @@ export const ErrorBoundary = (): JSX.Element => {
           </a>
           .
         </p>
-        {!isTasks() && (
+        {!isTasksPage() && (
           <div>
             <button
               type="button"

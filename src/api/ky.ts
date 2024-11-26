@@ -1,5 +1,6 @@
-import _ky, { TimeoutError } from "ky";
+import _ky, { HTTPError, TimeoutError } from "ky";
 import { camelCase, isObject, transform } from "lodash-es";
+import { STATUS_CODE_FOR } from "../constants/statusCodes";
 import { getLocaleTime } from "../fn/getLocaleTime";
 
 const TIMEOUT = 10 * 1000; // same as default
@@ -65,6 +66,16 @@ export const ky = {
     try {
       return normalizeApiObject(await kyInstance.get(url).json()) as T;
     } catch (error) {
+      if (
+        error instanceof HTTPError &&
+        error.response.status === STATUS_CODE_FOR.BAD_REQUEST
+      ) {
+        console.error(
+          `Bad request. storage will be cleared. url: ${url}, error: ${error}`,
+        );
+        await chrome.storage.local.clear();
+      }
+
       // TimeoutError の場合、ky の beforeError 等が発火しないため、ここでやる
       /* NOTE: error.message の最後に追加する、をやらない理由：
          TimeoutError オブジェクトを throw すると、

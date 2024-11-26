@@ -13,7 +13,7 @@ import { PATH_TO } from "../../constants/paths";
 import { STORAGE_KEY_FOR } from "../../storage/storageKeys";
 import * as storage from "../../storage/useStorage";
 import type { ProjectId, Section } from "../../types";
-import { isTasks } from "../fn/isTasks";
+import { isTasksPage } from "../fn/isTasks";
 import { useBadgeUpdate_andSetCache } from "../hooks/useBadgeUpdate_andSetCache";
 import { Spinner } from "./Spinner";
 
@@ -194,7 +194,7 @@ const Main_Suspended = () => {
             onClick={async () =>
               setIsInitialized(true, {
                 onSuccess: () => {
-                  navigate(isTasks() ? PATH_TO.TASKS : PATH_TO.WELCOME);
+                  navigate(isTasksPage() ? PATH_TO.TASKS : PATH_TO.WELCOME);
                 },
               })
             }

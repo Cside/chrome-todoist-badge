@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import { EXTENSION_NAME } from "../../constants/extensionName";
 import { PATH_TO } from "../../constants/paths";
-import { isTasks } from "../fn/isTasks";
+import { isTasksPage } from "../fn/isTasks";
 import Options from "./Options";
 import PinExtensionToToolbar from "./PinExtensionToToolbar";
 import { ErrorBoundary } from "./Providers/ErrorBoundary";
@@ -49,7 +49,7 @@ export const Router = () => (
         children: [
           {
             index: true,
-            loader: () => redirect(isTasks() ? PATH_TO.TASKS : PATH_TO.OPTIONS),
+            loader: () => redirect(isTasksPage() ? PATH_TO.TASKS : PATH_TO.OPTIONS),
           },
           {
             path: PATH_TO.OPTIONS,
