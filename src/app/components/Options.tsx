@@ -83,11 +83,14 @@ const Main_Suspended = () => {
         <tbody>
           <tr className="border-none">
             <th className="w-48 font-normal">
-              <label className="label cursor-pointer">Project:</label>
+              <label htmlFor="select-for-project" className="label cursor-pointer">
+                Project:
+              </label>
             </th>
             <td>
               {areProjectsLoaded ? (
                 <select
+                  id="select-for-project"
                   value={projectId ?? getFirstProjectId_WithAssert()}
                   onChange={(event) => {
                     setProjectId(event.target.value);
@@ -110,10 +113,13 @@ const Main_Suspended = () => {
           {areSectionsLoaded && sections.length > 0 ? (
             <tr className="border-none">
               <th className="w-48 font-normal">
-                <label className="label cursor-pointer">Section:</label>
+                <label htmlFor="select-for-section" className="label cursor-pointer">
+                  Section:
+                </label>
               </th>
               <td>
                 <select
+                  id="select-for-section"
                   value={sectionId ?? SECTION_ID_FOR_STORAGE.ALL}
                   onChange={(event) => {
                     const value = event.target.value;
