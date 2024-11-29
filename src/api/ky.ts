@@ -1,9 +1,11 @@
 import _ky, { HTTPError, TimeoutError } from "ky";
 import { camelCase, isObject, transform } from "lodash-es";
+import { MAX_RETRY } from "../constants/maxRetry";
 import { STATUS_CODE_FOR } from "../constants/statusCodes";
 import { getLocaleTime } from "../fn/getLocaleTime";
 
 const TIMEOUT = 10 * 1000; // same as default
+const IS_SERVICE_WORKER = typeof window === "undefined";
 
 // これだとリクエストがパラで飛んだ時駄目。
 // req id があれば一番楽だが...
@@ -24,6 +26,7 @@ const kyInstance = _ky.create({
     ],
     afterResponse: [
       (req, _options, res) => {
+        // logging
         const startedAt = requestStartedAt.get(req.url);
         if (startedAt === undefined) {
           console.warn(`startedAt (url: ${req.url}) is undefined`);
@@ -59,6 +62,11 @@ const kyInstance = _ky.create({
       },
     ],
   },
+  ...(IS_SERVICE_WORKER
+    ? // 400, 401 等はリトライされない
+      // https://github.com/sindresorhus/ky?tab=readme-ov-file#retry
+      { retry: MAX_RETRY }
+    : {}),
 });
 
 export const ky = {
@@ -70,6 +78,10 @@ export const ky = {
         error instanceof HTTPError &&
         error.response.status === STATUS_CODE_FOR.BAD_REQUEST
       ) {
+        /* FIXME
+          - throw じゃなくて console.error で本当にいいの？
+          - ここで throw した場合、worker はどうなるの？ retry される？ retry していいの？
+      */
         console.error(
           `Bad request. storage will be cleared. url: ${url}, error: ${error}`,
         );
