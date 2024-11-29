@@ -2,6 +2,7 @@ import _ky, { HTTPError, TimeoutError } from "ky";
 import { camelCase, isObject, transform } from "lodash-es";
 import { MAX_RETRY } from "../constants/maxRetry";
 import { STATUS_CODE_FOR } from "../constants/statusCodes";
+import { API_REST_BASE_URL } from "../constants/urls";
 import { getLocaleTime } from "../fn/getLocaleTime";
 
 const TIMEOUT = 10 * 1000; // same as default
@@ -18,6 +19,7 @@ const getFilter = (url: string) => {
 
 const kyInstance = _ky.create({
   timeout: TIMEOUT,
+  prefixUrl: API_REST_BASE_URL,
   hooks: {
     beforeRequest: [
       (req) => {
@@ -72,7 +74,15 @@ const kyInstance = _ky.create({
 export const ky = {
   fetchAndNormalize: async <T>(url: string) => {
     try {
-      return normalizeApiObject(await kyInstance.get(url).json()) as T;
+      return normalizeApiObject(
+        await kyInstance
+          .get(
+            // ky の仕様で、prefixUrl がある場合、url は / から始まってはいけない
+            // https://github.com/sindresorhus/ky?tab=readme-ov-file#prefixurl
+            url.startsWith("/") ? url.slice(1) : url,
+          )
+          .json(),
+      ) as T;
     } catch (error) {
       if (
         error instanceof HTTPError &&
@@ -115,7 +125,7 @@ export const normalizeApiObject = (obj: unknown): unknown =>
       const camelKey = Array.isArray(target) ? key : camelCase(key as string);
       acc[camelKey] = isObject(value)
         ? normalizeApiObject(value)
-        : value ?? undefined;
+        : (value ?? undefined);
     },
   );
 

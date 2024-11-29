@@ -18,7 +18,7 @@
     "format": "pnpm run '/^format:.+/'",
     "format-fix": "pnpm run '/^format-fix:.+/'",
     "lint:biome": "rm vitest.config.ts.timestamp-*; biome lint .",
-    "lint-fix:biome": "biome check --apply-unsafe .",
+    "lint-fix:biome": "biome check --write --unsafe .",
     "lint:unused-code": "knip",
     "lint-fix:unused-code": "knip --fix-type exports",
     "lint:eslint": "eslint --cache --report-unused-disable-directives '{entrypoints,src,test}/**/*.{ts,tsx}'",
