@@ -1,8 +1,12 @@
-import _ky, { TimeoutError } from "ky";
+import _ky, { HTTPError, TimeoutError } from "ky";
 import { camelCase, isObject, transform } from "lodash-es";
+import { MAX_RETRY } from "../constants/maxRetry";
+import { STATUS_CODE_FOR } from "../constants/statusCodes";
+import { API_REST_BASE_URL } from "../constants/urls";
 import { getLocaleTime } from "../fn/getLocaleTime";
 
 const TIMEOUT = 10 * 1000; // same as default
+const IS_SERVICE_WORKER = typeof window === "undefined";
 
 // これだとリクエストがパラで飛んだ時駄目。
 // req id があれば一番楽だが...
@@ -15,6 +19,7 @@ const getFilter = (url: string) => {
 
 const kyInstance = _ky.create({
   timeout: TIMEOUT,
+  prefixUrl: API_REST_BASE_URL,
   hooks: {
     beforeRequest: [
       (req) => {
@@ -23,6 +28,7 @@ const kyInstance = _ky.create({
     ],
     afterResponse: [
       (req, _options, res) => {
+        // logging
         const startedAt = requestStartedAt.get(req.url);
         if (startedAt === undefined) {
           console.warn(`startedAt (url: ${req.url}) is undefined`);
@@ -58,13 +64,40 @@ const kyInstance = _ky.create({
       },
     ],
   },
+  ...(IS_SERVICE_WORKER
+    ? // 400, 401 等はリトライされない
+      // https://github.com/sindresorhus/ky?tab=readme-ov-file#retry
+      { retry: MAX_RETRY }
+    : {}),
 });
 
 export const ky = {
   fetchAndNormalize: async <T>(url: string) => {
     try {
-      return normalizeApiObject(await kyInstance.get(url).json()) as T;
+      return normalizeApiObject(
+        await kyInstance
+          .get(
+            // ky の仕様で、prefixUrl がある場合、url は / から始まってはいけない
+            // https://github.com/sindresorhus/ky?tab=readme-ov-file#prefixurl
+            url.startsWith("/") ? url.slice(1) : url,
+          )
+          .json(),
+      ) as T;
     } catch (error) {
+      if (
+        error instanceof HTTPError &&
+        error.response.status === STATUS_CODE_FOR.BAD_REQUEST
+      ) {
+        /* FIXME
+          - throw じゃなくて console.error で本当にいいの？
+          - ここで throw した場合、worker はどうなるの？ retry される？ retry していいの？
+      */
+        console.error(
+          `Bad request. storage will be cleared. url: ${url}, error: ${error}`,
+        );
+        await chrome.storage.local.clear();
+      }
+
       // TimeoutError の場合、ky の beforeError 等が発火しないため、ここでやる
       /* NOTE: error.message の最後に追加する、をやらない理由：
          TimeoutError オブジェクトを throw すると、
@@ -92,7 +125,7 @@ export const normalizeApiObject = (obj: unknown): unknown =>
       const camelKey = Array.isArray(target) ? key : camelCase(key as string);
       acc[camelKey] = isObject(value)
         ? normalizeApiObject(value)
-        : value ?? undefined;
+        : (value ?? undefined);
     },
   );
 
