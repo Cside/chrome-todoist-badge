@@ -27,8 +27,8 @@ importers:
         specifier: ^3.6.0
         version: 3.6.0
       ky:
-        specifier: ^1.2.2
-        version: 1.2.2
+        specifier: ^1.7.2
+        version: 1.7.2
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
@@ -2362,8 +2362,8 @@ packages:
       '@types/node': '>=18'
       typescript: '>=5.0.4'
 
-  ky@1.2.2:
-    resolution: {integrity: sha512-gYA2QOI3uIaImJPJjaBbLCdvKHzwxsuB03s7PjrXmoO6tcn6k53rwYoSRgqrmVsEV6wFFegOXDVjABxFZ0aRSg==}
+  ky@1.7.2:
+    resolution: {integrity: sha512-OzIvbHKKDpi60TnF9t7UUVAF1B4mcqc02z5PIvrm08Wyb+yOcz63GRvEuVxNT18a9E1SrNouhB4W2NNLeD7Ykg==}
     engines: {node: '>=18'}
 
   latest-version@7.0.0:
@@ -6064,7 +6064,7 @@ snapshots:
       zod: 3.22.4
       zod-validation-error: 3.0.3(zod@3.22.4)
 
-  ky@1.2.2: {}
+  ky@1.7.2: {}
 
   latest-version@7.0.0:
     dependencies:

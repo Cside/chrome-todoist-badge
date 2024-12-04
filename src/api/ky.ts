@@ -52,69 +52,46 @@ const kyInstance = _ky.create({
     // HTTPError を modify するもの。Timeout では呼ばれない
     beforeError: [
       async (error) => {
+        // FIXME これ🔽のエラーハンドリングですればよくない？
+        //        副作用が。。。
+        // タイムアウト頻発の調査に使っていたもの。一応今も残している。
+        // message を破壊的変更するのは、お行儀が良くない気もするか⋯。
         const url = error.request.url;
         error.message +=
           // biome-ignore lint/style/useTemplate:
           `\n    url: ${url}` +
           extractFilter(url) +
           `\n    body: ${
+            // FIXME ここで body を読むと、後続の処理で bodyUsed が true になってしまう。
             error.response.bodyUsed ? "" : await error.response.text()
           }`;
         return error;
       },
     ],
   },
-  ...(IS_SERVICE_WORKER
+  retry: IS_SERVICE_WORKER
     ? // 400, 401 等はリトライされない
       // https://github.com/sindresorhus/ky?tab=readme-ov-file#retry
-      { retry: MAX_RETRY }
-    : {}),
+      MAX_RETRIES
+    : 0, // TQ がリトライするので、リトライしない
 });
 
 export const ky = {
-  fetchAndNormalize: async <T>(url: string) => {
-    try {
-      return normalizeApiObject(
-        await kyInstance
-          .get(
-            // ky の仕様で、prefixUrl がある場合、url は / から始まってはいけない
-            // https://github.com/sindresorhus/ky?tab=readme-ov-file#prefixurl
-            url.startsWith("/") ? url.slice(1) : url,
-          )
-          .json(),
-      ) as T;
-    } catch (error) {
-      if (
-        error instanceof HTTPError &&
-        error.response.status === STATUS_CODE_FOR.BAD_REQUEST
-      ) {
-        /* FIXME
-          - throw じゃなくて console.error で本当にいいの？
-          - ここで throw した場合、worker はどうなるの？ retry される？ retry していいの？
-      */
-        console.error(
-          `Bad request. storage will be cleared. url: ${url}, error: ${error}`,
-        );
-        await chrome.storage.local.clear();
-      }
-
-      // TimeoutError の場合、ky の beforeError 等が発火しないため、ここでやる
-      /* NOTE: error.message の最後に追加する、をやらない理由：
-         TimeoutError オブジェクトを throw すると、
-         なぜか、変更した error.message が無視される */
-      throw error instanceof TimeoutError
-        ? new Error(
-            // biome-ignore format:
-            // biome-ignore lint/style/useTemplate:
-            "Request timed out" +
-            `\n  url: ${url}` +
-            extractFilter(url) +
-            `\n  timeout: ${TIMEOUT}ms`,
-          )
-        : error;
-    }
-  },
+  fetchAndNormalize: async <T>(url: string) =>
+    normalizeApiObject(
+      await kyInstance
+        .get(
+          // ky の仕様で、prefixUrl がある場合、url は / から始まってはいけない (なんじゃそりゃ⋯)
+          // https://github.com/sindresorhus/ky?tab=readme-ov-file#prefixurl
+          url.startsWith("/") ? url.slice(1) : url,
+        )
+        .json(),
+    ) as T,
 };
+
+// ============================================================
+// Utils
+// ============================================================
 
 // 1. camelize
 // 2. null -> undefined
