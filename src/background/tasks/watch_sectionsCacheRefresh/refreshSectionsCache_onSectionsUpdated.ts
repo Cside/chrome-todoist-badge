@@ -7,7 +7,7 @@ const REGEXP = /^section_/;
 
 export const refreshSectionsCache_onSectionsUpdated = () =>
   addCommandListener({
-    name: api.refreshSectionsCache_withRetry.name,
+    name: "refreshSectionsCache_withRetry",
     commandRegExp: REGEXP,
     listener: async () => await api.refreshSectionsCache_withRetry(),
   });
