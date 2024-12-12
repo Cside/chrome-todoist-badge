@@ -11,13 +11,14 @@ import { MAX_RETRIES } from "../../../constants/maxRetry";
 const RETRY_STATUS_CODES = [408, 413, 429, 500, 502, 503, 504];
 
 const queryClient = new QueryClient({
-  // https://tanstack.com/query/latest/docs/reference/QueryClient
+  // Options: https://tanstack.com/query/latest/docs/reference/QueryClient
   defaultOptions: {
     mutations: {
       throwOnError: true,
       retry: MAX_RETRIES,
     },
     queries: {
+      // https://github.com/TanStack/query/discussions/372#discussioncomment-7807126
       retry: (_failureCount, error) => {
         const failureCount = _failureCount + 1; // failureCount: 0 で始まるため
 
