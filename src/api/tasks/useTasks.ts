@@ -17,8 +17,8 @@ export const useTasks = ({
   deps: unknown[];
   cache?: Task[] | undefined;
   enabled?: boolean;
-}) => {
-  const result = useQuery({
+}) =>
+  useQuery({
     queryKey: [QUERY_KEY_FOR.API.TASKS, ...deps],
     queryFn: async () => {
       const tasks = await api.getTasksByParams(filters);
@@ -30,9 +30,6 @@ export const useTasks = ({
       placeholderData: (prevData) => (prevData !== undefined ? undefined : cache),
     }),
   });
-
-  return result;
-};
 
 // from Tasks
 export const useCachedTasks = ({
