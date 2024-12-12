@@ -17,5 +17,9 @@
   "paths": {
     "@/*": ["./*"]
   },
-  "ignoreDependencies": ["@types/chrome", "@sentry/integrations"]
+  "ignoreDependencies": [
+    "@types/chrome",
+    "@sentry/integrations",
+    "@typescript-eslint/typescript-estree"
+  ]
 }

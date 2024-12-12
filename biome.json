@@ -14,8 +14,7 @@
       "recommended": true,
       "correctness": {
         "noUnusedImports": "error",
-        "useExhaustiveDependencies": "off",
-        "useJsxKeyInIterable": "error"
+        "useExhaustiveDependencies": "off"
       },
       "suspicious": {
         "useAwait": "error"
