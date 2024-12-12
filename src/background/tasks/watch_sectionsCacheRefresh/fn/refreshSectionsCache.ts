@@ -3,7 +3,7 @@ import { STORAGE_KEY_FOR } from "../../../../storage/storageKeys";
 import type { ProjectId, Section } from "../../../../types";
 
 // for bg worker
-export const refreshSectionsCache_withRetry = async () => {
+export const refreshSectionsCache = async () => {
   const projectId = await storage.getItem<ProjectId>(
     STORAGE_KEY_FOR.CONFIG.FILTER_BY.PROJECT_ID,
   );
