@@ -17,5 +17,5 @@
     "isolatedModules": true,
     "checkJs": true
   },
-  "exclude": ["./tailwind.config.js"]
+  "exclude": ["./tailwind.config.js", "./wxt.config.ts"]
 }
