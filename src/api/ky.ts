@@ -50,7 +50,8 @@ const kyInstance = _ky.create({
     ],
   },
   retry: IS_SERVICE_WORKER
-    ? // 400, 401 等はリトライされない
+    ? // NOTE: 本来はここは 0 にすべきで、pRetry 等で storage 等を含めた処理全体を retry すべき
+      // 400, 401 等はリトライされない
       // https://github.com/sindresorhus/ky?tab=readme-ov-file#retry
       MAX_RETRIES
     : 0, // TQ がリトライするので、リトライしない
