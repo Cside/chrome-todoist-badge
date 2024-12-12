@@ -42,6 +42,7 @@ export const useIsConfigInitialized_Suspended = () => {
       defaultValue: false,
       onMutationSuccess: async () =>
         await Promise.all([
+          // TODO: 本来なら、ここ全体を pRetry で囲むべきかねぇ⋯
           chrome.runtime.sendMessage({
             action: "watch-tasks-cache-refresh-and-badge-count-updates",
           }),

@@ -5,7 +5,7 @@ import type { Task } from "../../../../types";
 
 // for bg worker
 export const refreshTasksCache_andUpdateBadgeCount_withRetry = async () => {
-  const tasks = await api.getTasks();
+  const tasks = await api.getTasksForWorker();
   // storage は実質失敗し得ないので、リトライはしない
   await storage.setItem<Task[]>(STORAGE_KEY_FOR.CACHE.TASKS, tasks);
 

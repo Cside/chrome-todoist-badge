@@ -1,7 +1,6 @@
-import _ky, { HTTPError, TimeoutError } from "ky";
+import _ky from "ky";
 import { camelCase, isObject, transform } from "lodash-es";
-import { MAX_RETRY } from "../constants/maxRetry";
-import { STATUS_CODE_FOR } from "../constants/statusCodes";
+import { MAX_RETRIES } from "../constants/maxRetry";
 import { API_REST_BASE_URL } from "../constants/urls";
 import { getLocaleTime } from "../fn/getLocaleTime";
 
@@ -27,8 +26,10 @@ const kyInstance = _ky.create({
       },
     ],
     afterResponse: [
+      // NOTE: 各 try ごとのエラー処理。全 try がコケた後のエラー処理は catch {} で
       (req, _options, res) => {
-        // logging
+        // logging ==============================================
+
         const startedAt = requestStartedAt.get(req.url);
         if (startedAt === undefined) {
           console.warn(`startedAt (url: ${req.url}) is undefined`);
@@ -43,29 +44,8 @@ const kyInstance = _ky.create({
             `${res.status}`,
             `${req.method} ${req.url}${getFilter(req.url)}`,
           ].join("\t"),
-          `color: ${
-            String(res.status).startsWith("2") ? "darkcyan" : "darkgoldenrod"
-          }`,
+          `color: ${String(res.status).startsWith("2") ? "darkcyan" : "darkgoldenrod"}`,
         );
-      },
-    ],
-    // HTTPError を modify するもの。Timeout では呼ばれない
-    beforeError: [
-      async (error) => {
-        // FIXME これ🔽のエラーハンドリングですればよくない？
-        //        副作用が。。。
-        // タイムアウト頻発の調査に使っていたもの。一応今も残している。
-        // message を破壊的変更するのは、お行儀が良くない気もするか⋯。
-        const url = error.request.url;
-        error.message +=
-          // biome-ignore lint/style/useTemplate:
-          `\n    url: ${url}` +
-          extractFilter(url) +
-          `\n    body: ${
-            // FIXME ここで body を読むと、後続の処理で bodyUsed が true になってしまう。
-            error.response.bodyUsed ? "" : await error.response.text()
-          }`;
-        return error;
       },
     ],
   },
@@ -105,12 +85,3 @@ export const normalizeApiObject = (obj: unknown): unknown =>
         : (value ?? undefined);
     },
   );
-
-// ==================================================
-// Utils
-// ==================================================
-
-const extractFilter = (url: string): string => {
-  const filter = new URL(url).searchParams.get("filter");
-  return filter !== null ? `\n    filter: ${filter}` : "";
-};
