@@ -64,8 +64,8 @@ importers:
         specifier: ^0.5.1
         version: 0.5.1
       '@types/chrome':
-        specifier: ^0.0.269
-        version: 0.0.269
+        specifier: ^0.0.287
+        version: 0.0.287
       '@types/lodash-es':
         specifier: ^4.17.12
         version: 4.17.12
@@ -883,8 +883,8 @@ packages:
   '@types/babel__traverse@7.20.5':
     resolution: {integrity: sha512-WXCyOcRtH37HAUkpXhUduaxdm82b4GSlyTqajXviN4EfiuPgNYR109xMCKvpl6zPIpua0DGlMEDCq+g8EdoheQ==}
 
-  '@types/chrome@0.0.269':
-    resolution: {integrity: sha512-vF7x8YywnhXX2F06njQ/OE7a3Qeful43C5GUOsUksXWk89WoSFUU3iLeZW8lDpVO9atm8iZIEiLQTRC3H7NOXQ==}
+  '@types/chrome@0.0.287':
+    resolution: {integrity: sha512-wWhBNPNXZHwycHKNYnexUcpSbrihVZu++0rdp6GEk5ZgAglenLx+RwdEouh6FrHS0XQiOxSd62yaujM1OoQlZQ==}
 
   '@types/estree@1.0.5':
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
@@ -4370,7 +4370,7 @@ snapshots:
     dependencies:
       '@babel/types': 7.24.0
 
-  '@types/chrome@0.0.269':
+  '@types/chrome@0.0.287':
     dependencies:
       '@types/filesystem': 0.0.35
       '@types/har-format': 1.2.15
