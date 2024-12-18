@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { storage as wxtStorage } from "wxt/storage";
+import { ProjectIdNotFoundError } from "../../errors";
 import { STORAGE_KEY_FOR } from "../../storage/storageKeys";
 import * as storage from "../../storage/useStorage";
 import type { Section } from "../../types";
@@ -12,7 +13,8 @@ export const useSections = ({ cache }: { cache?: Section[] | undefined } = {}) =
   return useQuery({
     queryKey: [QUERY_KEY_FOR.API.SECTIONS, projectId],
     queryFn: async () => {
-      if (projectId === undefined) throw new Error("projectId is undefined");
+      if (projectId === undefined)
+        throw new ProjectIdNotFoundError("projectId is undefined");
       const sections = await api.getSections({ projectId });
       await wxtStorage.setItem<Section[]>(STORAGE_KEY_FOR.CACHE.SECTIONS, sections); // retry はサボる
       return sections;

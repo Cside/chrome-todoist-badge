@@ -1,27 +1,24 @@
 import { HTTPError } from "ky";
 import { useRouteError } from "react-router-dom";
 import useAsyncEffect from "use-async-effect";
-import {
-  cleanupStorage,
-  isBadRequestErrorForTaskFetch,
-} from "../../../api/tasks/getTasks";
 import { STATUS_CODE_FOR } from "../../../constants/statusCodes";
 import { WEB_APP_URL_FOR } from "../../../constants/urls";
+import { clearStorage, shouldClearStorage } from "../../../fn/clearStorage";
 import { isTasksPage } from "../../fn/isTasks";
 
 export const ErrorBoundary = (): JSX.Element => {
   const error = useRouteError();
 
   useAsyncEffect(async () => {
-    if (isBadRequestErrorForTaskFetch(error)) {
-      await cleanupStorage(error);
+    if (shouldClearStorage(error)) {
+      await clearStorage(error);
       // useEffect(() => navigate('/options'), [error]);
       // だと、error が消えなくて無限ループになってしまうため、リロードする⋯。
       location.reload();
     }
   }, [error]);
 
-  if (isBadRequestErrorForTaskFetch(error)) return <>Bad Request. Reloading...</>;
+  if (shouldClearStorage(error)) return <>Bad Request. Reloading...</>;
 
   if (
     error instanceof HTTPError &&

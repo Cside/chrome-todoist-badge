@@ -11,7 +11,7 @@
     "zip": "wxt zip",
     "zip:firefox": "wxt zip -b firefox",
     "compile": "tsc --noEmit",
-    "format:prettier": "rm -f vitest.config.ts.timestamp-* && prettier --check .",
+    "format:prettier": "prettier --check .",
     "format-fix:prettier": "prettier --list-different --write .",
     "format:biome": "rm -f vitest.config.ts.timestamp-* && biome format .",
     "format-fix:biome": "biome format --write .",

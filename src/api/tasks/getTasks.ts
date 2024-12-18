@@ -1,11 +1,11 @@
-import { HTTPError } from "ky";
 import {
   DEFAULT_FILTER_BY_DUE_BY_TODAY,
   SECTION_ID_FOR_STORAGE,
   SECTION_ID_TO_FILTER,
 } from "../../constants/options";
-import { STATUS_CODE_FOR } from "../../constants/statusCodes";
-import { API_PATH_FOR, API_REST_BASE_URL } from "../../constants/urls";
+import { API_PATH_FOR } from "../../constants/urls";
+import { ProjectIdNotFoundError } from "../../errors";
+import { clearStorage, shouldClearStorage } from "../../fn/clearStorage";
 import { STORAGE_KEY_FOR } from "../../storage/storageKeys";
 import type { ProjectId, Task, TaskFilters } from "../../types";
 import { ky } from "../ky";
@@ -24,7 +24,7 @@ const getTasks = async (): Promise<Task[]> => {
     STORAGE_KEY_FOR.CONFIG.FILTER_BY.PROJECT_ID,
   );
   // 初期化が終わった後に呼ばれる前提の関数なので、projectId == null の場合はエラーにしている
-  if (projectId === null) throw new Error("projectId is null");
+  if (projectId === null) throw new ProjectIdNotFoundError("projectId is null");
 
   const filterByDueByToday =
     (await storage.getItem<boolean>(
@@ -41,42 +41,14 @@ export const getTasksForWorker = async () => {
   try {
     return await getTasks();
   } catch (error) {
-    if (isBadRequestErrorForTaskFetch(error)) await cleanupStorage(error);
+    if (shouldClearStorage(error)) await clearStorage(error);
     throw error;
   }
 };
-
-export const isBadRequestErrorForTaskFetch = (error: unknown): error is HTTPError =>
-  error instanceof HTTPError &&
-  error.response.status === STATUS_CODE_FOR.BAD_REQUEST &&
-  error.request.url.replace(/\?.*$/, "") ===
-    `${API_REST_BASE_URL}${API_PATH_FOR.GET_TASKS}`;
 
 // Bad Request かどうかの検証は済んでいるものとする。
 // 1. Bad Request の場合、ストレージをクリアする
 // 2. エラーの情報をもう少し増やす
-export const cleanupStorage = async (error: HTTPError) => {
-  if (error.response.bodyUsed) {
-    console.error("bodyUsed is already true");
-    throw error;
-  }
-
-  // NOTE: 他にも Error の body を読むところが出てきたら、共通化する
-  const responseText = await error.response.text();
-  if (responseText !== "The search query is incorrect") {
-    console.error(
-      `Error message is not "The search query is incorrect". Message: ${responseText}`,
-    );
-    return;
-  }
-
-  await chrome.storage.local.clear();
-  // Bad Request の場合、ストレージをクリアする
-  console.error(
-    `Bad request. storage was cleared. url: ${error.response.url}, error: ${error}`,
-  );
-};
-
 // ==================================================
 // Utils
 // ==================================================
