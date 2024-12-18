@@ -30,5 +30,6 @@
     ],
     "react/jsx-no-bind": ["error", { "ignoreDOMComponents": true }], // onClick={location.reload} みたいな this バグを防ぐ
     "react/jsx-no-useless-fragment": "error" // 不要な <></> を削除
-  }
+  },
+  "ignorePatterns": ["vitest.config.ts.timestamp-*.mjs"]
 }

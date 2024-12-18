@@ -30,6 +30,6 @@
     }
   },
   "files": {
-    "ignore": [".output/**/*", ".wxt/**/*"]
+    "ignore": [".output/**/*", ".wxt/**/*", "vitest.config.ts.timestamp-*.mjs"]
   }
 }

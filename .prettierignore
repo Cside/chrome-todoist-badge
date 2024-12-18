@@ -3,4 +3,4 @@
 **/*.tsx
 **/*.json
 /pnpm-lock.yaml
-/vitest.config.ts.timestamp-*
+/vitest.config.ts.timestamp-*.mjs
