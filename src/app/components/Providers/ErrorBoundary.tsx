@@ -1,4 +1,5 @@
 import { HTTPError } from "ky";
+import type { JSX } from "react";
 import { useRouteError } from "react-router-dom";
 import useAsyncEffect from "use-async-effect";
 import { STATUS_CODE_FOR } from "../../../constants/statusCodes";
