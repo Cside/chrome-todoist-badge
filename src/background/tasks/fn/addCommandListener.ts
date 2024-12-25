@@ -1,6 +1,7 @@
 import color from "chalk";
 import { ONE_MINUTE } from "../../../constants/time";
 import { API_URL_MATCH_PATTERN_FOR } from "../../../constants/urls";
+import { isInitialized } from "../../../fn/isInitialized";
 import { label } from "../../../fn/label";
 import { InMemoryCache } from "../../InMemoryCache";
 
@@ -58,7 +59,7 @@ export const addCommandListener = ({
       const command = cache.get(details.requestId);
       if (command !== undefined) {
         const matched = commandRegExp.test(command);
-        if (matched)
+        if (matched && (await isInitialized()))
           try {
             await listener();
             console.info(`${label(name)} ${labelForCommand(command)}`);

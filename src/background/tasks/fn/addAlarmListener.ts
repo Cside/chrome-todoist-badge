@@ -1,6 +1,7 @@
 import { formatDistance } from "date-fns";
 import { ONE_MINUTE } from "../../../constants/time";
 import { getLocaleTime } from "../../../fn/getLocaleTime";
+import { isInitialized } from "../../../fn/isInitialized";
 import { label } from "../../../fn/label";
 
 const prevStateMap = new Map<string, chrome.idle.IdleState>();
@@ -32,7 +33,11 @@ export const addAlarmListener_andIdleStateListener = async ({
   }
 
   chrome.alarms.onAlarm.addListener(async (alarm) => {
-    if (alarm.name === name && (await getCurrentIdleState()) === "active")
+    if (
+      alarm.name === name &&
+      (await getCurrentIdleState()) === "active" &&
+      (await isInitialized())
+    )
       try {
         await listener();
         console.info(
@@ -55,7 +60,7 @@ export const addAlarmListener_andIdleStateListener = async ({
     prevStateMap.set(name, idleState);
 
     // idle -> active の時に発火してほしくないので currentState === 'active' じゃ駄目
-    if (prevState === "locked")
+    if (prevState === "locked" && (await isInitialized()))
       try {
         await listener();
         console.info(`${label(name)} 💡onActive: Executed at ${getLocaleTime()}.`);
