@@ -32,7 +32,7 @@ export const addAlarmListener_andIdleStateListener = async ({
   }
 
   chrome.alarms.onAlarm.addListener(async (alarm) => {
-    if (alarm.name === name && (await chrome.idle.queryState(10_000)) === "active")
+    if (alarm.name === name && (await getCurrentIdleState()) === "active")
       try {
         await listener();
         console.info(
@@ -48,6 +48,8 @@ export const addAlarmListener_andIdleStateListener = async ({
   // ==================================================
   // Idle State Listener
   // ==================================================
+  // 🔥🔥🔥これ、この関数が呼ばれるたびに呼ぶのは筋悪なような⋯
+  // でも、後方互換性を考えたらもう変更できないかなぁ⋯
   chrome.idle.onStateChanged.addListener(async (idleState) => {
     const prevState = prevStateMap.get(name);
     prevStateMap.set(name, idleState);
@@ -65,3 +67,14 @@ export const addAlarmListener_andIdleStateListener = async ({
       }
   });
 };
+
+// ==================================================
+// Utils
+// ==================================================
+
+const getCurrentIdleState = async () =>
+  await chrome.idle.queryState(
+    // 適当に数値を入れる必要がある
+    // https://developer.chrome.com/docs/extensions/mv2/reference/idle?hl=ja#method-queryState
+    10_000,
+  );
