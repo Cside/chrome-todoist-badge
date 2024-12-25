@@ -66,6 +66,9 @@ export const addAlarmListener_andIdleStateListener = async ({
         );
       }
   });
+
+  // 最初の１回を発火
+  await listener();
 };
 
 // ==================================================
