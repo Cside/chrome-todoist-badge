@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { EXTENSION_NAME } from "../../constants/basic";
+import { EXTENSION_NAME } from "../../constants/extensionName";
 import { PATH_TO } from "../../constants/paths";
 import { useIsOnToolbar_Suspended } from "../../hooks/useIsOnToolbar";
 import * as storage from "../../storage/useStorage";

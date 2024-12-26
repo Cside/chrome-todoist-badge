@@ -16,6 +16,8 @@ web-ext.config.ts
 .wxt
 .eslintcache
 .git-pr-release
+vitest.config.ts.*.mjs
+src/localizationMessages.json
 
 # Editor directories and files
 #.vscode/*

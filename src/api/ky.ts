@@ -1,8 +1,11 @@
-import _ky, { TimeoutError } from "ky";
+import _ky from "ky";
 import { camelCase, isObject, transform } from "lodash-es";
+import { MAX_RETRIES } from "../constants/maxRetry";
+import { API_REST_BASE_URL } from "../constants/urls";
 import { getLocaleTime } from "../fn/getLocaleTime";
 
 const TIMEOUT = 10 * 1000; // same as default
+const IS_SERVICE_WORKER = typeof window === "undefined";
 
 // これだとリクエストがパラで飛んだ時駄目。
 // req id があれば一番楽だが...
@@ -15,6 +18,7 @@ const getFilter = (url: string) => {
 
 const kyInstance = _ky.create({
   timeout: TIMEOUT,
+  prefixUrl: API_REST_BASE_URL,
   hooks: {
     beforeRequest: [
       (req) => {
@@ -22,7 +26,10 @@ const kyInstance = _ky.create({
       },
     ],
     afterResponse: [
+      // NOTE: 各 try ごとのエラー処理。全 try がコケた後のエラー処理は catch {} で
       (req, _options, res) => {
+        // logging ==============================================
+
         const startedAt = requestStartedAt.get(req.url);
         if (startedAt === undefined) {
           console.warn(`startedAt (url: ${req.url}) is undefined`);
@@ -37,52 +44,38 @@ const kyInstance = _ky.create({
             `${res.status}`,
             `${req.method} ${req.url}${getFilter(req.url)}`,
           ].join("\t"),
-          `color: ${
-            String(res.status).startsWith("2") ? "darkcyan" : "darkgoldenrod"
-          }`,
+          `color: ${String(res.status).startsWith("2") ? "darkcyan" : "darkgoldenrod"}`,
         );
       },
     ],
-    // HTTPError を modify するもの。Timeout では呼ばれない
-    beforeError: [
-      async (error) => {
-        const url = error.request.url;
-        error.message +=
-          // biome-ignore lint/style/useTemplate:
-          `\n    url: ${url}` +
-          extractFilter(url) +
-          `\n    body: ${
-            error.response.bodyUsed ? "" : await error.response.text()
-          }`;
-        return error;
-      },
-    ],
   },
+  retry: IS_SERVICE_WORKER
+    ? // NOTE: 本来はここは 0 にすべきで、pRetry 等で storage 等を含めた処理全体を retry すべき
+      // 400, 401 等はリトライされない
+      // https://github.com/sindresorhus/ky?tab=readme-ov-file#retry
+      MAX_RETRIES
+    : 0, // TQ がリトライするので、リトライしない
 });
 
 export const ky = {
-  getCamelized: async <T>(url: string) => {
-    try {
-      return normalizeApiObject(await kyInstance.get(url).json()) as T;
-    } catch (error) {
-      // TimeoutError の場合、ky の beforeError 等が発火しないため、ここでやる
-      /* NOTE: error.message の最後に追加する、をやらない理由：
-         TimeoutError オブジェクトを throw すると、
-         なぜか、変更した error.message が無視される */
-      throw error instanceof TimeoutError
-        ? new Error(
-            // biome-ignore format:
-            // biome-ignore lint/style/useTemplate:
-            "Request timed out" +
-            `\n  url: ${url}` +
-            extractFilter(url) +
-            `\n  timeout: ${TIMEOUT}ms`,
-          )
-        : error;
-    }
-  },
+  fetchAndNormalize: async <T>(url: string) =>
+    normalizeApiObject(
+      await kyInstance
+        .get(
+          // ky の仕様で、prefixUrl がある場合、url は / から始まってはいけない (なんじゃそりゃ⋯)
+          // https://github.com/sindresorhus/ky?tab=readme-ov-file#prefixurl
+          url.startsWith("/") ? url.slice(1) : url,
+        )
+        .json(),
+    ) as T,
 };
 
+// ============================================================
+// Utils
+// ============================================================
+
+// 1. camelize
+// 2. null -> undefined
 export const normalizeApiObject = (obj: unknown): unknown =>
   transform(
     obj as object,
@@ -90,15 +83,6 @@ export const normalizeApiObject = (obj: unknown): unknown =>
       const camelKey = Array.isArray(target) ? key : camelCase(key as string);
       acc[camelKey] = isObject(value)
         ? normalizeApiObject(value)
-        : value ?? undefined;
+        : (value ?? undefined);
     },
   );
-
-// ==================================================
-// Utils
-// ==================================================
-
-const extractFilter = (url: string): string => {
-  const filter = new URL(url).searchParams.get("filter");
-  return filter !== null ? `\n    filter: ${filter}` : "";
-};

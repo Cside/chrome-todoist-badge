@@ -17,7 +17,6 @@
   "rules": {
     "object-shorthand": "error",
     "arrow-body-style": ["error", "as-needed"],
-    "curly": ["error", "multi"],
     "@typescript-eslint/prefer-includes": "error",
     "@typescript-eslint/no-unnecessary-condition": "error",
     "@typescript-eslint/unbound-method": "error", // メソッドの変数代入とか禁止
@@ -31,5 +30,6 @@
     ],
     "react/jsx-no-bind": ["error", { "ignoreDOMComponents": true }], // onClick={location.reload} みたいな this バグを防ぐ
     "react/jsx-no-useless-fragment": "error" // 不要な <></> を削除
-  }
+  },
+  "ignorePatterns": ["vitest.config.ts.timestamp-*.mjs"]
 }

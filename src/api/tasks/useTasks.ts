@@ -1,5 +1,6 @@
 import { type UseQueryResult, useQuery } from "@tanstack/react-query";
 import { storage as wxtStorage } from "wxt/storage";
+import { ProjectIdNotFoundError } from "../../errors";
 import { STORAGE_KEY_FOR } from "../../storage/storageKeys";
 import * as storage from "../../storage/useStorage";
 import type { Task, TaskFilters } from "../../types";
@@ -37,7 +38,8 @@ export const useCachedTasks = ({
 }: { isCacheAvailable: boolean }) => {
   // NOTE: 現状 ここでしか使ってない関数。共通関数化して良かったのだろうか…
   const [projectId] = storage.useFilteringProjectId_Suspended();
-  if (projectId === undefined) throw new Error("projectId is undefined");
+  if (projectId === undefined)
+    throw new ProjectIdNotFoundError("projectId is undefined");
   const [filterByDueByToday] = storage.useFilterByDueByToday_Suspended();
   const [sectionId] = storage.useFilteringSectionId_Suspended();
 

@@ -1,6 +1,7 @@
 import color from "chalk";
 import { ONE_MINUTE } from "../../../constants/time";
 import { API_URL_MATCH_PATTERN_FOR } from "../../../constants/urls";
+import { isInitialized } from "../../../fn/isInitialized";
 import { label } from "../../../fn/label";
 import { InMemoryCache } from "../../InMemoryCache";
 
@@ -27,17 +28,17 @@ chrome.webRequest.onBeforeRequest.addListener(
       }
     })();
 
-    if (parsed.commands === undefined) {
+    if (parsed.commands === undefined)
       // command 無しで Sync API が叩かれることはあるだろうから、これは正常系。
-      console.info(`commands is undefined. requestBody: ${requestBodyJson}`);
+      // console.info(`commands is undefined. requestBody: ${requestBodyJson}`);
       return;
-    }
+
     const firstCommand = parsed.commands[0]?.type;
-    if (firstCommand === undefined) {
+    if (firstCommand === undefined)
       // 普通にある https://gist.github.com/Cside/e3c9208e9011b53d28154d5dffd9da87
-      console.info("parsed.commands[] is empty");
+      // console.info("parsed.commands[] is empty");
       return;
-    }
+
     cache.set(details.requestId, firstCommand);
   },
   { urls: [API_URL_MATCH_PATTERN_FOR.SYNC] },
@@ -58,7 +59,7 @@ export const addCommandListener = ({
       const command = cache.get(details.requestId);
       if (command !== undefined) {
         const matched = commandRegExp.test(command);
-        if (matched)
+        if (matched && (await isInitialized()))
           try {
             await listener();
             console.info(`${label(name)} ${labelForCommand(command)}`);
