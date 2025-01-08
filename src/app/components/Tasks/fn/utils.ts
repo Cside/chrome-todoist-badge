@@ -1,4 +1,4 @@
-import { difference } from "lodash-es";
+import { difference } from "es-toolkit/compat";
 import type {
   Section,
   SectionId,

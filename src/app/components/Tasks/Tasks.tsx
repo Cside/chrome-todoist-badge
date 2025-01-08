@@ -1,5 +1,5 @@
 import todoistIcon from "@/assets/images/todoist.webp";
-import { uniq } from "lodash-es";
+import { uniq } from "es-toolkit/compat";
 import Markdown from "markdown-to-jsx";
 import React, { useEffect, useState, useMemo } from "react";
 import { NavLink } from "react-router-dom";
