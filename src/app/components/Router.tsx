@@ -12,7 +12,6 @@ import Options from "./Options";
 import PinExtensionToToolbar from "./PinExtensionToToolbar";
 import { ErrorBoundary } from "./Providers/ErrorBoundary";
 import { QueryClientProvider } from "./Providers/QueryClientProvider";
-import { Spinner } from "./Spinner";
 import Tasks_Suspended from "./Tasks/Tasks";
 import { TasksLoader } from "./Tasks/TasksLoader";
 import Welcome from "./Welcome";
@@ -27,7 +26,11 @@ const Container = () => {
 
   return (
     <QueryClientProvider>
-      <Suspense fallback={<Spinner className="mt-12 ml-16" />}>
+      <Suspense
+        fallback={
+          <div style={{ backgroundColor: "orange" }}>Router の fallback</div>
+        }
+      >
         <Outlet />
       </Suspense>
     </QueryClientProvider>
