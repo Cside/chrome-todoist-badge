@@ -45,12 +45,13 @@
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-router-dom": "^6.22.3",
+    "@tanstack/react-query": "^5.62.1",
+    "ts-array-length": "^0.1.2",
     "use-async-effect": "^2.2.7"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@tailwindcss/typography": "^0.5.13",
-    "@tanstack/react-query": "^5.62.1",
     "@total-typescript/ts-reset": "^0.5.1",
     "@types/chrome": "^0.0.287",
     "@types/lodash-es": "^4.17.12",
@@ -71,7 +72,6 @@
     "prettier-plugin-tailwindcss": "^0.6.9",
     "tailwind-merge": "^2.2.2",
     "tailwindcss": "^3.4.3",
-    "ts-array-length": "^0.1.2",
     "typescript": "^5.7.2",
     "vite": "6.0.3",
     "vitest": "^2.1.8",
