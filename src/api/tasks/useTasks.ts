@@ -37,17 +37,11 @@ export const useCachedTasks = ({
   isCacheAvailable,
 }: { isCacheAvailable: boolean }) => {
   // NOTE: 現状 ここでしか使ってない関数。共通関数化して良かったのだろうか…
-  console.log(10);
-  return { data: [], isSuccess: true, isFetching: false };
-  console.log(1111111111111);
   const [projectId] = storage.useFilteringProjectId_Suspended();
-  console.log(1);
   if (projectId === undefined)
     throw new ProjectIdNotFoundError("projectId is undefined");
   const [filterByDueByToday] = storage.useFilterByDueByToday_Suspended();
-  console.log(2);
   const [sectionId] = storage.useFilteringSectionId_Suspended();
-  console.log(3);
 
   const [cache] = storage.useCachedTasks_Suspended();
 

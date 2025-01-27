@@ -24,7 +24,6 @@ export default function Tasks_Suspended() {
     isFetching: areTasksFetching,
   } = api.useCachedTasks({ isCacheAvailable: areCachesAvailable });
   const webAppUrl = useWebAppUrl();
-
   const {
     data: sections,
     isSuccess: areSectionsLoaded,
@@ -161,7 +160,9 @@ export default function Tasks_Suspended() {
           Donation
         </a>
       </div>
-      {(areTasksFetching || areSectionsFetching) && <div>Are fetching</div>}
+      {(areTasksFetching || areSectionsFetching) && (
+        <Spinner className="fixed top-7 right-7" />
+      )}
     </>
   );
 }
