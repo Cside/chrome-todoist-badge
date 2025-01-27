@@ -10,13 +10,22 @@ importers:
     dependencies:
       '@oieduardorabelo/use-user-agent':
         specifier: ^5.0.1
-        version: 5.0.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        version: 5.0.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@sentry/integrations':
         specifier: ^7.113.0
         version: 7.114.0
       '@sentry/react':
         specifier: ^7.113.0
+<<<<<<< HEAD
+        version: 7.120.2(react@18.3.1)
+      '@tanstack/react-query':
+        specifier: ^5.62.1
+        version: 5.62.10(react@18.3.1)
+||||||| cadd6f6
+        version: 7.113.0(react@19.0.0)
+=======
         version: 7.120.2(react@19.0.0)
+>>>>>>> develop
       chalk:
         specifier: ^5.3.0
         version: 5.4.1
@@ -37,29 +46,53 @@ importers:
         version: 4.17.21
       markdown-to-jsx:
         specifier: ^7.4.7
+<<<<<<< HEAD
+        version: 7.7.2(react@18.3.1)
+||||||| cadd6f6
+        version: 7.4.7(react@19.0.0)
+=======
         version: 7.7.2(react@19.0.0)
+>>>>>>> develop
       react:
-        specifier: 19.0.0
-        version: 19.0.0
+        specifier: 18.3.1
+        version: 18.3.1
       react-dom:
-        specifier: 19.0.0
-        version: 19.0.0(react@19.0.0)
+        specifier: 18.3.1
+        version: 18.3.1(react@18.3.1)
       react-router-dom:
         specifier: ^6.22.3
+<<<<<<< HEAD
+        version: 6.28.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      ts-array-length:
+        specifier: ^0.1.2
+        version: 0.1.2
+||||||| cadd6f6
+        version: 6.22.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+=======
         version: 6.28.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+>>>>>>> develop
       use-async-effect:
         specifier: ^2.2.7
-        version: 2.2.7(react@19.0.0)
+        version: 2.2.7(react@18.3.1)
     devDependencies:
       '@biomejs/biome':
         specifier: ^1.9.4
         version: 1.9.4
       '@tailwindcss/typography':
         specifier: ^0.5.13
+<<<<<<< HEAD
+        version: 0.5.15(tailwindcss@3.4.17)
+||||||| cadd6f6
+        version: 0.5.13(tailwindcss@3.4.3)
+      '@tanstack/react-query':
+        specifier: ^5.62.1
+        version: 5.62.1(react@19.0.0)
+=======
         version: 0.5.15(tailwindcss@3.4.17)
       '@tanstack/react-query':
         specifier: ^5.62.1
         version: 5.62.10(react@19.0.0)
+>>>>>>> develop
       '@total-typescript/ts-reset':
         specifier: ^0.5.1
         version: 0.5.1
@@ -70,11 +103,11 @@ importers:
         specifier: ^4.17.12
         version: 4.17.12
       '@types/react':
-        specifier: ^19.0.2
-        version: 19.0.2
+        specifier: ^18.3.1
+        version: 18.3.1
       '@types/react-dom':
-        specifier: ^19.0.2
-        version: 19.0.2(@types/react@19.0.2)
+        specifier: ^18.3.1
+        version: 18.3.1
       '@typescript-eslint/eslint-plugin':
         specifier: ^8.18.0
         version: 8.18.2(@typescript-eslint/parser@8.18.2(eslint@8.57.1)(typescript@5.7.2))(eslint@8.57.1)(typescript@5.7.2)
@@ -119,10 +152,19 @@ importers:
         version: 2.6.0
       tailwindcss:
         specifier: ^3.4.3
+<<<<<<< HEAD
         version: 3.4.17
+||||||| cadd6f6
+        version: 3.4.3
       ts-array-length:
         specifier: ^0.1.2
-        version: 0.1.3
+        version: 0.1.2
+=======
+        version: 3.4.17
+      ts-array-length:
+        specifier: 0.1.2
+        version: 0.1.2
+>>>>>>> develop
       typescript:
         specifier: ^5.7.2
         version: 5.7.2
@@ -1055,10 +1097,14 @@ packages:
   '@types/node@22.10.2':
     resolution: {integrity: sha512-Xxr6BBRCAOQixvonOye19wnzyDiUtTeqldOOmj3CkeblonbccA12PFwlufvRdrpjXxqnmUaeiU5EOA+7s5diUQ==}
 
-  '@types/react-dom@19.0.2':
-    resolution: {integrity: sha512-c1s+7TKFaDRRxr1TxccIX2u7sfCnc3RxkVyBIUA2lCpyqCF+QoAwQ/CBg7bsMdVwP120HEH143VQezKtef5nCg==}
-    peerDependencies:
-      '@types/react': ^19.0.0
+  '@types/prop-types@15.7.14':
+    resolution: {integrity: sha512-gNMvNH49DJ7OJYv+KAKn0Xp45p8PLl6zo2YnvDIbTd4J6MER2BmWN49TG7n9LvkyihINxeKW8+3bfS2yDC9dzQ==}
+
+  '@types/react-dom@18.3.1':
+    resolution: {integrity: sha512-qW1Mfv8taImTthu4KoXgDfLuk4bydU6Q/TkADnDWWHwi4NX4BR+LWfTp2sVmTqRrsHvyDDTelgelxJ+SsejKKQ==}
+
+  '@types/react@18.3.1':
+    resolution: {integrity: sha512-V0kuGBX3+prX+DQ/7r2qsv1NsdfnCLnTgnRJ1pYnxykBhGMz+qj+box5lq7XsO5mtZsBqpjwwTu/7wszPfMBcw==}
 
   '@types/react@19.0.2':
     resolution: {integrity: sha512-USU8ZI/xyKJwFTpjSVIrSeHBVAGagkHQKPNbxeWwql/vDmnTIBgx+TJnhFnj1NXgz8XfprU0egV2dROLGpsBEg==}
@@ -3119,10 +3165,10 @@ packages:
     resolution: {integrity: sha512-y3bGgqKj3QBdxLbLkomlohkvsA8gdAiUQlSBJnBhfn+BPxg4bc62d8TcBW15wavDfgexCgccckhcZvywyQYPOw==}
     hasBin: true
 
-  react-dom@19.0.0:
-    resolution: {integrity: sha512-4GV5sHFG0e/0AD4X+ySy6UJd3jVl1iNsNHdpad0qhABJ11twS3TTBnseqsKurKcsNqCEFeGL3uLpVChpIO3QfQ==}
+  react-dom@18.3.1:
+    resolution: {integrity: sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==}
     peerDependencies:
-      react: ^19.0.0
+      react: ^18.3.1
 
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
@@ -3144,8 +3190,8 @@ packages:
     peerDependencies:
       react: '>=16.8'
 
-  react@19.0.0:
-    resolution: {integrity: sha512-V8AVnmPIICiWpGfm6GLzCR/W5FXLchHop40W4nXBmdlEceh16rCN8O8LNWm5bh5XUX91fh7KpA+W0TgMKmgTpQ==}
+  react@18.3.1:
+    resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
     engines: {node: '>=0.10.0'}
 
   read-cache@1.0.0:
@@ -3266,8 +3312,8 @@ packages:
   sax@1.4.1:
     resolution: {integrity: sha512-+aWOz7yVScEGoKNd4PA10LZ8sk0A/z5+nXQG5giUO5rprX9jgYsTdov9qCchZiPIZezbZH+jRut8nPodFAX4Jg==}
 
-  scheduler@0.25.0:
-    resolution: {integrity: sha512-xFVuu11jh+xcO7JOAGJNOXld8/TcEHK/4CituBUeUb5hqxJLj9YuemAEuvm9gQ/+pgXYfbQuqAkiYu+u7YEsNA==}
+  scheduler@0.23.2:
+    resolution: {integrity: sha512-UOShsPwz7NrMUqhR6t0hWjFduvOzbtv7toDH1/hIrfRNIDBnnBWd0CwJTGvTpngVlmwGCdP9/Zl/tVrDqcuYzQ==}
 
   scule@1.3.0:
     resolution: {integrity: sha512-6FtHJEvt+pVMIB9IBY+IcCJ6Z5f1iQnytgyfKMhDKgmzYG+TeH/wx1y3l27rshSbLiSanrR9ffZDrEsmjlQF2g==}
@@ -3543,8 +3589,8 @@ packages:
     peerDependencies:
       typescript: '>=4.2.0'
 
-  ts-array-length@0.1.3:
-    resolution: {integrity: sha512-f0qY4hUogp24j/Cq6qjUyPRKlB/Plr3Z+q6OeWPnNx5K0S38KyZWyVwIl6KOgfSEBJj7/2cGRbQ8tJSY1hJUfg==}
+  ts-array-length@0.1.2:
+    resolution: {integrity: sha512-x/e5IkAhltwO/O9RZU4MQXlu8cAY9NJH6vwv53FgjK4Bmvwim3Ll6z5XB5xbP79v8Yu3g/fMI5sK42JKKEDudA==}
 
   ts-interface-checker@0.1.13:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
@@ -4391,10 +4437,10 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.18.0
 
-  '@oieduardorabelo/use-user-agent@5.0.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
+  '@oieduardorabelo/use-user-agent@5.0.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      react: 19.0.0
-      react-dom: 19.0.0(react@19.0.0)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
       ua-parser-js: 1.0.2
 
   '@pkgjs/parseargs@0.11.0':
@@ -4528,6 +4574,24 @@ snapshots:
 
   '@sentry/integrations@7.120.2':
     dependencies:
+<<<<<<< HEAD
+      '@sentry/core': 7.120.2
+      '@sentry/types': 7.120.2
+      '@sentry/utils': 7.120.2
+      localforage: 1.10.0
+
+  '@sentry/react@7.120.2(react@18.3.1)':
+    dependencies:
+      '@sentry/browser': 7.120.2
+      '@sentry/core': 7.120.2
+      '@sentry/types': 7.120.2
+      '@sentry/utils': 7.120.2
+||||||| cadd6f6
+      '@sentry/browser': 7.113.0
+      '@sentry/core': 7.113.0
+      '@sentry/types': 7.113.0
+      '@sentry/utils': 7.113.0
+=======
       '@sentry/core': 7.120.2
       '@sentry/types': 7.120.2
       '@sentry/utils': 7.120.2
@@ -4539,8 +4603,9 @@ snapshots:
       '@sentry/core': 7.120.2
       '@sentry/types': 7.120.2
       '@sentry/utils': 7.120.2
+>>>>>>> develop
       hoist-non-react-statics: 3.3.2
-      react: 19.0.0
+      react: 18.3.1
 
   '@sentry/replay@7.120.2':
     dependencies:
@@ -4583,10 +4648,24 @@ snapshots:
 
   '@tanstack/query-core@5.62.9': {}
 
+<<<<<<< HEAD
+  '@tanstack/react-query@5.62.10(react@18.3.1)':
+||||||| cadd6f6
+  '@tanstack/react-query@5.62.1(react@19.0.0)':
+=======
   '@tanstack/react-query@5.62.10(react@19.0.0)':
+>>>>>>> develop
     dependencies:
+<<<<<<< HEAD
+      '@tanstack/query-core': 5.62.9
+      react: 18.3.1
+||||||| cadd6f6
+      '@tanstack/query-core': 5.62.1
+      react: 19.0.0
+=======
       '@tanstack/query-core': 5.62.9
       react: 19.0.0
+>>>>>>> develop
 
   '@total-typescript/ts-reset@0.5.1': {}
 
@@ -4640,9 +4719,16 @@ snapshots:
     dependencies:
       undici-types: 6.20.0
 
-  '@types/react-dom@19.0.2(@types/react@19.0.2)':
+  '@types/prop-types@15.7.14': {}
+
+  '@types/react-dom@18.3.1':
     dependencies:
       '@types/react': 19.0.2
+
+  '@types/react@18.3.1':
+    dependencies:
+      '@types/prop-types': 15.7.14
+      csstype: 3.1.3
 
   '@types/react@19.0.2':
     dependencies:
@@ -5501,10 +5587,18 @@ snapshots:
   es-to-primitive@1.3.0:
     dependencies:
       is-callable: 1.2.7
+<<<<<<< HEAD
+      is-date-object: 1.1.0
+      is-symbol: 1.1.1
+||||||| cadd6f6
+      is-date-object: 1.0.5
+      is-symbol: 1.0.4
+=======
       is-date-object: 1.1.0
       is-symbol: 1.1.1
 
   es-toolkit@1.31.0: {}
+>>>>>>> develop
 
   es6-error@4.1.1: {}
 
@@ -6448,9 +6542,15 @@ snapshots:
 
   make-error@1.3.6: {}
 
+<<<<<<< HEAD
+  markdown-to-jsx@7.7.2(react@18.3.1):
+||||||| cadd6f6
+  markdown-to-jsx@7.4.7(react@19.0.0):
+=======
   markdown-to-jsx@7.7.2(react@19.0.0):
+>>>>>>> develop
     dependencies:
-      react: 19.0.0
+      react: 18.3.1
 
   marky@1.2.5: {}
 
@@ -6917,28 +7017,63 @@ snapshots:
       minimist: 1.2.8
       strip-json-comments: 2.0.1
 
-  react-dom@19.0.0(react@19.0.0):
+  react-dom@18.3.1(react@18.3.1):
     dependencies:
-      react: 19.0.0
-      scheduler: 0.25.0
+      loose-envify: 1.4.0
+      react: 18.3.1
+      scheduler: 0.23.2
 
   react-is@16.13.1: {}
 
   react-refresh@0.14.2: {}
 
+<<<<<<< HEAD
+  react-router-dom@6.28.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+||||||| cadd6f6
+  react-router-dom@6.22.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+=======
   react-router-dom@6.28.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+>>>>>>> develop
     dependencies:
+<<<<<<< HEAD
+      '@remix-run/router': 1.21.0
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      react-router: 6.28.1(react@18.3.1)
+||||||| cadd6f6
+      '@remix-run/router': 1.15.3
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
+      react-router: 6.22.3(react@19.0.0)
+=======
       '@remix-run/router': 1.21.0
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
       react-router: 6.28.1(react@19.0.0)
+>>>>>>> develop
 
+<<<<<<< HEAD
+  react-router@6.28.1(react@18.3.1):
+||||||| cadd6f6
+  react-router@6.22.3(react@19.0.0):
+=======
   react-router@6.28.1(react@19.0.0):
+>>>>>>> develop
     dependencies:
+<<<<<<< HEAD
+      '@remix-run/router': 1.21.0
+      react: 18.3.1
+||||||| cadd6f6
+      '@remix-run/router': 1.15.3
+      react: 19.0.0
+=======
       '@remix-run/router': 1.21.0
       react: 19.0.0
+>>>>>>> develop
 
-  react@19.0.0: {}
+  react@18.3.1:
+    dependencies:
+      loose-envify: 1.4.0
 
   read-cache@1.0.0:
     dependencies:
@@ -7095,7 +7230,9 @@ snapshots:
 
   sax@1.4.1: {}
 
-  scheduler@0.25.0: {}
+  scheduler@0.23.2:
+    dependencies:
+      loose-envify: 1.4.0
 
   scule@1.3.0: {}
 
@@ -7408,7 +7545,7 @@ snapshots:
     dependencies:
       typescript: 5.7.2
 
-  ts-array-length@0.1.3: {}
+  ts-array-length@0.1.2: {}
 
   ts-interface-checker@0.1.13: {}
 
@@ -7543,9 +7680,9 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
-  use-async-effect@2.2.7(react@19.0.0):
+  use-async-effect@2.2.7(react@18.3.1):
     dependencies:
-      react: 19.0.0
+      react: 18.3.1
 
   util-deprecate@1.0.2: {}
 
