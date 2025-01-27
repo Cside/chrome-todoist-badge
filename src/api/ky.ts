@@ -1,5 +1,6 @@
+import { camelCase, isObject } from "es-toolkit/compat";
 import _ky from "ky";
-import { camelCase, isObject, transform } from "lodash-es";
+import { transform } from "lodash-es"; // 未実装@2025/01 https://es-toolkit.slash.page/compatibility.html
 import { MAX_RETRIES } from "../constants/maxRetry";
 import { API_REST_BASE_URL } from "../constants/urls";
 import { getLocaleTime } from "../fn/getLocaleTime";

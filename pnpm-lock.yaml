@@ -16,10 +16,16 @@ importers:
         version: 7.114.0
       '@sentry/react':
         specifier: ^7.113.0
+<<<<<<< HEAD
         version: 7.120.2(react@18.3.1)
       '@tanstack/react-query':
         specifier: ^5.62.1
         version: 5.62.10(react@18.3.1)
+||||||| cadd6f6
+        version: 7.113.0(react@19.0.0)
+=======
+        version: 7.120.2(react@19.0.0)
+>>>>>>> develop
       chalk:
         specifier: ^5.3.0
         version: 5.4.1
@@ -29,6 +35,9 @@ importers:
       date-fns:
         specifier: ^3.6.0
         version: 3.6.0
+      es-toolkit:
+        specifier: ^1.31.0
+        version: 1.31.0
       ky:
         specifier: ^1.7.2
         version: 1.7.4
@@ -37,7 +46,13 @@ importers:
         version: 4.17.21
       markdown-to-jsx:
         specifier: ^7.4.7
+<<<<<<< HEAD
         version: 7.7.2(react@18.3.1)
+||||||| cadd6f6
+        version: 7.4.7(react@19.0.0)
+=======
+        version: 7.7.2(react@19.0.0)
+>>>>>>> develop
       react:
         specifier: 18.3.1
         version: 18.3.1
@@ -46,10 +61,16 @@ importers:
         version: 18.3.1(react@18.3.1)
       react-router-dom:
         specifier: ^6.22.3
+<<<<<<< HEAD
         version: 6.28.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       ts-array-length:
         specifier: ^0.1.2
         version: 0.1.2
+||||||| cadd6f6
+        version: 6.22.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+=======
+        version: 6.28.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+>>>>>>> develop
       use-async-effect:
         specifier: ^2.2.7
         version: 2.2.7(react@18.3.1)
@@ -59,7 +80,19 @@ importers:
         version: 1.9.4
       '@tailwindcss/typography':
         specifier: ^0.5.13
+<<<<<<< HEAD
         version: 0.5.15(tailwindcss@3.4.17)
+||||||| cadd6f6
+        version: 0.5.13(tailwindcss@3.4.3)
+      '@tanstack/react-query':
+        specifier: ^5.62.1
+        version: 5.62.1(react@19.0.0)
+=======
+        version: 0.5.15(tailwindcss@3.4.17)
+      '@tanstack/react-query':
+        specifier: ^5.62.1
+        version: 5.62.10(react@19.0.0)
+>>>>>>> develop
       '@total-typescript/ts-reset':
         specifier: ^0.5.1
         version: 0.5.1
@@ -119,7 +152,19 @@ importers:
         version: 2.6.0
       tailwindcss:
         specifier: ^3.4.3
+<<<<<<< HEAD
         version: 3.4.17
+||||||| cadd6f6
+        version: 3.4.3
+      ts-array-length:
+        specifier: ^0.1.2
+        version: 0.1.2
+=======
+        version: 3.4.17
+      ts-array-length:
+        specifier: 0.1.2
+        version: 0.1.2
+>>>>>>> develop
       typescript:
         specifier: ^5.7.2
         version: 5.7.2
@@ -1787,6 +1832,9 @@ packages:
   es-to-primitive@1.3.0:
     resolution: {integrity: sha512-w+5mJ3GuFL+NjVtJlvydShqE1eN3h3PbI7/5LAsYJP/2qtuMXjfL2LpHSRqo4b4eSF5K/DH1JXKUAHSB2UW50g==}
     engines: {node: '>= 0.4'}
+
+  es-toolkit@1.31.0:
+    resolution: {integrity: sha512-vwS0lv/tzjM2/t4aZZRAgN9I9TP0MSkWuvt6By+hEXfG/uLs8yg2S1/ayRXH/x3pinbLgVJYT+eppueg3cM6tg==}
 
   es6-error@4.1.1:
     resolution: {integrity: sha512-Um/+FxMr9CISWh0bi5Zv0iOD+4cFh5qLeks1qhAopKVAJw3drgKbKySikp7wGhDL0HPeaja0P5ULZrxLkniUVg==}
@@ -4526,6 +4574,7 @@ snapshots:
 
   '@sentry/integrations@7.120.2':
     dependencies:
+<<<<<<< HEAD
       '@sentry/core': 7.120.2
       '@sentry/types': 7.120.2
       '@sentry/utils': 7.120.2
@@ -4537,6 +4586,24 @@ snapshots:
       '@sentry/core': 7.120.2
       '@sentry/types': 7.120.2
       '@sentry/utils': 7.120.2
+||||||| cadd6f6
+      '@sentry/browser': 7.113.0
+      '@sentry/core': 7.113.0
+      '@sentry/types': 7.113.0
+      '@sentry/utils': 7.113.0
+=======
+      '@sentry/core': 7.120.2
+      '@sentry/types': 7.120.2
+      '@sentry/utils': 7.120.2
+      localforage: 1.10.0
+
+  '@sentry/react@7.120.2(react@19.0.0)':
+    dependencies:
+      '@sentry/browser': 7.120.2
+      '@sentry/core': 7.120.2
+      '@sentry/types': 7.120.2
+      '@sentry/utils': 7.120.2
+>>>>>>> develop
       hoist-non-react-statics: 3.3.2
       react: 18.3.1
 
@@ -4581,10 +4648,24 @@ snapshots:
 
   '@tanstack/query-core@5.62.9': {}
 
+<<<<<<< HEAD
   '@tanstack/react-query@5.62.10(react@18.3.1)':
+||||||| cadd6f6
+  '@tanstack/react-query@5.62.1(react@19.0.0)':
+=======
+  '@tanstack/react-query@5.62.10(react@19.0.0)':
+>>>>>>> develop
     dependencies:
+<<<<<<< HEAD
       '@tanstack/query-core': 5.62.9
       react: 18.3.1
+||||||| cadd6f6
+      '@tanstack/query-core': 5.62.1
+      react: 19.0.0
+=======
+      '@tanstack/query-core': 5.62.9
+      react: 19.0.0
+>>>>>>> develop
 
   '@total-typescript/ts-reset@0.5.1': {}
 
@@ -5506,8 +5587,18 @@ snapshots:
   es-to-primitive@1.3.0:
     dependencies:
       is-callable: 1.2.7
+<<<<<<< HEAD
       is-date-object: 1.1.0
       is-symbol: 1.1.1
+||||||| cadd6f6
+      is-date-object: 1.0.5
+      is-symbol: 1.0.4
+=======
+      is-date-object: 1.1.0
+      is-symbol: 1.1.1
+
+  es-toolkit@1.31.0: {}
+>>>>>>> develop
 
   es6-error@4.1.1: {}
 
@@ -6451,7 +6542,13 @@ snapshots:
 
   make-error@1.3.6: {}
 
+<<<<<<< HEAD
   markdown-to-jsx@7.7.2(react@18.3.1):
+||||||| cadd6f6
+  markdown-to-jsx@7.4.7(react@19.0.0):
+=======
+  markdown-to-jsx@7.7.2(react@19.0.0):
+>>>>>>> develop
     dependencies:
       react: 18.3.1
 
@@ -6930,17 +7027,49 @@ snapshots:
 
   react-refresh@0.14.2: {}
 
+<<<<<<< HEAD
   react-router-dom@6.28.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+||||||| cadd6f6
+  react-router-dom@6.22.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+=======
+  react-router-dom@6.28.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+>>>>>>> develop
     dependencies:
+<<<<<<< HEAD
       '@remix-run/router': 1.21.0
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       react-router: 6.28.1(react@18.3.1)
+||||||| cadd6f6
+      '@remix-run/router': 1.15.3
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
+      react-router: 6.22.3(react@19.0.0)
+=======
+      '@remix-run/router': 1.21.0
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
+      react-router: 6.28.1(react@19.0.0)
+>>>>>>> develop
 
+<<<<<<< HEAD
   react-router@6.28.1(react@18.3.1):
+||||||| cadd6f6
+  react-router@6.22.3(react@19.0.0):
+=======
+  react-router@6.28.1(react@19.0.0):
+>>>>>>> develop
     dependencies:
+<<<<<<< HEAD
       '@remix-run/router': 1.21.0
       react: 18.3.1
+||||||| cadd6f6
+      '@remix-run/router': 1.15.3
+      react: 19.0.0
+=======
+      '@remix-run/router': 1.21.0
+      react: 19.0.0
+>>>>>>> develop
 
   react@18.3.1:
     dependencies:

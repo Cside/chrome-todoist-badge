@@ -1,4 +1,4 @@
-import { mapValues } from "lodash-es";
+import { mapValues } from "es-toolkit/compat";
 
 export const PATHNAME_FOR = {
   OPTIONS: "/options.html",
