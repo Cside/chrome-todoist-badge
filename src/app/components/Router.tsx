@@ -76,5 +76,11 @@ export const Router = () => (
         errorElement: <ErrorBoundary />,
       },
     ])}
+    future={{
+      v7_startTransition: true,
+      // @ts-ignore
+      v7_relativeSplatPath: true,
+      // See https://www.notion.so/189cb33a6a1f81c49990f53ea0fdced5
+    }}
   />
 );
