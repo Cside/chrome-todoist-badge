@@ -9,8 +9,8 @@ if [ "${YN}" != "y" ]; then
 fi
 
 git pull
-yarn run check
-yarn run zip
+pnpm run check
+pnpm run zip
 git push --tags
 
 gh release create "v$version" --generate-notes --title "v$version"
