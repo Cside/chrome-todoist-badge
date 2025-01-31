@@ -1,5 +1,5 @@
 {
-  "version": "0.0.9",
+  "version": "0.0.10",
   "type": "module",
   "scripts": {
     "dev": "wxt || terminal-notifier -message 'wxt failed' -sound Sosumi",
