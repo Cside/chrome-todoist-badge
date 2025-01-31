@@ -6,6 +6,7 @@ const REGEXP = [
   "^item_",
   "^section_move$",
   "^section_delete$",
+  "^project_delete$",
 ];
 
 export const refreshTasksCache_andUpdateBadgeCount_onTaskUpdated = () =>

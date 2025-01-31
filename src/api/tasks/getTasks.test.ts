@@ -53,5 +53,8 @@ describe(`${_buildTasksApiQueryString.name}()`, () => {
   );
 });
 
+// https://www.notion.so/18ccb33a6a1f8095bef8e41a751d8200?pvs=4#18ccb33a6a1f8031987dfe3964752b7c
 test(`${_escapeFilter.name}()`, () =>
-  expect(_escapeFilter("foo & bar & baz")).toBe("foo \\& bar \\& baz"));
+  expect(_escapeFilter("foo, bar, baz & foobar (vol #3)")).toBe(
+    "foo\\, bar\\, baz \\& foobar \\(vol \\#3\\)",
+  ));
