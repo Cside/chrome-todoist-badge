@@ -85,4 +85,8 @@ const sectionIdToFilter = async (sectionId: ProjectId) =>
     : // TODO キャッシュ。。
       `/${_escapeFilter((await getSection(sectionId)).name)}`;
 
-export const _escapeFilter = (filter: string) => filter.replace(/([&])/g, "\\$1");
+// https://www.notion.so/18ccb33a6a1f8095bef8e41a751d8200?pvs=4#18ccb33a6a1f8031987dfe3964752b7c
+// 絵文字・空白・スラッシュ等は、今のところ、エスケープしなくても怒られない
+// 公式のサンプルでは空白をエスケープしているので、そこが少し心配⋯
+export const _escapeFilter = (filter: string) =>
+  filter.replace(/([&,#\(\)])/g, "\\$1");
