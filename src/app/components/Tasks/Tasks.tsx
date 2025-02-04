@@ -145,7 +145,7 @@ export default function Tasks_Suspended() {
         <a
           href="https://ko-fi.com/Cside"
           target="_blank"
-          className="btn flex columns-3 gap-x-1 px-3"
+          className="btn btn-active btn-ghost flex columns-3 gap-x-1 px-3"
           rel="noreferrer"
         >
           <svg
