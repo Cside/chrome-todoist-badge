@@ -1,4 +1,4 @@
-import { sample } from "lodash-es";
+import { sample } from "es-toolkit";
 
 const Button = sample<JSX.Element>([
   <a
@@ -21,7 +21,7 @@ const Button = sample<JSX.Element>([
   </a>,
   <a
     key="review"
-    href="FIXME"
+    href="https://browser-extension.netlify.app/redirect-to-review.html?app=counter-for-todoist"
     target="_blank"
     className="btn btn-outline btn-primary flex columns-3 gap-x-1 px-3"
     rel="noreferrer"
