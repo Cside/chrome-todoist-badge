@@ -21,14 +21,15 @@ export default function Tasks_Suspended() {
   const [areCachesAvailable, setAreCachesAvailable] = useState(true);
   const {
     data: tasks,
-    isSuccess: areTasksLoaded,
+    isSuccess: areTasksSucceeded,
     isFetching: areTasksFetching,
   } = api.useCachedTasks({ isCacheAvailable: areCachesAvailable });
   const webAppUrl = useWebAppUrl();
   const {
     data: sections,
-    isSuccess: areSectionsLoaded,
+    isSuccess: areSectionsSucceeded,
     isFetching: areSectionsFetching,
+    isLoading: areSectionsLoading,
   } = api.useCachedSections({ isCacheAvailable: areCachesAvailable });
 
   /*
@@ -44,7 +45,7 @@ export default function Tasks_Suspended() {
     ( invalidate しないでいい。キャッシュを使わないだけで、再 set される）
   */
   useEffect(() => {
-    if (areTasksLoaded && areSectionsLoaded && areCachesAvailable) {
+    if (areTasksSucceeded && areSectionsSucceeded && areCachesAvailable) {
       const notIncluded = getUnknownSectionIds({ tasks, sections });
       if (notIncluded.length > 0) {
         console.error(
@@ -58,48 +59,51 @@ export default function Tasks_Suspended() {
         setAreCachesAvailable(false);
       }
     }
-  }, [areTasksLoaded, tasks, areSectionsLoaded, sections]);
+  }, [areTasksSucceeded, tasks, areSectionsSucceeded, sections]);
 
-  useBadgeUpdate_andSetCache({ tasks, areTasksLoaded });
+  useBadgeUpdate_andSetCache({ tasks, areTasksLoaded: areTasksSucceeded });
 
   const GroupedTasks = useMemo(
     () =>
-      areTasksLoaded && areSectionsLoaded ? (
+      areTasksSucceeded &&
+      // projectId === undefined の場合、useQuery で enabled: false になるため、isSuccess は使えない
+      !areSectionsLoading ? (
         (() => {
-          const groupedTasks = groupTasksBySectionId({ tasks, sections }).map(
-            (group, index) => (
-              <React.Fragment key={group.section?.id ?? `undefinedSection-${index}`}>
-                {group.section !== undefined && (
-                  <h2 className="my-4">{group.section.name}</h2>
-                )}
-                <ul>
-                  {group.tasks.map((task) => (
-                    <li key={task.id}>
-                      {/* Markdown の中に a タグが入り込みうるため、div にする */}
-                      <div
-                        className="link link-hover m-0"
-                        onClick={(event) => {
-                          if (event.target instanceof HTMLAnchorElement) {
-                            event.preventDefault();
-                            window.open(event.target.href);
-                            return;
-                          }
-                          window.open(task.url);
-                        }}
-                      >
-                        {/* 「------------」は Markdown にしない */}
-                        {/^-+$/.test(task.content) ? (
-                          task.content
-                        ) : (
-                          <Markdown>{task.content}</Markdown>
-                        )}
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </React.Fragment>
-            ),
-          );
+          const groupedTasks = groupTasksBySectionId({
+            tasks,
+            sections: sections ?? [],
+          }).map((group, index) => (
+            <React.Fragment key={group.section?.id ?? `undefinedSection-${index}`}>
+              {group.section !== undefined && (
+                <h2 className="my-4">{group.section.name}</h2>
+              )}
+              <ul>
+                {group.tasks.map((task) => (
+                  <li key={task.id}>
+                    {/* Markdown の中に a タグが入り込みうるため、div にする */}
+                    <div
+                      className="link link-hover m-0"
+                      onClick={(event) => {
+                        if (event.target instanceof HTMLAnchorElement) {
+                          event.preventDefault();
+                          window.open(event.target.href);
+                          return;
+                        }
+                        window.open(task.url);
+                      }}
+                    >
+                      {/* 「------------」は Markdown にしない */}
+                      {/^-+$/.test(task.content) ? (
+                        task.content
+                      ) : (
+                        <Markdown>{task.content}</Markdown>
+                      )}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </React.Fragment>
+          ));
           return groupedTasks.length > 0 ? (
             groupedTasks
           ) : (
@@ -109,7 +113,7 @@ export default function Tasks_Suspended() {
       ) : (
         <Spinner className="m-5" />
       ),
-    [areTasksLoaded, areSectionsLoaded, tasks, sections],
+    [areTasksSucceeded, areSectionsSucceeded, tasks, sections],
   );
 
   return (

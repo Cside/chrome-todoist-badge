@@ -31,7 +31,11 @@ const Main_Suspended = () => {
   // ==================================================
   // All projects && Filtering projectId
   // ==================================================
-  const { data: projects, isSuccess: areProjectsLoaded } = api.useProjects();
+  const {
+    data: projects,
+    isSuccess: areProjectsSucceeded,
+    isLoading: areProjectsLoading,
+  } = api.useProjects();
 
   // TODO: projectId が projects に含まれているかチェックする
   // (project がアーカイブ/削除されていれば、含まれない)
@@ -41,30 +45,34 @@ const Main_Suspended = () => {
   // ==================================================
   // All sections && Filtering sectionId
   // ==================================================
-  const { data: sections, isSuccess: areSectionsLoaded } = api.useSections();
+  const {
+    data: sections,
+    isSuccess: areSectionsSucceeded,
+    isLoading: areSectionsLoading,
+  } = api.useSections();
   const [sectionId, setSectionId, removeSectionId] =
     storage.useFilteringSectionId_Suspended();
 
   useAsyncEffect(async () => {
-    if (areSectionsLoaded)
+    if (areSectionsSucceeded)
       // Popup とは別 Window なので TQ は使う意味ない。
       await wxtStorage.setItem<Section[]>(STORAGE_KEY_FOR.CACHE.SECTIONS, sections); // retry はサボる
-  }, [sections, areSectionsLoaded]);
+  }, [sections, areSectionsSucceeded]);
 
   // ==================================================
   // Tasks
   // ==================================================
   // TODO: sectionId が存在するかチェックする?
-  const { data: tasks, isSuccess: areTasksLoaded } = api.useTasks({
+  const { data: tasks, isSuccess: areTasksSucceeded } = api.useTasks({
     filters: {
       projectId,
       filterByDueByToday,
       sectionId,
     },
-    enabled: projectId !== undefined || areProjectsLoaded,
+    enabled: projectId !== undefined || areProjectsSucceeded,
     deps: [projectId, filterByDueByToday, sectionId],
   });
-  useBadgeUpdate_andSetCache({ tasks, areTasksLoaded });
+  useBadgeUpdate_andSetCache({ tasks, areTasksLoaded: areTasksSucceeded });
 
   return (
     <div className="flex flex-col gap-y-3">
@@ -80,7 +88,7 @@ const Main_Suspended = () => {
               </label>
             </th>
             <td>
-              {areProjectsLoaded ? (
+              {areProjectsSucceeded ? (
                 <select
                   id="select-for-project"
                   value={projectId ?? PROJECT_ID_FOR_ALL}
@@ -108,7 +116,7 @@ const Main_Suspended = () => {
           {/* ==================================================
               Select a section
             ================================================== */}
-          {areSectionsLoaded && sections.length > 0 ? (
+          {areSectionsSucceeded && sections.length > 0 ? (
             <tr className="border-none">
               <th className="w-48 font-normal">
                 <label htmlFor="select-for-section" className="label cursor-pointer">
@@ -167,7 +175,7 @@ const Main_Suspended = () => {
       </table>
 
       <div>
-        {areTasksLoaded ? (
+        {areTasksSucceeded ? (
           <span className="font-bold text-primary">{tasks.length} Tasks</span>
         ) : (
           <Spinner className="ml-16" />
@@ -175,19 +183,21 @@ const Main_Suspended = () => {
       </div>
 
       {/* Debug */}
-      {/* <pre>
-        <code>
-          {JSON.stringify(
-            {
-              areTasksSuccess: areTasksLoaded && undefined,
-              areProjectsSuccess: areProjectsLoaded && undefined,
-              areSectionsSuccess: areSectionsLoaded && undefined,
-            },
-            null,
-            "  ",
-          )}
-        </code>
-      </pre> */}
+      {/*
+        <pre>
+          <code>
+            {JSON.stringify(
+              {
+                areTasksSuccess: areTasksSucceeded && undefined,
+                areProjectsSuccess: areProjectsSucceeded && undefined,
+                areSectionsSuccess: areSectionsSucceeded && undefined,
+              },
+              null,
+              "  ",
+            )}
+          </code>
+        </pre>
+      */}
 
       {/* ==================================================
           Submit
@@ -199,7 +209,7 @@ const Main_Suspended = () => {
             className={clsx(
               "btn",
               "btn-primary",
-              (!areProjectsLoaded || !areSectionsLoaded) && "btn-disabled",
+              (areProjectsLoading || areSectionsLoading) && "btn-disabled",
             )}
             onClick={async () =>
               setIsInitialized(true, {
