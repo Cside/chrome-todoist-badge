@@ -3,7 +3,7 @@ import { storage as wxtStorage } from "wxt/storage";
 import { ProjectIdNotFoundError } from "../../errors";
 import { STORAGE_KEY_FOR } from "../../storage/storageKeys";
 import * as storage from "../../storage/useStorage";
-import type { Task, TaskFilters } from "../../types";
+import type { TaskForApi } from "../../types";
 import { QUERY_KEY_FOR } from "../queryKeys";
 import * as api from "./getTasks";
 
@@ -16,14 +16,14 @@ export const useTasks = ({
 }: {
   filters: TaskFilters;
   deps: unknown[];
-  cache?: Task[] | undefined;
+  cache?: TaskForApi[] | undefined;
   enabled?: boolean;
 }) =>
   useQuery({
     queryKey: [QUERY_KEY_FOR.API.TASKS, ...deps],
     queryFn: async () => {
       const tasks = await api.getTasksByParams(filters);
-      await wxtStorage.setItem<Task[]>(STORAGE_KEY_FOR.CACHE.TASKS, tasks); // retry はサボる
+      await wxtStorage.setItem<TaskForApi[]>(STORAGE_KEY_FOR.CACHE.TASKS, tasks); // retry はサボる
       return tasks;
     },
     enabled,
@@ -49,5 +49,5 @@ export const useCachedTasks = ({
     filters: { projectId, filterByDueByToday, sectionId },
     deps: [projectId, filterByDueByToday, sectionId],
     cache: isCacheAvailable ? cache : undefined,
-  }) as UseQueryResult<Task[]>;
+  }) as UseQueryResult<TaskForApi[]>;
 };
