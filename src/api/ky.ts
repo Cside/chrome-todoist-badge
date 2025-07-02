@@ -10,7 +10,7 @@ const IS_SERVICE_WORKER = typeof window === "undefined";
 
 // これだとリクエストがパラで飛んだ時駄目。
 // req id があれば一番楽だが...
-// FIXME これ、メモリリーク。。
+// TODO これ、メモリリーク。。
 const requestStartedAt: Map<string, number | undefined> = new Map();
 const getFilter = (url: string) => {
   const filter = new URL(url).searchParams.get("filter");

@@ -9,7 +9,7 @@ import {
   DEFAULT_FILTER_BY_DUE_BY_TODAY,
   DEFAULT_IS_CONFIG_INITIALIZED,
 } from "../constants/options";
-import type { ProjectId, Section, SectionId, Task } from "../types";
+import type { ProjectId, Section, SectionId, TaskForApi } from "../types";
 import { STORAGE_KEY_FOR } from "./storageKeys";
 
 export const useFilteringProjectId_Suspended = () => {
@@ -55,7 +55,7 @@ export const useIsConfigInitialized_Suspended = () => {
 };
 
 export const useCachedTasks_Suspended = () =>
-  useStorage_Suspended<Task[]>({
+  useStorage_Suspended<TaskForApi[]>({
     storageKey: STORAGE_KEY_FOR.CACHE.TASKS,
   });
 

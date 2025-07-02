@@ -1,10 +1,12 @@
-import type { Section, Task } from "../../../../types";
+import type { Section, TaskForApi } from "../../../../types";
 import { groupTasksBySectionId } from "./utils";
 
 const SECTION1: Section = { id: "sec-100", name: "Section 1", order: 0 };
 const SECTION2: Section = { id: "sec-200", name: "Section 2", order: 1 };
 
-const toTask = (task: Pick<Task, "id" | "order" | "sectionId">): Task => ({
+const toTask = (
+  task: Pick<TaskForApi, "id" | "order" | "sectionId">,
+): TaskForApi => ({
   ...task,
   content: "",
   url: "",
