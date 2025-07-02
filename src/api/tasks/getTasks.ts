@@ -4,7 +4,6 @@ import {
   SECTION_ID_TO_FILTER,
 } from "../../constants/options";
 import { API_PATH_FOR } from "../../constants/urls";
-import { ProjectIdNotFoundError } from "../../errors";
 import { clearStorage, shouldClearStorage } from "../../fn/clearStorage";
 import { STORAGE_KEY_FOR } from "../../storage/storageKeys";
 import type { ProjectId, TaskFilters, TaskForApi } from "../../types";
@@ -30,11 +29,10 @@ export const getTasksByParams = async (
 };
 
 const getTasks = async (): Promise<TaskForApi[]> => {
-  const projectId = await storage.getItem<ProjectId>(
-    STORAGE_KEY_FOR.CONFIG.FILTER_BY.PROJECT_ID,
-  );
-  // 初期化が終わった後に呼ばれる前提の関数なので、projectId == null の場合はエラーにしている
-  if (projectId === null) throw new ProjectIdNotFoundError("projectId is null");
+  const projectId =
+    (await storage.getItem<ProjectId>(
+      STORAGE_KEY_FOR.CONFIG.FILTER_BY.PROJECT_ID,
+    )) ?? undefined;
 
   const filterByDueByToday =
     (await storage.getItem<boolean>(
@@ -83,7 +81,7 @@ export const _buildTasksApiQueryString = async ({
     .filter(Boolean)
     .join(" & ");
 
-  return `?${new URLSearchParams({ filter: filters })}`;
+  return filters === "" ? "" : `?${new URLSearchParams({ filter: filters })}`;
 };
 
 const projectIdToFilter = async (projectId: ProjectId) =>

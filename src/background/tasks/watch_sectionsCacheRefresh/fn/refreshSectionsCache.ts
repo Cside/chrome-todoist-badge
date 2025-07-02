@@ -1,5 +1,4 @@
 import * as api from "../../../../api/sections/getSections";
-import { ProjectIdNotFoundError } from "../../../../errors";
 import { STORAGE_KEY_FOR } from "../../../../storage/storageKeys";
 import type { ProjectId, Section } from "../../../../types";
 
@@ -8,8 +7,7 @@ export const refreshSectionsCache = async () => {
   const projectId = await storage.getItem<ProjectId>(
     STORAGE_KEY_FOR.CONFIG.FILTER_BY.PROJECT_ID,
   );
-  // 初期化が終わった後に呼ばれる前提の関数なので、projectId == null の場合はエラーにしている
-  if (projectId === null) throw new ProjectIdNotFoundError("projectId is null");
+  if (projectId === null) return; // noop
 
   const sections = await api.getSections({ projectId });
   // storage は実質失敗し得ないので、リトライはしない
