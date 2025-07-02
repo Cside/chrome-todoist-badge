@@ -10,13 +10,11 @@ export type Project = {
   name: string;
 };
 
-type SectionIdOfTask = SectionId | undefined;
-
 export type TaskForApi = {
   id: TaskId;
   order: number;
   content: string;
-  sectionId: SectionIdOfTask;
+  sectionId: SectionId | undefined;
   url: string;
 };
 
@@ -30,7 +28,7 @@ export type Section = {
 // Others
 // ==================================================
 export type TaskFilters = {
-  projectId: ProjectId;
+  projectId: ProjectId | undefined;
   filterByDueByToday: boolean;
   sectionId: SectionId | undefined;
 };

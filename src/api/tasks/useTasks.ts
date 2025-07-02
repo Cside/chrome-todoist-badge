@@ -3,7 +3,7 @@ import { storage as wxtStorage } from "wxt/storage";
 import { ProjectIdNotFoundError } from "../../errors";
 import { STORAGE_KEY_FOR } from "../../storage/storageKeys";
 import * as storage from "../../storage/useStorage";
-import type { TaskForApi } from "../../types";
+import type { TaskFilters, TaskForApi } from "../../types";
 import { QUERY_KEY_FOR } from "../queryKeys";
 import * as api from "./getTasks";
 

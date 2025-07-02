@@ -7,10 +7,19 @@ import { API_PATH_FOR } from "../../constants/urls";
 import { ProjectIdNotFoundError } from "../../errors";
 import { clearStorage, shouldClearStorage } from "../../fn/clearStorage";
 import { STORAGE_KEY_FOR } from "../../storage/storageKeys";
-import type { ProjectId, TaskForApi } from "../../types";
+import type { ProjectId, TaskFilters, TaskForApi } from "../../types";
 import { ky } from "../ky";
 import { getProject } from "../projects/getProject";
 import { getSection } from "../sections/getSection";
+
+/*
+  (Worker)--> getTasksForWorker
+               └getTasks
+  (Web)--> useTasks │
+            └───┤
+                    └getTasksByPrams
+                       └_buildTasksApiQueryString
+*/
 
 // for TQ
 export const getTasksByParams = async (
@@ -20,7 +29,6 @@ export const getTasksByParams = async (
   return await ky.fetchAndNormalize<TaskForApi[]>(url);
 };
 
-// for BG worker 。Retry は呼び出し元で行うので、ここではやらない
 const getTasks = async (): Promise<TaskForApi[]> => {
   const projectId = await storage.getItem<ProjectId>(
     STORAGE_KEY_FOR.CONFIG.FILTER_BY.PROJECT_ID,
@@ -39,6 +47,7 @@ const getTasks = async (): Promise<TaskForApi[]> => {
   return getTasksByParams({ projectId, filterByDueByToday, sectionId });
 };
 
+// for BG worker 。Retry は呼び出し元で行うので、ここではやらない
 export const getTasksForWorker = async () => {
   try {
     return await getTasks();
@@ -67,7 +76,7 @@ export const _buildTasksApiQueryString = async ({
   const filters = [
     filterByDueByToday === true && "(today | overdue)",
     ...(await Promise.all([
-      projectIdToFilter(projectId),
+      projectId !== undefined && projectIdToFilter(projectId),
       sectionId !== undefined && sectionIdToFilter(sectionId),
     ])),
   ]

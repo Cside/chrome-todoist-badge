@@ -27,11 +27,17 @@ describe(`${_buildTasksApiQueryString.name}()`, () => {
         filterByDueByToday: false,
         sectionId: undefined,
       },
-      expected: `?${new URLSearchParams({ filter: `#${projectName}` })}`,
+      expected: `?${new URLSearchParams({
+        filter: `#${projectName}`,
+      })}`,
     },
     {
       name: "sectionId is a string",
-      input: { projectId: "100", filterByDueByToday: false, sectionId: "200" },
+      input: {
+        projectId: "100",
+        filterByDueByToday: false,
+        sectionId: "200",
+      },
       expected: `?${new URLSearchParams({
         filter: `#${projectName} & /${sectionName}`,
       })}`,
@@ -45,6 +51,17 @@ describe(`${_buildTasksApiQueryString.name}()`, () => {
       },
       expected: `?${new URLSearchParams({
         filter: `(today | overdue) & #${projectName}`,
+      })}`,
+    },
+    {
+      name: "all projects",
+      input: {
+        projectId: undefined,
+        filterByDueByToday: true,
+        sectionId: undefined,
+      },
+      expected: `?${new URLSearchParams({
+        filter: "(today | overdue)",
       })}`,
     },
   ];
