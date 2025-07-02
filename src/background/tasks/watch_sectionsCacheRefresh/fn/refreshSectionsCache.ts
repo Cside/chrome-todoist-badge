@@ -11,5 +11,5 @@ export const refreshSectionsCache = async () => {
 
   const sections = await api.getSections({ projectId });
   // storage は実質失敗し得ないので、リトライはしない
-  await storage.setItem<Api.Section[]>(STORAGE_KEY_FOR.CACHE.SECTIONS, sections);
+  await storage.setItem<Api.Project[]>(STORAGE_KEY_FOR.CACHE.SECTIONS, sections);
 };

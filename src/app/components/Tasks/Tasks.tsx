@@ -1,36 +1,54 @@
 import todoistIcon from "@/assets/images/todoist.webp";
 import { uniq } from "es-toolkit/compat";
 import Markdown from "markdown-to-jsx";
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { NavLink } from "react-router-dom";
+import { useCachedProjects } from "../../../api/projects/useProjects";
 import { useCachedSections } from "../../../api/sections/useSections";
 import { useCachedTasks } from "../../../api/tasks/useTasks";
 import { PATH_TO } from "../../../constants/paths";
+import type { Api } from "../../../types";
 import { useBadgeUpdate_andSetCache } from "../../hooks/useBadgeUpdate_andSetCache";
 import { Spinner } from "../Spinner";
 import { DonationOrReviewButton } from "./DonationOrReviewButton";
-import { getUnknownSectionIds, groupTasksBySectionId } from "./fn/utils";
+import {
+  getUnknownProjects,
+  getUnknownSections,
+  groupTasksByProject,
+  groupTasksBySection,
+} from "./fn/utils";
 import { useWebAppUrl } from "./hooks";
 
-const api = { useCachedTasks, useCachedSections };
+const api = { useCachedTasks, useCachedSections, useCachedProjects };
 
 const ICON_LENGTH = 30;
 const PATH_TO_OPTIONS = addFromParam(PATH_TO.OPTIONS);
 
 export default function Tasks_Suspended() {
-  const [areCachesAvailable, setAreCachesAvailable] = useState(true);
+  const [isCacheAvailable, setIsCacheAvailable] = useState(true);
   const {
     data: tasks,
     isSuccess: areTasksSucceeded,
     isFetching: areTasksFetching,
-  } = api.useCachedTasks({ isCacheAvailable: areCachesAvailable });
-  const webAppUrl = useWebAppUrl();
+  } = api.useCachedTasks({ isCacheAvailable });
+
   const {
     data: sections,
     isSuccess: areSectionsSucceeded,
     isFetching: areSectionsFetching,
-    isLoading: areSectionsLoading,
-  } = api.useCachedSections({ isCacheAvailable: areCachesAvailable });
+  } = api.useCachedSections({ isCacheAvailable });
+
+  const isCrossProject = tasks
+    ? uniq(tasks.map((task) => task.projectId)).length > 1
+    : false;
+  const {
+    data: projects,
+    isSuccess: areProjectsSucceeded,
+    isFetching: areProjectsFetching,
+  } = api.useCachedProjects({
+    isCacheAvailable,
+    enabled: isCrossProject,
+  });
 
   /*
     tasks.sectionId の中に、sections.id に含まれていないものがある場合、cache を再 set する。
@@ -45,76 +63,110 @@ export default function Tasks_Suspended() {
     ( invalidate しないでいい。キャッシュを使わないだけで、再 set される）
   */
   useEffect(() => {
-    if (areTasksSucceeded && areSectionsSucceeded && areCachesAvailable) {
-      const notIncluded = getUnknownSectionIds({ tasks, sections });
-      if (notIncluded.length > 0) {
-        console.error(
-          // biome-ignore format:
-          `task.sectionId were found in sections. ids: ${JSON.stringify({
-            notIncluded,
-            tasksIds: uniq(tasks.map((task) => task.sectionId).sort()),
-            sectionIds: uniq(sections.map((section) => section.id).sort()),
-          }, null, 2)}`,
-        );
-        setAreCachesAvailable(false);
+    if (areTasksSucceeded && areSectionsSucceeded && isCacheAvailable) {
+      const [isNotIncluded, idsString] = getUnknownSections({ tasks, sections });
+      if (isNotIncluded) {
+        console.error(`task.sectionId were found in sections. ids: ${idsString}`);
+        setIsCacheAvailable(false);
       }
     }
   }, [areTasksSucceeded, tasks, areSectionsSucceeded, sections]);
+  useEffect(() => {
+    if (
+      areTasksSucceeded &&
+      isCrossProject &&
+      areProjectsSucceeded &&
+      isCacheAvailable
+    ) {
+      const [isNotIncluded, idsString] = getUnknownProjects({ tasks, projects });
+      if (isNotIncluded) {
+        console.error(`task.projectId were found in projects. ids: ${idsString}`);
+        setIsCacheAvailable(false);
+      }
+    }
+  }, [areTasksSucceeded, tasks, areProjectsSucceeded, projects]);
 
   useBadgeUpdate_andSetCache({ tasks, areTasksLoaded: areTasksSucceeded });
 
-  const GroupedTasks = useMemo(
-    () =>
-      areTasksSucceeded &&
-      // projectId === undefined の場合、useQuery で enabled: false になるため、isSuccess は使えない
-      !areSectionsLoading ? (
-        (() => {
-          const groupedTasks = groupTasksBySectionId({
-            tasks,
-            sections: sections ?? [],
-          }).map((group, index) => (
-            <React.Fragment key={group.section?.id ?? `undefinedSection-${index}`}>
-              {group.section !== undefined && (
-                <h2 className="my-4">{group.section.name}</h2>
+  // 共通化: タスクリストの描画
+  const renderTaskList = useCallback(
+    (tasks: Api.Task[]) => (
+      <ul>
+        {tasks.map((task) => (
+          <li key={task.id}>
+            {/* Markdown の中に a タグが入り込みうるため、div にする */}
+            <div
+              className="link link-hover m-0"
+              onClick={(event) => {
+                if (event.target instanceof HTMLAnchorElement) {
+                  event.preventDefault();
+                  window.open(event.target.href);
+                  return;
+                }
+                window.open(task.url);
+              }}
+            >
+              {/* 「------------」は Markdown にしない */}
+              {/^-+$/.test(task.content) ? (
+                task.content
+              ) : (
+                <Markdown>{task.content}</Markdown>
               )}
-              <ul>
-                {group.tasks.map((task) => (
-                  <li key={task.id}>
-                    {/* Markdown の中に a タグが入り込みうるため、div にする */}
-                    <div
-                      className="link link-hover m-0"
-                      onClick={(event) => {
-                        if (event.target instanceof HTMLAnchorElement) {
-                          event.preventDefault();
-                          window.open(event.target.href);
-                          return;
-                        }
-                        window.open(task.url);
-                      }}
-                    >
-                      {/* 「------------」は Markdown にしない */}
-                      {/^-+$/.test(task.content) ? (
-                        task.content
-                      ) : (
-                        <Markdown>{task.content}</Markdown>
-                      )}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </React.Fragment>
-          ));
-          return groupedTasks.length > 0 ? (
-            groupedTasks
-          ) : (
-            <div className="mt-3 mb-5 ml-1">All done!</div>
-          );
-        })()
-      ) : (
-        <Spinner className="m-5" />
-      ),
-    [areTasksSucceeded, areSectionsSucceeded, tasks, sections],
+            </div>
+          </li>
+        ))}
+      </ul>
+    ),
+    [],
   );
+
+  const GroupedTasks = useMemo(() => {
+    if (areTasksSucceeded && !isCrossProject && areSectionsSucceeded) {
+      const groupedTasks = groupTasksBySection({
+        tasks,
+        sections,
+      }).map((group, index) => (
+        <React.Fragment key={group.section?.id ?? `undefinedSection-${index}`}>
+          {group.section !== undefined && (
+            <h2 className="my-4">{group.section.name}</h2>
+          )}
+          {renderTaskList(group.tasks)}
+        </React.Fragment>
+      ));
+      return groupedTasks.length > 0 ? (
+        groupedTasks
+      ) : (
+        <div className="mt-3 mb-5 ml-1">All done!</div>
+      );
+    }
+    if (areTasksSucceeded && isCrossProject && areProjectsSucceeded) {
+      const groupedTasks = groupTasksByProject({
+        tasks,
+        projects,
+      }).map((group) => (
+        <React.Fragment key={group.project.id}>
+          <h2 className="my-4">{group.project.name}</h2>
+          {renderTaskList(group.tasks)}
+        </React.Fragment>
+      ));
+      return groupedTasks.length > 0 ? (
+        groupedTasks
+      ) : (
+        <div className="mt-3 mb-5 ml-1">All done!</div>
+      );
+    }
+    return <Spinner className="m-5" />;
+  }, [
+    areTasksSucceeded,
+    areSectionsSucceeded,
+    areProjectsSucceeded,
+    tasks,
+    sections,
+    projects,
+    isCrossProject,
+  ]);
+
+  const webAppUrl = useWebAppUrl();
 
   return (
     <>
@@ -149,7 +201,7 @@ export default function Tasks_Suspended() {
         </NavLink>
         <DonationOrReviewButton />
       </div>
-      {(areTasksFetching || areSectionsFetching) && (
+      {(areTasksFetching || areSectionsFetching || areProjectsFetching) && (
         <Spinner className="fixed top-7 right-7" />
       )}
     </>

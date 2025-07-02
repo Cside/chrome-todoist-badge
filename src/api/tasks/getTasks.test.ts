@@ -13,7 +13,7 @@ describe(`${_buildTasksApiQueryString.name}()`, () => {
     } as Api.Project);
     vi.spyOn(getSection, "getSection").mockResolvedValue({
       name: sectionName,
-    } as Api.Section);
+    } as Api.Project);
   });
   const cases: {
     name: string;

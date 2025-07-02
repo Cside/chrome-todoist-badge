@@ -9,12 +9,14 @@ export namespace Api {
   export type Project = {
     id: ProjectId;
     name: string;
+    order: number;
   };
 
   export type Task = {
     id: TaskId;
     order: number;
     content: string;
+    projectId: ProjectId;
     sectionId: SectionId | undefined;
     url: string;
   };
@@ -36,6 +38,11 @@ export type TaskFilters = {
 };
 
 export type TasksGroupedBySection = {
-  section: Api.Section | undefined;
+  section: Api.Project | undefined;
+  tasks: Api.Task[];
+}[];
+
+export type TasksGroupedByProject = {
+  project: Api.Project;
   tasks: Api.Task[];
 }[];

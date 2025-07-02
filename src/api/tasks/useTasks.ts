@@ -22,6 +22,7 @@ export const useTasks = ({
     queryKey: [QUERY_KEY_FOR.API.TASKS, ...deps],
     queryFn: async () => {
       const tasks = await api.getTasksByParams(filters);
+      // TODO: useMutation 使わなくて良いんだっけ？
       await wxtStorage.setItem<Api.Task[]>(STORAGE_KEY_FOR.CACHE.TASKS, tasks); // retry はサボる
       return tasks;
     },

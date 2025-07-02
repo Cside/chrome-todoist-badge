@@ -1,20 +1,21 @@
 import type { Api } from "../../../../types";
-import { groupTasksBySectionId } from "./utils";
+import { groupTasksBySection } from "./utils";
 
-const SECTION1: Api.Section = { id: "sec-100", name: "Section 1", order: 0 };
-const SECTION2: Api.Section = { id: "sec-200", name: "Section 2", order: 1 };
+const SECTION1: Api.Project = { id: "sec-100", name: "Section 1", order: 0 };
+const SECTION2: Api.Project = { id: "sec-200", name: "Section 2", order: 1 };
 
 const toTask = (task: Pick<Api.Task, "id" | "order" | "sectionId">): Api.Task => ({
   ...task,
   content: "",
   url: "",
+  projectId: "project-100",
 });
 
-describe(`${groupTasksBySectionId.name}()`, () => {
+describe(`${groupTasksBySection.name}()`, () => {
   const cases: {
     name: string;
-    input: Parameters<typeof groupTasksBySectionId>[0];
-    expected: ReturnType<typeof groupTasksBySectionId>;
+    input: Parameters<typeof groupTasksBySection>[0];
+    expected: ReturnType<typeof groupTasksBySection>;
   }[] = [
     {
       name: "basic",
@@ -106,6 +107,6 @@ describe(`${groupTasksBySectionId.name}()`, () => {
     },
   ];
   test.each(cases)("$name", ({ input, expected }) =>
-    expect(groupTasksBySectionId(input)).toEqual(expected),
+    expect(groupTasksBySection(input)).toEqual(expected),
   );
 });

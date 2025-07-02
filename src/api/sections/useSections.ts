@@ -9,21 +9,22 @@ import * as api from "./getSections";
 // from Options
 export const useSections = ({
   cache,
-}: { cache?: Api.Section[] | undefined } = {}) => {
+}: { cache?: Api.Project[] | undefined } = {}) => {
   const [projectId] = storage.useFilteringProjectId_Suspended();
   return useQuery({
     queryKey: [QUERY_KEY_FOR.API.SECTIONS, projectId],
     queryFn: async () => {
       if (projectId === undefined) throw new Error("projectId is undefined");
       const sections = await api.getSections({ projectId });
-      await wxtStorage.setItem<Api.Section[]>(
+      // TODO: useMutation 使わなくて良いんだっけ？
+      await wxtStorage.setItem<Api.Project[]>(
         STORAGE_KEY_FOR.CACHE.SECTIONS,
         sections,
       ); // retry はサボる
       return sections;
     },
     ...(cache && {
-      placeholderData: (prevData: Api.Section[] | undefined) =>
+      placeholderData: (prevData: Api.Project[] | undefined) =>
         prevData !== undefined ? undefined : cache,
     }),
     enabled: projectId !== undefined,

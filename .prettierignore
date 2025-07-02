@@ -4,3 +4,4 @@
 **/*.json
 /vitest.config.ts.timestamp-*.mjs
 pnpm-workspace.yaml
+pnpm-lock.yaml
