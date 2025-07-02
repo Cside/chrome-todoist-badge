@@ -63,20 +63,25 @@ export default function Tasks_Suspended() {
     ( invalidate しないでいい。キャッシュを使わないだけで、再 set される）
   */
   useEffect(() => {
-    if (areTasksSucceeded && areSectionsSucceeded && isCacheAvailable) {
+    if (
+      areTasksSucceeded &&
+      areSectionsSucceeded &&
+      isCacheAvailable &&
+      !isCrossProject
+    ) {
       const [isNotIncluded, idsString] = getUnknownSections({ tasks, sections });
       if (isNotIncluded) {
         console.error(`task.sectionId were found in sections. ids: ${idsString}`);
         setIsCacheAvailable(false);
       }
     }
-  }, [areTasksSucceeded, tasks, areSectionsSucceeded, sections]);
+  }, [areTasksSucceeded, tasks, areSectionsSucceeded, sections, isCrossProject]);
   useEffect(() => {
     if (
       areTasksSucceeded &&
-      isCrossProject &&
       areProjectsSucceeded &&
-      isCacheAvailable
+      isCacheAvailable &&
+      isCrossProject
     ) {
       const [isNotIncluded, idsString] = getUnknownProjects({ tasks, projects });
       if (isNotIncluded) {
@@ -84,7 +89,7 @@ export default function Tasks_Suspended() {
         setIsCacheAvailable(false);
       }
     }
-  }, [areTasksSucceeded, tasks, areProjectsSucceeded, projects]);
+  }, [areTasksSucceeded, tasks, areProjectsSucceeded, projects, isCrossProject]);
 
   useBadgeUpdate_andSetCache({ tasks, areTasksLoaded: areTasksSucceeded });
 
