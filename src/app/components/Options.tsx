@@ -11,7 +11,7 @@ import { SECTION_ID_FOR_STORAGE } from "../../constants/options";
 import { PATH_TO } from "../../constants/paths";
 import { STORAGE_KEY_FOR } from "../../storage/storageKeys";
 import * as storage from "../../storage/useStorage";
-import type { Section } from "../../types";
+import type { Api } from "../../types";
 import { isTasksPage } from "../fn/isTasks";
 import { useBadgeUpdate_andSetCache } from "../hooks/useBadgeUpdate_andSetCache";
 import { Spinner } from "./Spinner";
@@ -56,7 +56,10 @@ const Main_Suspended = () => {
   useAsyncEffect(async () => {
     if (areSectionsSucceeded)
       // Popup とは別 Window なので TQ は使う意味ない。
-      await wxtStorage.setItem<Section[]>(STORAGE_KEY_FOR.CACHE.SECTIONS, sections); // retry はサボる
+      await wxtStorage.setItem<Api.Section[]>(
+        STORAGE_KEY_FOR.CACHE.SECTIONS,
+        sections,
+      ); // retry はサボる
   }, [sections, areSectionsSucceeded]);
 
   // ==================================================

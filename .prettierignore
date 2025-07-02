@@ -3,3 +3,4 @@
 **/*.tsx
 **/*.json
 /vitest.config.ts.timestamp-*.mjs
+pnpm-workspace.yaml

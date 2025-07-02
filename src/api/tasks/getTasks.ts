@@ -6,7 +6,7 @@ import {
 import { API_PATH_FOR } from "../../constants/urls";
 import { clearStorage, shouldClearStorage } from "../../fn/clearStorage";
 import { STORAGE_KEY_FOR } from "../../storage/storageKeys";
-import type { ProjectId, TaskFilters, TaskForApi } from "../../types";
+import type { Api, ProjectId, TaskFilters } from "../../types";
 import { ky } from "../ky";
 import { getProject } from "../projects/getProject";
 import { getSection } from "../sections/getSection";
@@ -23,12 +23,12 @@ import { getSection } from "../sections/getSection";
 // for TQ
 export const getTasksByParams = async (
   filters: TaskFilters,
-): Promise<TaskForApi[]> => {
+): Promise<Api.Task[]> => {
   const url = `${API_PATH_FOR.GET_TASKS}${await _buildTasksApiQueryString(filters)}`;
-  return await ky.fetchAndNormalize<TaskForApi[]>(url);
+  return await ky.fetchAndNormalize<Api.Task[]>(url);
 };
 
-const getTasks = async (): Promise<TaskForApi[]> => {
+const getTasks = async (): Promise<Api.Task[]> => {
   const projectId =
     (await storage.getItem<ProjectId>(
       STORAGE_KEY_FOR.CONFIG.FILTER_BY.PROJECT_ID,

@@ -5,24 +5,26 @@ export type ProjectId = string;
 export type SectionId = string;
 type TaskId = string;
 
-export type Project = {
-  id: ProjectId;
-  name: string;
-};
+export namespace Api {
+  export type Project = {
+    id: ProjectId;
+    name: string;
+  };
 
-export type TaskForApi = {
-  id: TaskId;
-  order: number;
-  content: string;
-  sectionId: SectionId | undefined;
-  url: string;
-};
+  export type Task = {
+    id: TaskId;
+    order: number;
+    content: string;
+    sectionId: SectionId | undefined;
+    url: string;
+  };
 
-export type Section = {
-  id: SectionId;
-  name: string;
-  order: number;
-};
+  export type Section = {
+    id: SectionId;
+    name: string;
+    order: number;
+  };
+}
 
 // ==================================================
 // Others
@@ -34,6 +36,6 @@ export type TaskFilters = {
 };
 
 export type TasksGroupedBySection = {
-  section: Section | undefined;
-  tasks: TaskForApi[];
+  section: Api.Section | undefined;
+  tasks: Api.Task[];
 }[];

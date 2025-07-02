@@ -1,4 +1,4 @@
-import type { Project, Section } from "../../types";
+import type { Api } from "../../types";
 import * as getProject from "../projects/getProject";
 import * as getSection from "../sections/getSection";
 import { _buildTasksApiQueryString, _escapeFilter } from "./getTasks";
@@ -10,10 +10,10 @@ describe(`${_buildTasksApiQueryString.name}()`, () => {
   beforeEach(() => {
     vi.spyOn(getProject, "getProject").mockResolvedValue({
       name: projectName,
-    } as Project);
+    } as Api.Project);
     vi.spyOn(getSection, "getSection").mockResolvedValue({
       name: sectionName,
-    } as Section);
+    } as Api.Section);
   });
   const cases: {
     name: string;

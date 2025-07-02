@@ -9,7 +9,7 @@ import {
   DEFAULT_FILTER_BY_DUE_BY_TODAY,
   DEFAULT_IS_CONFIG_INITIALIZED,
 } from "../constants/options";
-import type { ProjectId, Section, SectionId, TaskForApi } from "../types";
+import type { Api, ProjectId, SectionId } from "../types";
 import { STORAGE_KEY_FOR } from "./storageKeys";
 
 export const useFilteringProjectId_Suspended = () => {
@@ -55,7 +55,7 @@ export const useIsConfigInitialized_Suspended = () => {
 };
 
 export const useCachedTasks_Suspended = () =>
-  useStorage_Suspended<TaskForApi[]>({
+  useStorage_Suspended<Api.Task[]>({
     storageKey: STORAGE_KEY_FOR.CACHE.TASKS,
   });
 
@@ -64,7 +64,7 @@ export const useCachedSections_Suspended = () =>
   useSuspenseQuery({
     queryKey: [STORAGE_KEY_FOR.CACHE.SECTIONS],
     queryFn: async () =>
-      await storage.getItem<Section[]>(STORAGE_KEY_FOR.CACHE.SECTIONS),
+      await storage.getItem<Api.Section[]>(STORAGE_KEY_FOR.CACHE.SECTIONS),
   }).data ?? undefined;
 
 // ==================================================
