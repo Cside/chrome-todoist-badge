@@ -1,4 +1,4 @@
-import { camelCase, isObject } from "es-toolkit/compat";
+import { isObject } from "es-toolkit/compat";
 import _ky from "ky";
 import { transform } from "lodash-es"; // 未実装@2025/01 https://es-toolkit.slash.page/compatibility.html
 import { MAX_RETRIES } from "../constants/maxRetry";
@@ -76,13 +76,15 @@ export const ky = {
 // Utils
 // ============================================================
 
+// TODO: 時間あったら ky-hooks-change-case 使う
+//        https://github.com/alice-health/ky-hooks-change-case
 // 1. camelize
 // 2. null -> undefined
 export const normalizeApiObject = (obj: unknown): unknown =>
   transform(
     obj as object,
     (acc: Record<string, unknown>, value: unknown, key: string, target) => {
-      const camelKey = Array.isArray(target) ? key : camelCase(key as string);
+      const camelKey = Array.isArray(target) ? key : (key as string);
       acc[camelKey] = isObject(value)
         ? normalizeApiObject(value)
         : (value ?? undefined);
