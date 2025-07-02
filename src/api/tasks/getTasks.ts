@@ -7,19 +7,21 @@ import { API_PATH_FOR } from "../../constants/urls";
 import { ProjectIdNotFoundError } from "../../errors";
 import { clearStorage, shouldClearStorage } from "../../fn/clearStorage";
 import { STORAGE_KEY_FOR } from "../../storage/storageKeys";
-import type { ProjectId, Task, TaskFilters } from "../../types";
+import type { ProjectId, TaskForApi } from "../../types";
 import { ky } from "../ky";
 import { getProject } from "../projects/getProject";
 import { getSection } from "../sections/getSection";
 
 // for TQ
-export const getTasksByParams = async (filters: TaskFilters): Promise<Task[]> => {
+export const getTasksByParams = async (
+  filters: TaskFilters,
+): Promise<TaskForApi[]> => {
   const url = `${API_PATH_FOR.GET_TASKS}${await _buildTasksApiQueryString(filters)}`;
-  return await ky.fetchAndNormalize<Task[]>(url);
+  return await ky.fetchAndNormalize<TaskForApi[]>(url);
 };
 
 // for BG worker 。Retry は呼び出し元で行うので、ここではやらない
-const getTasks = async (): Promise<Task[]> => {
+const getTasks = async (): Promise<TaskForApi[]> => {
   const projectId = await storage.getItem<ProjectId>(
     STORAGE_KEY_FOR.CONFIG.FILTER_BY.PROJECT_ID,
   );

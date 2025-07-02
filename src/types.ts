@@ -12,7 +12,7 @@ export type Project = {
 
 type SectionIdOfTask = SectionId | undefined;
 
-export type Task = {
+export type TaskForApi = {
   id: TaskId;
   order: number;
   content: string;
@@ -37,5 +37,5 @@ export type TaskFilters = {
 
 export type TasksGroupedBySection = {
   section: Section | undefined;
-  tasks: Task[];
+  tasks: TaskForApi[];
 }[];

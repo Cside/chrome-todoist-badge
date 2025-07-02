@@ -2,7 +2,7 @@ import { difference } from "es-toolkit/compat";
 import type {
   Section,
   SectionId,
-  Task,
+  TaskForApi,
   TasksGroupedBySection,
 } from "../../../../types";
 
@@ -10,12 +10,12 @@ const undefinedKey = "undefined";
 export const groupTasksBySectionId = ({
   tasks,
   sections,
-}: { tasks: Task[]; sections: Section[] }): TasksGroupedBySection => {
+}: { tasks: TaskForApi[]; sections: Section[] }): TasksGroupedBySection => {
   const sectionIdToSection = new Map(
     sections.map((section) => [section.id, section] as const),
   );
 
-  const groupedTasks = tasks.reduce((acc: Record<SectionId, Task[]>, task) => {
+  const groupedTasks = tasks.reduce((acc: Record<SectionId, TaskForApi[]>, task) => {
     const key = task.sectionId ?? undefinedKey;
 
     acc[key] ??= [];
@@ -40,7 +40,7 @@ export const groupTasksBySectionId = ({
 export const getUnknownSectionIds = ({
   tasks,
   sections,
-}: { tasks: Task[]; sections: Section[] }) =>
+}: { tasks: TaskForApi[]; sections: Section[] }) =>
   difference(
     tasks.map((task) => task.sectionId).filter((id) => id !== undefined) as string[],
     sections.map((section) => section.id),
