@@ -49,6 +49,9 @@ export const useIsConfigInitialized_Suspended = () => {
           chrome.runtime.sendMessage({
             action: "watch-sections-cache-refresh",
           }),
+          chrome.runtime.sendMessage({
+            action: "watch-projects-cache-refresh",
+          }),
         ]),
     });
   return [value, mutate] as const;

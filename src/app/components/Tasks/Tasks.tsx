@@ -1,5 +1,6 @@
 import todoistIcon from "@/assets/images/todoist.webp";
 import { uniq } from "es-toolkit/compat";
+import { difference } from "lodash-es";
 import Markdown from "markdown-to-jsx";
 import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { NavLink } from "react-router-dom";
@@ -11,18 +12,16 @@ import type { Api } from "../../../types";
 import { useBadgeUpdate_andSetCache } from "../../hooks/useBadgeUpdate_andSetCache";
 import { Spinner } from "../Spinner";
 import { DonationOrReviewButton } from "./DonationOrReviewButton";
-import {
-  getUnknownProjects,
-  getUnknownSections,
-  groupTasksByProject,
-  groupTasksBySection,
-} from "./fn/utils";
+import { groupTasksByProject, groupTasksBySection } from "./fn/utils";
 import { useWebAppUrl } from "./hooks";
 
 const api = { useCachedTasks, useCachedSections, useCachedProjects };
 
 const ICON_LENGTH = 30;
 const PATH_TO_OPTIONS = addFromParam(PATH_TO.OPTIONS);
+
+// eslint-disable-next-line react-refresh/only-export-components
+const CenterSpinner = () => <Spinner className="m-5" />;
 
 export default function Tasks_Suspended() {
   const [isCacheAvailable, setIsCacheAvailable] = useState(true);
@@ -62,34 +61,44 @@ export default function Tasks_Suspended() {
     cache の再 set：sections, tasks どちらが古い場合もありうるので、どっちも再 set する。
     ( invalidate しないでいい。キャッシュを使わないだけで、再 set される）
   */
+
+  const unknownProjects = useMemo(
+    () =>
+      isCacheAvailable && isCrossProject && tasks && projects
+        ? difference(
+            tasks.map((task) => task.projectId),
+            projects.map((project) => project.id),
+          )
+        : [],
+    [tasks, projects, isCacheAvailable, isCrossProject],
+  );
   useEffect(() => {
-    if (
-      areTasksSucceeded &&
-      areSectionsSucceeded &&
-      isCacheAvailable &&
-      !isCrossProject
-    ) {
-      const [isNotIncluded, idsString] = getUnknownSections({ tasks, sections });
-      if (isNotIncluded) {
-        console.error(`task.sectionId were found in sections. ids: ${idsString}`);
-        setIsCacheAvailable(false);
-      }
+    if (unknownProjects.length > 0) {
+      console.error(
+        `Unknown task.projectId: ${JSON.stringify(unknownProjects)}. Invalidating cache.`,
+      );
+      setIsCacheAvailable(false);
     }
-  }, [areTasksSucceeded, tasks, areSectionsSucceeded, sections, isCrossProject]);
+  }, [unknownProjects]);
+
+  const unknownSections = useMemo(
+    () =>
+      isCacheAvailable && !isCrossProject && tasks && sections
+        ? difference(
+            tasks.map((task) => task.sectionId).filter(Boolean),
+            sections.map((section) => section.id),
+          )
+        : [],
+    [tasks, sections, isCacheAvailable, isCrossProject],
+  );
   useEffect(() => {
-    if (
-      areTasksSucceeded &&
-      areProjectsSucceeded &&
-      isCacheAvailable &&
-      isCrossProject
-    ) {
-      const [isNotIncluded, idsString] = getUnknownProjects({ tasks, projects });
-      if (isNotIncluded) {
-        console.error(`task.projectId were found in projects. ids: ${idsString}`);
-        setIsCacheAvailable(false);
-      }
+    if (unknownSections.length > 0) {
+      console.error(
+        `Unknown task.projectId: ${JSON.stringify(unknownSections)}. Invalidating cache.`,
+      );
+      setIsCacheAvailable(false);
     }
-  }, [areTasksSucceeded, tasks, areProjectsSucceeded, projects, isCrossProject]);
+  }, [unknownProjects]);
 
   useBadgeUpdate_andSetCache({ tasks, areTasksLoaded: areTasksSucceeded });
 
@@ -126,6 +135,9 @@ export default function Tasks_Suspended() {
   );
 
   const GroupedTasks = useMemo(() => {
+    if (unknownProjects.length > 0 || unknownSections.length > 0)
+      return <CenterSpinner />;
+
     if (areTasksSucceeded && !isCrossProject && areSectionsSucceeded) {
       const groupedTasks = groupTasksBySection({
         tasks,
@@ -160,8 +172,10 @@ export default function Tasks_Suspended() {
         <div className="mt-3 mb-5 ml-1">All done!</div>
       );
     }
-    return <Spinner className="m-5" />;
+    return <CenterSpinner />;
   }, [
+    unknownProjects,
+    unknownSections,
     areTasksSucceeded,
     areSectionsSucceeded,
     areProjectsSucceeded,
@@ -177,6 +191,7 @@ export default function Tasks_Suspended() {
     <>
       {GroupedTasks}
 
+      {/* Footer ===================================================== */}
       <div className="flex gap-x-3">
         <a
           href={webAppUrl}

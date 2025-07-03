@@ -2,6 +2,7 @@ import { STORAGE_KEY_FOR } from "../storage/storageKeys";
 import { addMessageListeners } from "./tasks/addMessageListeners";
 import { openWelcomePageOnInstalled } from "./tasks/openWelcomePage";
 import { setBadgeColor } from "./tasks/setBadgeColor";
+import { watch_projectsCacheRefresh } from "./tasks/watch_projectsCacheRefresh/watch_projectsCacheRefresh";
 import { watch_sectionsCacheRefresh } from "./tasks/watch_sectionsCacheRefresh/watch_sectionsCacheRefresh";
 import { watch_tasksCacheRefresh_andBadgeCountUpdates } from "./tasks/watch_tasksCacheRefresh_andBadgeCountUpdates/watch_tasksCacheRefresh_andBadgeCountUpdates";
 
@@ -20,6 +21,7 @@ export const startBackground =
         await Promise.all([
           watch_tasksCacheRefresh_andBadgeCountUpdates(),
           watch_sectionsCacheRefresh(),
+          watch_projectsCacheRefresh(),
         ]);
     })();
   };
