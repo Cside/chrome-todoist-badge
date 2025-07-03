@@ -1,7 +1,7 @@
 import { addAlarmListener_andIdleStateListener } from "../fn/addAlarmListener";
 import { refreshProjectsCache } from "./fn/refreshProjectsCache";
 
-const INTERVAL_MINUTES = 300; // FIXME
+const INTERVAL_MINUTES = 15;
 
 export const refreshProjectsCache_regularly = async () =>
   addAlarmListener_andIdleStateListener({
