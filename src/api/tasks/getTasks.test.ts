@@ -57,6 +57,15 @@ describe(`${_buildTasksApiQueryString.name}()`, () => {
       name: "all projects",
       input: {
         projectId: undefined,
+        filterByDueByToday: false,
+        sectionId: undefined,
+      },
+      expected: "",
+    },
+    {
+      name: "all projects + Due by today",
+      input: {
+        projectId: undefined,
         filterByDueByToday: true,
         sectionId: undefined,
       },
