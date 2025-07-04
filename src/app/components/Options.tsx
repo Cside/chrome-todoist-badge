@@ -56,7 +56,7 @@ const Main_Suspended = () => {
   useAsyncEffect(async () => {
     if (areSectionsSucceeded)
       // Popup とは別 Window なので TQ は使う意味ない。
-      await wxtStorage.setItem<Api.Project[]>(
+      await wxtStorage.setItem<Api.Section[]>(
         STORAGE_KEY_FOR.CACHE.SECTIONS,
         sections,
       ); // retry はサボる

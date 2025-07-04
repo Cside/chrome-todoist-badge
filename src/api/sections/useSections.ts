@@ -17,7 +17,7 @@ export const useSections = ({
       if (projectId === undefined) throw new Error("projectId is undefined");
       const sections = await api.getSections({ projectId });
       // TODO: useMutation 使わなくて良いんだっけ？
-      await wxtStorage.setItem<Api.Project[]>(
+      await wxtStorage.setItem<Api.Section[]>(
         STORAGE_KEY_FOR.CACHE.SECTIONS,
         sections,
       ); // retry はサボる
