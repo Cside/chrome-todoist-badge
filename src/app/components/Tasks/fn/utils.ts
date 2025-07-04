@@ -1,21 +1,22 @@
-import { difference } from "es-toolkit/compat";
+import {} from "es-toolkit/compat";
 import type {
-  Section,
+  Api,
+  ProjectId,
   SectionId,
-  Task,
+  TasksGroupedByProject,
   TasksGroupedBySection,
 } from "../../../../types";
 
 const undefinedKey = "undefined";
-export const groupTasksBySectionId = ({
+export const groupTasksBySection = ({
   tasks,
   sections,
-}: { tasks: Task[]; sections: Section[] }): TasksGroupedBySection => {
+}: { tasks: Api.Task[]; sections: Api.Section[] }): TasksGroupedBySection => {
   const sectionIdToSection = new Map(
     sections.map((section) => [section.id, section] as const),
   );
 
-  const groupedTasks = tasks.reduce((acc: Record<SectionId, Task[]>, task) => {
+  const groupedTasks = tasks.reduce((acc: Record<SectionId, Api.Task[]>, task) => {
     const key = task.sectionId ?? undefinedKey;
 
     acc[key] ??= [];
@@ -31,17 +32,65 @@ export const groupTasksBySectionId = ({
         (sectionIdToSection.get(b)?.order ?? 0),
   );
 
-  return sortedKeys.map((key) => ({
-    section: key === undefinedKey ? undefined : sectionIdToSection.get(key),
-    tasks: (groupedTasks[key] ?? []).sort((a, b) => a.order - b.order),
-  }));
+  return sortedKeys
+    .map((key) => {
+      const tasks = (groupedTasks[key] ?? []).sort((a, b) => a.order - b.order);
+      if (key === undefinedKey) {
+        return {
+          section: undefined,
+          tasks,
+        };
+      }
+      const section = sectionIdToSection.get(key);
+      if (!section) {
+        console.warn(`Unknown sectionId: ${key}`); // API 側でキャッシュされている時
+        return undefined;
+      }
+
+      return {
+        section: key === undefinedKey ? undefined : section,
+        tasks,
+      };
+    })
+    .filter(Boolean);
 };
 
-export const getUnknownSectionIds = ({
+// TODO 共通化、テスト
+export const groupTasksByProject = ({
   tasks,
-  sections,
-}: { tasks: Task[]; sections: Section[] }) =>
-  difference(
-    tasks.map((task) => task.sectionId).filter((id) => id !== undefined) as string[],
-    sections.map((section) => section.id),
+  projects,
+}: { tasks: Api.Task[]; projects: Api.Project[] }): TasksGroupedByProject => {
+  const projectIdToProject = new Map(
+    projects.map((project) => [project.id, project] as const),
   );
+
+  const groupedTasks = tasks.reduce((acc: Record<ProjectId, Api.Task[]>, task) => {
+    const key = task.projectId;
+
+    acc[key] ??= [];
+    acc[key].push(task);
+
+    return acc;
+  }, {});
+
+  const sortedKeys = Object.keys(groupedTasks).sort(
+    (a, b) =>
+      (projectIdToProject.get(a)?.order ?? 0) -
+      (projectIdToProject.get(b)?.order ?? 0),
+  );
+
+  return sortedKeys
+    .map((key) => {
+      const project = projectIdToProject.get(key);
+      if (!project) {
+        console.warn(`Unknown projectId: ${key}`); // API 側でキャッシュされている時
+        return undefined;
+      }
+
+      return {
+        project,
+        tasks: (groupedTasks[key] ?? []).sort((a, b) => a.order - b.order),
+      };
+    })
+    .filter(Boolean);
+};

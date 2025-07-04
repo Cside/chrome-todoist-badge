@@ -4,27 +4,35 @@ import {
   SECTION_ID_TO_FILTER,
 } from "../../constants/options";
 import { API_PATH_FOR } from "../../constants/urls";
-import { ProjectIdNotFoundError } from "../../errors";
 import { clearStorage, shouldClearStorage } from "../../fn/clearStorage";
 import { STORAGE_KEY_FOR } from "../../storage/storageKeys";
-import type { ProjectId, Task, TaskFilters } from "../../types";
+import type { Api, ProjectId, TaskFilters } from "../../types";
 import { ky } from "../ky";
 import { getProject } from "../projects/getProject";
 import { getSection } from "../sections/getSection";
 
+/*
+  (Worker)--> getTasksForWorker
+               └getTasks
+  (Web)--> useTasks │
+            └───┤
+                    └getTasksByPrams
+                       └_buildTasksApiQueryString
+*/
+
 // for TQ
-export const getTasksByParams = async (filters: TaskFilters): Promise<Task[]> => {
+export const getTasksByParams = async (
+  filters: TaskFilters,
+): Promise<Api.Task[]> => {
   const url = `${API_PATH_FOR.GET_TASKS}${await _buildTasksApiQueryString(filters)}`;
-  return await ky.fetchAndNormalize<Task[]>(url);
+  return await ky.fetchAndNormalize<Api.Task[]>(url);
 };
 
-// for BG worker 。Retry は呼び出し元で行うので、ここではやらない
-const getTasks = async (): Promise<Task[]> => {
-  const projectId = await storage.getItem<ProjectId>(
-    STORAGE_KEY_FOR.CONFIG.FILTER_BY.PROJECT_ID,
-  );
-  // 初期化が終わった後に呼ばれる前提の関数なので、projectId == null の場合はエラーにしている
-  if (projectId === null) throw new ProjectIdNotFoundError("projectId is null");
+const getTasks = async (): Promise<Api.Task[]> => {
+  const projectId =
+    (await storage.getItem<ProjectId>(
+      STORAGE_KEY_FOR.CONFIG.FILTER_BY.PROJECT_ID,
+    )) ?? undefined;
 
   const filterByDueByToday =
     (await storage.getItem<boolean>(
@@ -37,6 +45,7 @@ const getTasks = async (): Promise<Task[]> => {
   return getTasksByParams({ projectId, filterByDueByToday, sectionId });
 };
 
+// for BG worker 。Retry は呼び出し元で行うので、ここではやらない
 export const getTasksForWorker = async () => {
   try {
     return await getTasks();
@@ -65,14 +74,14 @@ export const _buildTasksApiQueryString = async ({
   const filters = [
     filterByDueByToday === true && "(today | overdue)",
     ...(await Promise.all([
-      projectIdToFilter(projectId),
+      projectId !== undefined && projectIdToFilter(projectId),
       sectionId !== undefined && sectionIdToFilter(sectionId),
     ])),
   ]
     .filter(Boolean)
     .join(" & ");
 
-  return `?${new URLSearchParams({ filter: filters })}`;
+  return filters === "" ? "" : `?${new URLSearchParams({ filter: filters })}`;
 };
 
 const projectIdToFilter = async (projectId: ProjectId) =>

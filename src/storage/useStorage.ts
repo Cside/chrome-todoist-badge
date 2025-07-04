@@ -9,7 +9,7 @@ import {
   DEFAULT_FILTER_BY_DUE_BY_TODAY,
   DEFAULT_IS_CONFIG_INITIALIZED,
 } from "../constants/options";
-import type { ProjectId, Section, SectionId, Task } from "../types";
+import type { Api, ProjectId, SectionId } from "../types";
 import { STORAGE_KEY_FOR } from "./storageKeys";
 
 export const useFilteringProjectId_Suspended = () => {
@@ -49,22 +49,33 @@ export const useIsConfigInitialized_Suspended = () => {
           chrome.runtime.sendMessage({
             action: "watch-sections-cache-refresh",
           }),
+          chrome.runtime.sendMessage({
+            action: "watch-projects-cache-refresh",
+          }),
         ]),
     });
   return [value, mutate] as const;
 };
 
 export const useCachedTasks_Suspended = () =>
-  useStorage_Suspended<Task[]>({
+  useStorage_Suspended<Api.Task[]>({
     storageKey: STORAGE_KEY_FOR.CACHE.TASKS,
   });
+
+export const useCachedProjects_Suspended = () =>
+  // Mutation 使わないので素の useSuspenseQuery
+  useSuspenseQuery({
+    queryKey: [STORAGE_KEY_FOR.CACHE.PROJECTS],
+    queryFn: async () =>
+      await storage.getItem<Api.Project[]>(STORAGE_KEY_FOR.CACHE.PROJECTS),
+  }).data ?? undefined;
 
 export const useCachedSections_Suspended = () =>
   // Mutation 使わないので素の useSuspenseQuery
   useSuspenseQuery({
     queryKey: [STORAGE_KEY_FOR.CACHE.SECTIONS],
     queryFn: async () =>
-      await storage.getItem<Section[]>(STORAGE_KEY_FOR.CACHE.SECTIONS),
+      await storage.getItem<Api.Project[]>(STORAGE_KEY_FOR.CACHE.SECTIONS),
   }).data ?? undefined;
 
 // ==================================================

@@ -1,4 +1,4 @@
-import type { Project, Section } from "../../types";
+import type { Api } from "../../types";
 import * as getProject from "../projects/getProject";
 import * as getSection from "../sections/getSection";
 import { _buildTasksApiQueryString, _escapeFilter } from "./getTasks";
@@ -10,10 +10,10 @@ describe(`${_buildTasksApiQueryString.name}()`, () => {
   beforeEach(() => {
     vi.spyOn(getProject, "getProject").mockResolvedValue({
       name: projectName,
-    } as Project);
+    } as Api.Project);
     vi.spyOn(getSection, "getSection").mockResolvedValue({
       name: sectionName,
-    } as Section);
+    } as Api.Project);
   });
   const cases: {
     name: string;
@@ -27,11 +27,17 @@ describe(`${_buildTasksApiQueryString.name}()`, () => {
         filterByDueByToday: false,
         sectionId: undefined,
       },
-      expected: `?${new URLSearchParams({ filter: `#${projectName}` })}`,
+      expected: `?${new URLSearchParams({
+        filter: `#${projectName}`,
+      })}`,
     },
     {
       name: "sectionId is a string",
-      input: { projectId: "100", filterByDueByToday: false, sectionId: "200" },
+      input: {
+        projectId: "100",
+        filterByDueByToday: false,
+        sectionId: "200",
+      },
       expected: `?${new URLSearchParams({
         filter: `#${projectName} & /${sectionName}`,
       })}`,
@@ -45,6 +51,26 @@ describe(`${_buildTasksApiQueryString.name}()`, () => {
       },
       expected: `?${new URLSearchParams({
         filter: `(today | overdue) & #${projectName}`,
+      })}`,
+    },
+    {
+      name: "all projects",
+      input: {
+        projectId: undefined,
+        filterByDueByToday: false,
+        sectionId: undefined,
+      },
+      expected: "",
+    },
+    {
+      name: "all projects + Due by today",
+      input: {
+        projectId: undefined,
+        filterByDueByToday: true,
+        sectionId: undefined,
+      },
+      expected: `?${new URLSearchParams({
+        filter: "(today | overdue)",
       })}`,
     },
   ];

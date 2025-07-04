@@ -1,7 +1,6 @@
 import { clsx } from "clsx";
-import { Suspense, useCallback, useEffect } from "react";
+import { Suspense } from "react";
 import { NavLink, useNavigate, useSearchParams } from "react-router-dom";
-import { isNonEmpty } from "ts-array-length";
 import useAsyncEffect from "use-async-effect";
 import { storage as wxtStorage } from "wxt/storage";
 import { useProjects } from "../../api/projects/useProjects";
@@ -12,10 +11,13 @@ import { SECTION_ID_FOR_STORAGE } from "../../constants/options";
 import { PATH_TO } from "../../constants/paths";
 import { STORAGE_KEY_FOR } from "../../storage/storageKeys";
 import * as storage from "../../storage/useStorage";
-import type { ProjectId, Section } from "../../types";
+import type { Api } from "../../types";
 import { isTasksPage } from "../fn/isTasks";
 import { useBadgeUpdate_andSetCache } from "../hooks/useBadgeUpdate_andSetCache";
 import { Spinner } from "./Spinner";
+
+const PROJECT_ID_FOR_ALL = "__all";
+const SECTION_ID_FOR_ALL = "__all";
 
 const api = { useProjects, useTasks, useSections };
 
@@ -29,58 +31,67 @@ const Main_Suspended = () => {
   // ==================================================
   // All projects && Filtering projectId
   // ==================================================
-  const { data: projects, isSuccess: areProjectsLoaded } = api.useProjects();
+  const {
+    data: projects,
+    isSuccess: areProjectsSucceeded,
+    isLoading: areProjectsLoading,
+  } = api.useProjects();
 
   // TODO: projectId が projects に含まれているかチェックする
   // (project がアーカイブ/削除されていれば、含まれない)
-  const [projectId, setProjectId] = storage.useFilteringProjectId_Suspended();
-  const getFirstProjectId_WithAssert = useCallback((): ProjectId => {
-    if (!areProjectsLoaded) throw new Error("projects are not loaded");
-    if (!isNonEmpty(projects)) throw new Error("projects are empty");
-    return projects[0].id;
-  }, [areProjectsLoaded]);
-
-  // set initial projectId to storage
-  useEffect(() => {
-    if (areProjectsLoaded && projectId === undefined)
-      setProjectId(getFirstProjectId_WithAssert());
-  }, [areProjectsLoaded, projectId]);
+  const [projectId, setProjectId, removeProjectId] =
+    storage.useFilteringProjectId_Suspended();
 
   // ==================================================
   // All sections && Filtering sectionId
   // ==================================================
-  const { data: sections, isSuccess: areSectionsLoaded } = api.useSections();
+  const {
+    data: sections,
+    isSuccess: areSectionsSucceeded,
+    isLoading: areSectionsLoading,
+  } = api.useSections();
   const [sectionId, setSectionId, removeSectionId] =
     storage.useFilteringSectionId_Suspended();
 
   useAsyncEffect(async () => {
-    if (areSectionsLoaded)
+    if (areProjectsSucceeded)
       // Popup とは別 Window なので TQ は使う意味ない。
-      await wxtStorage.setItem<Section[]>(STORAGE_KEY_FOR.CACHE.SECTIONS, sections); // retry はサボる
-  }, [sections, areSectionsLoaded]);
+      await wxtStorage.setItem<Api.Project[]>(
+        STORAGE_KEY_FOR.CACHE.PROJECTS,
+        projects,
+      ); // retry はサボる
+  }, [sections, areProjectsSucceeded]);
+
+  useAsyncEffect(async () => {
+    if (areSectionsSucceeded)
+      // Popup とは別 Window なので TQ は使う意味ない。
+      await wxtStorage.setItem<Api.Section[]>(
+        STORAGE_KEY_FOR.CACHE.SECTIONS,
+        sections,
+      ); // retry はサボる
+  }, [sections, areSectionsSucceeded]);
 
   // ==================================================
   // Tasks
   // ==================================================
   // TODO: sectionId が存在するかチェックする?
-  const { data: tasks, isSuccess: areTasksLoaded } = api.useTasks({
+  const { data: tasks, isSuccess: areTasksSucceeded } = api.useTasks({
     filters: {
-      projectId: (() => {
-        if (projectId !== undefined) return projectId;
-        return areProjectsLoaded ? getFirstProjectId_WithAssert() : "";
-      })(),
+      projectId,
       filterByDueByToday,
       sectionId,
     },
-    enabled: projectId !== undefined || areProjectsLoaded,
     deps: [projectId, filterByDueByToday, sectionId],
   });
-  useBadgeUpdate_andSetCache({ tasks, areTasksLoaded });
+  useBadgeUpdate_andSetCache({ tasks, areTasksLoaded: areTasksSucceeded });
 
   return (
     <div className="flex flex-col gap-y-3">
       <table className="my-0 table">
         <tbody>
+          {/* ==================================================
+              Select a project
+            ================================================== */}
           <tr className="border-none">
             <th className="w-48 font-normal">
               <label htmlFor="select-for-project" className="label cursor-pointer">
@@ -88,16 +99,19 @@ const Main_Suspended = () => {
               </label>
             </th>
             <td>
-              {areProjectsLoaded ? (
+              {areProjectsSucceeded ? (
                 <select
                   id="select-for-project"
-                  value={projectId ?? getFirstProjectId_WithAssert()}
+                  value={projectId ?? PROJECT_ID_FOR_ALL}
                   onChange={(event) => {
-                    setProjectId(event.target.value);
+                    event.target.value === PROJECT_ID_FOR_ALL
+                      ? removeProjectId()
+                      : setProjectId(event.target.value);
                     removeSectionId();
                   }}
                   className="select select-bordered"
                 >
+                  <option value={PROJECT_ID_FOR_ALL}>All</option>
                   {projects.map((project) => (
                     <option key={project.id} value={project.id}>
                       {project.name}
@@ -110,7 +124,10 @@ const Main_Suspended = () => {
             </td>
           </tr>
 
-          {areSectionsLoaded && sections.length > 0 ? (
+          {/* ==================================================
+              Select a section
+            ================================================== */}
+          {areSectionsSucceeded && sections.length > 0 ? (
             <tr className="border-none">
               <th className="w-48 font-normal">
                 <label htmlFor="select-for-section" className="label cursor-pointer">
@@ -120,16 +137,16 @@ const Main_Suspended = () => {
               <td>
                 <select
                   id="select-for-section"
-                  value={sectionId ?? SECTION_ID_FOR_STORAGE.ALL}
+                  value={sectionId ?? SECTION_ID_FOR_ALL}
                   onChange={(event) => {
                     const value = event.target.value;
-                    value === SECTION_ID_FOR_STORAGE.ALL
+                    value === SECTION_ID_FOR_ALL
                       ? removeSectionId()
                       : setSectionId(value);
                   }}
                   className="select select-bordered"
                 >
-                  <option value={SECTION_ID_FOR_STORAGE.ALL}>(All)</option>
+                  <option value={SECTION_ID_FOR_ALL}>(All)</option>
                   <option value={SECTION_ID_FOR_STORAGE.NO_PARENT}>
                     (No parent section)
                   </option>
@@ -143,6 +160,9 @@ const Main_Suspended = () => {
             </tr>
           ) : null}
 
+          {/* ==================================================
+              Due by today
+            ================================================== */}
           <tr className="border-none">
             <th className="w-48 font-normal">
               <label
@@ -166,7 +186,7 @@ const Main_Suspended = () => {
       </table>
 
       <div>
-        {areTasksLoaded ? (
+        {areTasksSucceeded ? (
           <span className="font-bold text-primary">{tasks.length} Tasks</span>
         ) : (
           <Spinner className="ml-16" />
@@ -174,20 +194,25 @@ const Main_Suspended = () => {
       </div>
 
       {/* Debug */}
-      {/* <pre>
-        <code>
-          {JSON.stringify(
-            {
-              areTasksSuccess: areTasksLoaded && undefined,
-              areProjectsSuccess: areProjectsLoaded && undefined,
-              areSectionsSuccess: areSectionsLoaded && undefined,
-            },
-            null,
-            "  ",
-          )}
-        </code>
-      </pre> */}
+      {/*
+        <pre>
+          <code>
+            {JSON.stringify(
+              {
+                areTasksSuccess: areTasksSucceeded && undefined,
+                areProjectsSuccess: areProjectsSucceeded && undefined,
+                areSectionsSuccess: areSectionsSucceeded && undefined,
+              },
+              null,
+              "  ",
+            )}
+          </code>
+        </pre>
+      */}
 
+      {/* ==================================================
+          Submit
+        ================================================== */}
       {isInitialized || (
         <div>
           <button
@@ -195,7 +220,7 @@ const Main_Suspended = () => {
             className={clsx(
               "btn",
               "btn-primary",
-              (!areProjectsLoaded || !areSectionsLoaded) && "btn-disabled",
+              (areProjectsLoading || areSectionsLoading) && "btn-disabled",
             )}
             onClick={async () =>
               setIsInitialized(true, {

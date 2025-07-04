@@ -15,6 +15,7 @@ export const ErrorBoundary = (): JSX.Element => {
       await clearStorage(error);
       // useEffect(() => navigate('/options'), [error]);
       // だと、error が消えなくて無限ループになってしまうため、リロードする⋯。
+
       location.reload();
     }
   }, [error]);
