@@ -3,7 +3,7 @@ import { refreshProjectsCache_onProjectsUpdated } from "./refreshProjectsCache_o
 import { refreshProjectsCache_regularly } from "./refreshProjectsCache_regularly";
 
 export const watch_projectsCacheRefresh = async () => {
-  console.info(`${label(watch_projectsCacheRefresh.name)} task start`);
+  console.info(`${label("watch-projects-cache-refresh")} task start`);
   refreshProjectsCache_onProjectsUpdated();
   await refreshProjectsCache_regularly();
 };
