@@ -9,7 +9,7 @@ const REGEXP = [
 
 export const refreshProjectsCache_onProjectsUpdated = () =>
   addCommandListener({
-    name: "refreshProjectsCache",
+    name: "refresh-projects-cache",
     commandRegExp: new RegExp(REGEXP.join("|")),
     listener: async () => await api.refreshProjectsCache(),
   });
