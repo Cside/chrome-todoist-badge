@@ -4,7 +4,7 @@ import * as api from "./fn/refreshProjectsCache";
 
 const REGEXP = [
   // https://www.notion.so/97e7a56e72894496add5f649c56c78bd
-  "^projects_",
+  "^project_",
 ];
 
 export const refreshProjectsCache_onProjectsUpdated = () =>
