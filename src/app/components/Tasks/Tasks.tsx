@@ -94,11 +94,11 @@ export default function Tasks_Suspended() {
   useEffect(() => {
     if (unknownSections.length > 0) {
       console.error(
-        `Unknown task.projectId: ${JSON.stringify(unknownSections)}. Invalidating cache.`,
+        `Unknown task.sectionId: ${JSON.stringify(unknownSections)}. Invalidating cache.`,
       );
       setIsCacheAvailable(false);
     }
-  }, [unknownProjects]);
+  }, [unknownSections]);
 
   useBadgeUpdate_andSetCache({ tasks, areTasksLoaded: areTasksSucceeded });
 
