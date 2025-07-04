@@ -54,6 +54,15 @@ const Main_Suspended = () => {
     storage.useFilteringSectionId_Suspended();
 
   useAsyncEffect(async () => {
+    if (areProjectsSucceeded)
+      // Popup とは別 Window なので TQ は使う意味ない。
+      await wxtStorage.setItem<Api.Project[]>(
+        STORAGE_KEY_FOR.CACHE.PROJECTS,
+        projects,
+      ); // retry はサボる
+  }, [sections, areProjectsSucceeded]);
+
+  useAsyncEffect(async () => {
     if (areSectionsSucceeded)
       // Popup とは別 Window なので TQ は使う意味ない。
       await wxtStorage.setItem<Api.Section[]>(
