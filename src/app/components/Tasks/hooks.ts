@@ -1,5 +1,4 @@
 import { WEB_APP_URL_FOR } from "../../../constants/urls";
-import { ProjectIdNotFoundError } from "../../../errors";
 import * as storage from "../../../storage/useStorage";
 
 // 初期化が終わってないと Options.tsx にリダイレクトするので
@@ -7,8 +6,7 @@ import * as storage from "../../../storage/useStorage";
 
 export const useWebAppUrl = () => {
   const [projectId] = storage.useFilteringProjectId_Suspended();
-  if (projectId === undefined)
-    throw new ProjectIdNotFoundError("projectId is undefined");
+  if (projectId === undefined) return WEB_APP_URL_FOR.INBOX;
 
   return WEB_APP_URL_FOR.PROJECT_BY(projectId);
 };

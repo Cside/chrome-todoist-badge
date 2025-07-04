@@ -1,3 +1,4 @@
+import { watch_projectsCacheRefresh } from "./watch_projectsCacheRefresh/watch_projectsCacheRefresh";
 import { watch_sectionsCacheRefresh } from "./watch_sectionsCacheRefresh/watch_sectionsCacheRefresh";
 import { watch_tasksCacheRefresh_andBadgeCountUpdates } from "./watch_tasksCacheRefresh_andBadgeCountUpdates/watch_tasksCacheRefresh_andBadgeCountUpdates";
 
@@ -9,6 +10,9 @@ export const addMessageListeners = () => {
         break;
       case "watch-sections-cache-refresh":
         await watch_sectionsCacheRefresh();
+        break;
+      case "watch-projects-cache-refresh":
+        await watch_projectsCacheRefresh();
         break;
       default:
         throw new Error(`Unknown action: ${JSON.stringify(message)}`);

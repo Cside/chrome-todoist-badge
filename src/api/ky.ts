@@ -76,6 +76,8 @@ export const ky = {
 // Utils
 // ============================================================
 
+// TODO: 時間あったら ky-hooks-change-case 使う
+//        https://github.com/alice-health/ky-hooks-change-case
 // 1. camelize
 // 2. null -> undefined
 export const normalizeApiObject = (obj: unknown): unknown =>
