@@ -4,9 +4,10 @@ import { API_PATH_FOR, API_REST_BASE_URL } from "../constants/urls";
 
 const isBadRequestErrorForTaskFetch = (error: unknown): error is HTTPError =>
   error instanceof HTTPError &&
-  error.response.status === STATUS_CODE_FOR.BAD_REQUEST &&
-  error.request.url.replace(/\?.*$/, "") ===
-    `${API_REST_BASE_URL}${API_PATH_FOR.GET_TASKS}`;
+  (error.response.status === STATUS_CODE_FOR.NOT_FOUND ||
+    (error.response.status === STATUS_CODE_FOR.BAD_REQUEST &&
+      removeQueryParams(error.request.url) ===
+        `${API_REST_BASE_URL}${API_PATH_FOR.GET_TASKS}`));
 
 export const shouldClearStorage = (error: unknown): error is HTTPError =>
   // NOTE: ここの条件を増やす際は clearStorage にも同じ条件を追加する
@@ -36,3 +37,9 @@ export const clearStorage = async (error: HTTPError) => {
     `Bad request. storage was cleared. url: ${error.response.url}, message: ${error.message}, keys: ${keysString}`,
   );
 };
+
+// ===================================================
+// Utils
+// ===================================================
+
+export const removeQueryParams = (url: string): string => url.replace(/\?.*$/, "");
