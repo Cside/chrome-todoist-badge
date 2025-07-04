@@ -11,7 +11,7 @@ const undefinedKey = "undefined";
 export const groupTasksBySection = ({
   tasks,
   sections,
-}: { tasks: Api.Task[]; sections: Api.Project[] }): TasksGroupedBySection => {
+}: { tasks: Api.Task[]; sections: Api.Section[] }): TasksGroupedBySection => {
   const sectionIdToSection = new Map(
     sections.map((section) => [section.id, section] as const),
   );
@@ -32,10 +32,27 @@ export const groupTasksBySection = ({
         (sectionIdToSection.get(b)?.order ?? 0),
   );
 
-  return sortedKeys.map((key) => ({
-    section: key === undefinedKey ? undefined : sectionIdToSection.get(key),
-    tasks: (groupedTasks[key] ?? []).sort((a, b) => a.order - b.order),
-  }));
+  return sortedKeys
+    .map((key) => {
+      const tasks = (groupedTasks[key] ?? []).sort((a, b) => a.order - b.order);
+      if (key === undefinedKey) {
+        return {
+          section: undefined,
+          tasks,
+        };
+      }
+      const section = sectionIdToSection.get(key);
+      if (!section) {
+        console.warn(`Unknown sectionId: ${key}`); // API 側でキャッシュされている時
+        return undefined;
+      }
+
+      return {
+        section: key === undefinedKey ? undefined : section,
+        tasks,
+      };
+    })
+    .filter(Boolean);
 };
 
 // TODO 共通化、テスト
@@ -62,8 +79,18 @@ export const groupTasksByProject = ({
       (projectIdToProject.get(b)?.order ?? 0),
   );
 
-  return sortedKeys.map((key) => ({
-    project: projectIdToProject.get(key) as Api.Project,
-    tasks: (groupedTasks[key] ?? []).sort((a, b) => a.order - b.order),
-  }));
+  return sortedKeys
+    .map((key) => {
+      const project = projectIdToProject.get(key);
+      if (!project) {
+        console.warn(`Unknown projectId: ${key}`); // API 側でキャッシュされている時
+        return undefined;
+      }
+
+      return {
+        project,
+        tasks: (groupedTasks[key] ?? []).sort((a, b) => a.order - b.order),
+      };
+    })
+    .filter(Boolean);
 };
