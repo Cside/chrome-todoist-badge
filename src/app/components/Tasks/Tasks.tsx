@@ -21,7 +21,7 @@ const ICON_LENGTH = 30;
 const PATH_TO_OPTIONS = addFromParam(PATH_TO.OPTIONS);
 
 // eslint-disable-next-line react-refresh/only-export-components
-const CenterSpinner = () => <Spinner className="m-5" />;
+const CenteredSpinner = () => <Spinner className="m-5" />;
 
 export default function Tasks_Suspended() {
   const [isCacheAvailable, setIsCacheAvailable] = useState(true);
@@ -136,7 +136,7 @@ export default function Tasks_Suspended() {
 
   const GroupedTasks = useMemo(() => {
     if (unknownProjects.length > 0 || unknownSections.length > 0)
-      return <CenterSpinner />;
+      return <CenteredSpinner />;
 
     if (areTasksSucceeded && !isCrossProject && areSectionsSucceeded) {
       const groupedTasks = groupTasksBySection({
@@ -172,7 +172,7 @@ export default function Tasks_Suspended() {
         <div className="mt-3 mb-5 ml-1">All done!</div>
       );
     }
-    return <CenterSpinner />;
+    return <CenteredSpinner />;
   }, [
     unknownProjects,
     unknownSections,
