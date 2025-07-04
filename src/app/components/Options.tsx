@@ -72,7 +72,6 @@ const Main_Suspended = () => {
       filterByDueByToday,
       sectionId,
     },
-    enabled: projectId !== undefined || areProjectsSucceeded,
     deps: [projectId, filterByDueByToday, sectionId],
   });
   useBadgeUpdate_andSetCache({ tasks, areTasksLoaded: areTasksSucceeded });
