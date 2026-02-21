@@ -28,14 +28,15 @@ export const startBackground =
         );
         await chrome.storage.local.clear();
         await chrome.alarms.clearAll();
-        await chrome.tabs.create({
-          url: chrome.runtime.getURL(`${PATHNAME_FOR.OPTIONS}${HASH_FOR.WELCOME}`),
-          active: true,
-        });
 
         unwatch_tasksCacheRefresh_andBadgeCountUpdates();
         unwatch_sectionsCacheRefresh();
         unwatch_projectsCacheRefresh();
+
+        await chrome.tabs.create({
+          url: chrome.runtime.getURL(`${PATHNAME_FOR.OPTIONS}${HASH_FOR.WELCOME}`),
+          active: true,
+        });
       }
     });
 
