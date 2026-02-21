@@ -1,4 +1,5 @@
 import { compareVersions } from "compare-versions";
+import { HASH_FOR, PATHNAME_FOR } from "../../constants/paths";
 import { STORAGE_KEY_FOR } from "../storage/storageKeys";
 import { addMessageListeners } from "./tasks/addMessageListeners";
 import { openWelcomePageOnInstalled } from "./tasks/openWelcomePage";
@@ -12,6 +13,7 @@ const DEPRECATED_API_VERSION = "1.1.0";
 export const startBackground =
   // async にすると警告が出る
   () => {
+    // API v2 のキャッシュは削除する
     chrome.runtime.onInstalled.addListener(async ({ reason, previousVersion }) => {
       if (
         reason === chrome.runtime.OnInstalledReason.UPDATE &&
@@ -22,6 +24,10 @@ export const startBackground =
           `API v2 is deprecated. Clearing local storage. version: ${previousVersion}`,
         );
         await chrome.storage.local.clear();
+        await chrome.tabs.create({
+          url: chrome.runtime.getURL(`${PATHNAME_FOR.OPTIONS}${HASH_FOR.WELCOME}`),
+          active: true,
+        });
       }
     });
 
