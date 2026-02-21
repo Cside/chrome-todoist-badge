@@ -7,7 +7,7 @@ export const WEB_APP_BASE_URL = "https://app.todoist.com";
 // ==================================================
 // API
 // ==================================================
-export const API_REST_BASE_URL = `${API_BASE_URL}/rest/v2`;
+export const API_REST_BASE_URL = `${API_BASE_URL}/api/v1`;
 
 // biome-ignore format:
 export const API_PATH_FOR = {
