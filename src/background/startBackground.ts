@@ -4,8 +4,11 @@ import { STORAGE_KEY_FOR } from "../storage/storageKeys";
 import { addMessageListeners } from "./tasks/addMessageListeners";
 import { openWelcomePageOnInstalled } from "./tasks/openWelcomePage";
 import { setBadgeColor } from "./tasks/setBadgeColor";
+import { unwatch_projectsCacheRefresh } from "./tasks/watch_projectsCacheRefresh/refreshProjectsCache_onProjectsUpdated";
 import { watch_projectsCacheRefresh } from "./tasks/watch_projectsCacheRefresh/watch_projectsCacheRefresh";
+import { unwatch_sectionsCacheRefresh } from "./tasks/watch_sectionsCacheRefresh/refreshSectionsCache_onSectionsUpdated";
 import { watch_sectionsCacheRefresh } from "./tasks/watch_sectionsCacheRefresh/watch_sectionsCacheRefresh";
+import { unwatch_tasksCacheRefresh_andBadgeCountUpdates } from "./tasks/watch_tasksCacheRefresh_andBadgeCountUpdates/refreshTasksCache_andUpdateBadgeCount_onTaskUpdated";
 import { watch_tasksCacheRefresh_andBadgeCountUpdates } from "./tasks/watch_tasksCacheRefresh_andBadgeCountUpdates/watch_tasksCacheRefresh_andBadgeCountUpdates";
 
 const DEPRECATED_API_VERSION = "1.1.0";
@@ -24,10 +27,15 @@ export const startBackground =
           `API v2 is deprecated. Clearing local storage. version: ${previousVersion}`,
         );
         await chrome.storage.local.clear();
+        await chrome.alarms.clearAll();
         await chrome.tabs.create({
           url: chrome.runtime.getURL(`${PATHNAME_FOR.OPTIONS}${HASH_FOR.WELCOME}`),
           active: true,
         });
+
+        unwatch_tasksCacheRefresh_andBadgeCountUpdates();
+        unwatch_sectionsCacheRefresh();
+        unwatch_projectsCacheRefresh();
       }
     });
 

@@ -1,4 +1,4 @@
-import { addCommandListener } from "../fn/addCommandListener";
+import { addCommandListener, createListener } from "../fn/addCommandListener";
 import * as api from "./fn/refreshTasksCache_andUpdateBadgeCount";
 
 const REGEXP = [
@@ -9,9 +9,14 @@ const REGEXP = [
   "^project_delete$",
 ];
 
+const listener = createListener({
+  name: "refresh-tasks-cache-and-update-badge-count",
+  commandRegExp: new RegExp(REGEXP.join("|")),
+  listener: async () => await api.refreshTasksCache_andUpdateBadgeCount(),
+});
+
 export const refreshTasksCache_andUpdateBadgeCount_onTaskUpdated = () =>
-  addCommandListener({
-    name: "refresh-tasks-cache-and-update-badge-count",
-    commandRegExp: new RegExp(REGEXP.join("|")),
-    listener: async () => await api.refreshTasksCache_andUpdateBadgeCount(),
-  });
+  addCommandListener(listener);
+
+export const unwatch_tasksCacheRefresh_andBadgeCountUpdates = () =>
+  chrome.webRequest.onCompleted.removeListener(listener);

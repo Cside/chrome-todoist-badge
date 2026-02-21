@@ -1,5 +1,5 @@
 import type {} from "../../../types";
-import { addCommandListener } from "../fn/addCommandListener";
+import { addCommandListener, createListener } from "../fn/addCommandListener";
 import * as api from "./fn/refreshProjectsCache";
 
 const REGEXP = [
@@ -7,9 +7,14 @@ const REGEXP = [
   "^project_",
 ];
 
+const listener = createListener({
+  name: "refresh-projects-cache",
+  commandRegExp: new RegExp(REGEXP.join("|")),
+  listener: async () => await api.refreshProjectsCache(),
+});
+
 export const refreshProjectsCache_onProjectsUpdated = () =>
-  addCommandListener({
-    name: "refresh-projects-cache",
-    commandRegExp: new RegExp(REGEXP.join("|")),
-    listener: async () => await api.refreshProjectsCache(),
-  });
+  addCommandListener(listener);
+
+export const unwatch_projectsCacheRefresh = () =>
+  chrome.webRequest.onCompleted.removeListener(listener);
