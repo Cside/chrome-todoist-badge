@@ -24,8 +24,33 @@ import { getSection } from "../sections/getSection";
 export const getTasksByParams = async (
   filters: TaskFilters,
 ): Promise<Api.Task[]> => {
-  const url = `${API_PATH_FOR.GET_TASKS}${await _buildTasksApiQueryString(filters)}`;
-  return await ky.fetchAndNormalize<Api.Task[]>(url);
+  // ベースとなるURLとクエリ文字列を一度だけ生成します
+  const baseQueryString = await _buildTasksApiQueryString(filters);
+  const baseUrl = `${API_PATH_FOR.GET_TASKS}${baseQueryString}`;
+
+  const tasks: Api.Task[] = [];
+  let nextCursor: string | null = null;
+
+  do {
+    // 2回目以降（nextCursorがある場合）はcursorパラメータを付与します
+    let url = baseUrl;
+    if (typeof nextCursor === "string") {
+      // 既存のURLにクエリパラメータが含まれているか判定して区切り文字を決定
+      const separator = baseUrl.includes("?") ? "&" : "?";
+      url = `${baseUrl}${separator}cursor=${encodeURIComponent(nextCursor)}`;
+    }
+
+    const result = await ky.fetchAndNormalize<{
+      results: Api.Task[];
+      nextCursor: string | null;
+    }>(url);
+
+    tasks.push(...result.results);
+
+    nextCursor = result.nextCursor;
+  } while (typeof nextCursor === "string"); // cursorがnullになるまで繰り返す
+
+  return tasks;
 };
 
 const getTasks = async (): Promise<Api.Task[]> => {

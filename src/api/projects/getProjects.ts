@@ -3,6 +3,7 @@ import type { Api } from "../../types";
 import { ky } from "../ky";
 // import { STORAGE_KEY_FOR } from "../../storage/storageKeys";
 
+// TODO cursor
 export const getProjects = async () =>
   (await ky.fetchAndNormalize<{ results: Api.Project[] }>(API_PATH_FOR.GET_PROJECTS))
     .results;
