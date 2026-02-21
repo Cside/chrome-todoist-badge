@@ -1,5 +1,5 @@
 import { compareVersions } from "compare-versions";
-import { HASH_FOR, PATHNAME_FOR } from "../../constants/paths";
+import { HASH_FOR, PATHNAME_FOR } from "../constants/paths";
 import { STORAGE_KEY_FOR } from "../storage/storageKeys";
 import { addMessageListeners } from "./tasks/addMessageListeners";
 import { openWelcomePageOnInstalled } from "./tasks/openWelcomePage";
