@@ -14,7 +14,7 @@ export namespace Api {
 
   export type Task = {
     id: TaskId;
-    order: number;
+    childOrder: number;
     content: string;
     projectId: ProjectId;
     sectionId: SectionId | undefined;
@@ -24,7 +24,7 @@ export namespace Api {
   export type Section = {
     id: SectionId;
     name: string;
-    order: number;
+    sectionOrder: number;
   };
 }
 
@@ -38,7 +38,7 @@ export type TaskFilters = {
 };
 
 export type TasksGroupedBySection = {
-  section: Api.Project | undefined;
+  section: Api.Section | undefined;
   tasks: Api.Task[];
 }[];
 
