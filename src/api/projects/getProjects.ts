@@ -4,7 +4,8 @@ import { ky } from "../ky";
 // import { STORAGE_KEY_FOR } from "../../storage/storageKeys";
 
 export const getProjects = async () =>
-  await ky.fetchAndNormalize<Api.Project[]>(API_PATH_FOR.GET_PROJECTS);
+  (await ky.fetchAndNormalize<{ results: Api.Project[] }>(API_PATH_FOR.GET_PROJECTS))
+    .results;
 
 /* WIP
 // from BG worker

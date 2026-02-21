@@ -9,7 +9,7 @@ export namespace Api {
   export type Project = {
     id: ProjectId;
     name: string;
-    order: number;
+    childOrder: number;
   };
 
   export type Task = {

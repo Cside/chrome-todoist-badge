@@ -75,8 +75,8 @@ export const groupTasksByProject = ({
 
   const sortedKeys = Object.keys(groupedTasks).sort(
     (a, b) =>
-      (projectIdToProject.get(a)?.order ?? 0) -
-      (projectIdToProject.get(b)?.order ?? 0),
+      (projectIdToProject.get(a)?.childOrder ?? 0) -
+      (projectIdToProject.get(b)?.childOrder ?? 0),
   );
 
   return sortedKeys

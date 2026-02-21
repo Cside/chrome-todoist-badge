@@ -108,7 +108,11 @@ describe(`${groupTasksBySection.name}()`, () => {
 });
 
 describe(`${groupTasksByProject.name}()`, () => {
-  const PROJECT_1: Api.Project = { id: "project-100", name: "Project 1", order: 0 };
+  const PROJECT_1: Api.Project = {
+    id: "project-100",
+    name: "Project 1",
+    childOrder: 0,
+  };
 
   const toTask = (task: Pick<Api.Task, "id" | "order" | "projectId">): Api.Task => ({
     ...task,

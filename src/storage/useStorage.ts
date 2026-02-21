@@ -75,7 +75,7 @@ export const useCachedSections_Suspended = () =>
   useSuspenseQuery({
     queryKey: [STORAGE_KEY_FOR.CACHE.SECTIONS],
     queryFn: async () =>
-      await storage.getItem<Api.Project[]>(STORAGE_KEY_FOR.CACHE.SECTIONS),
+      await storage.getItem<Api.Section[]>(STORAGE_KEY_FOR.CACHE.SECTIONS),
   }).data ?? undefined;
 
 // ==================================================
