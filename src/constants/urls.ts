@@ -11,8 +11,9 @@ export const API_REST_BASE_URL = `${API_BASE_URL}/api/v1`;
 
 // biome-ignore format:
 export const API_PATH_FOR = {
-  GET_PROJECTS: "/projects",
-  GET_TASKS:    "/tasks",
+  GET_PROJECTS:          "/projects",
+  GET_TASKS:             "/tasks",
+  GET_TASKS_WITH_FILTER: "/tasks/filter",
 } as const;
 
 export const API_URL_MATCH_PATTERN_FOR = {

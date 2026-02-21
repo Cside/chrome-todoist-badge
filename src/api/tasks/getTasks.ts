@@ -25,25 +25,24 @@ export const getTasksByParams = async (
   filters: TaskFilters,
 ): Promise<Api.Task[]> => {
   // ベースとなるURLとクエリ文字列を一度だけ生成します
-  const baseQueryString = await _buildTasksApiQueryString(filters);
-  const baseUrl = `${API_PATH_FOR.GET_TASKS}${baseQueryString}`;
+  const [hasFilter, filter] = await _buildFilter(filters);
 
   const tasks: Api.Task[] = [];
   let nextCursor: string | null = null;
 
   do {
-    // 2回目以降（nextCursorがある場合）はcursorパラメータを付与します
-    let url = baseUrl;
-    if (typeof nextCursor === "string") {
-      // 既存のURLにクエリパラメータが含まれているか判定して区切り文字を決定
-      const separator = baseUrl.includes("?") ? "&" : "?";
-      url = `${baseUrl}${separator}cursor=${encodeURIComponent(nextCursor)}`;
-    }
-
-    const result = await ky.fetchAndNormalize<{
+    type ReturnedType = {
       results: Api.Task[];
       nextCursor: string | null;
-    }>(url);
+    };
+    const result: ReturnedType = await ky.fetchAndNormalize<ReturnedType>(
+      `${hasFilter ? API_PATH_FOR.GET_TASKS_WITH_FILTER : API_PATH_FOR.GET_TASKS}?${new URLSearchParams(
+        {
+          ...(hasFilter && { query: filter }),
+          ...(typeof nextCursor === "string" && { cursor: nextCursor }),
+        },
+      )}`,
+    );
 
     tasks.push(...result.results);
 
@@ -91,12 +90,12 @@ export const getTasksForWorker = async () => {
 /* NOTE: section_id, project_id クエリパラメータを使わない理由：
   - filter: (today|overdue) と併用できないから
 */
-export const _buildTasksApiQueryString = async ({
+export const _buildFilter = async ({
   projectId,
   filterByDueByToday,
   sectionId,
-}: TaskFilters) => {
-  const filters = [
+}: TaskFilters): Promise<[false, undefined] | [true, string]> => {
+  const filter = [
     filterByDueByToday === true && "(today | overdue)",
     ...(await Promise.all([
       projectId !== undefined && projectIdToFilter(projectId),
@@ -106,7 +105,7 @@ export const _buildTasksApiQueryString = async ({
     .filter(Boolean)
     .join(" & ");
 
-  return filters === "" ? "" : `?${new URLSearchParams({ filter: filters })}`;
+  return filter === "" ? [false, undefined] : [true, filter];
 };
 
 const projectIdToFilter = async (projectId: ProjectId) =>

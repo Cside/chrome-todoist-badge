@@ -1,9 +1,9 @@
 import type { Api } from "../../types";
 import * as getProject from "../projects/getProject";
 import * as getSection from "../sections/getSection";
-import { _buildTasksApiQueryString, _escapeFilter } from "./getTasks";
+import { _buildFilter, _escapeFilter } from "./getTasks";
 
-describe(`${_buildTasksApiQueryString.name}()`, () => {
+describe(`${_buildFilter.name}()`, () => {
   const projectName = "Project";
   const sectionName = "Section";
 
@@ -17,8 +17,8 @@ describe(`${_buildTasksApiQueryString.name}()`, () => {
   });
   const cases: {
     name: string;
-    input: Parameters<typeof _buildTasksApiQueryString>[0];
-    expected: Awaited<ReturnType<typeof _buildTasksApiQueryString>>;
+    input: Parameters<typeof _buildFilter>[0];
+    expected: Awaited<ReturnType<typeof _buildFilter>>;
   }[] = [
     {
       name: "filterByDueByToday === false && sectionId === undefined",
@@ -27,9 +27,7 @@ describe(`${_buildTasksApiQueryString.name}()`, () => {
         filterByDueByToday: false,
         sectionId: undefined,
       },
-      expected: `?${new URLSearchParams({
-        filter: `#${projectName}`,
-      })}`,
+      expected: [true, `#${projectName}`],
     },
     {
       name: "sectionId is a string",
@@ -38,9 +36,7 @@ describe(`${_buildTasksApiQueryString.name}()`, () => {
         filterByDueByToday: false,
         sectionId: "200",
       },
-      expected: `?${new URLSearchParams({
-        filter: `#${projectName} & /${sectionName}`,
-      })}`,
+      expected: [true, `#${projectName} & /${sectionName}`],
     },
     {
       name: "filterByDueByToday is true",
@@ -49,9 +45,7 @@ describe(`${_buildTasksApiQueryString.name}()`, () => {
         filterByDueByToday: true,
         sectionId: undefined,
       },
-      expected: `?${new URLSearchParams({
-        filter: `(today | overdue) & #${projectName}`,
-      })}`,
+      expected: [true, `(today | overdue) & #${projectName}`],
     },
     {
       name: "all projects",
@@ -60,7 +54,7 @@ describe(`${_buildTasksApiQueryString.name}()`, () => {
         filterByDueByToday: false,
         sectionId: undefined,
       },
-      expected: "",
+      expected: [false, undefined],
     },
     {
       name: "all projects + Due by today",
@@ -69,13 +63,11 @@ describe(`${_buildTasksApiQueryString.name}()`, () => {
         filterByDueByToday: true,
         sectionId: undefined,
       },
-      expected: `?${new URLSearchParams({
-        filter: "(today | overdue)",
-      })}`,
+      expected: [true, "(today | overdue)"],
     },
   ];
   test.each(cases)("$name", async ({ input, expected }) =>
-    expect(await _buildTasksApiQueryString(input)).toBe(expected),
+    expect(await _buildFilter(input)).toEqual(expected),
   );
 });
 

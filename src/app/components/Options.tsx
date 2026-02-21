@@ -83,7 +83,6 @@ const Main_Suspended = () => {
     },
     deps: [projectId, filterByDueByToday, sectionId],
   });
-  console.info("tasks", tasks);
   useBadgeUpdate_andSetCache({ tasks, areTasksLoaded: areTasksSucceeded });
 
   return (
