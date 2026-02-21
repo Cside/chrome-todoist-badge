@@ -1,3 +1,4 @@
+import { compareVersions } from "compare-versions";
 import { STORAGE_KEY_FOR } from "../storage/storageKeys";
 import { addMessageListeners } from "./tasks/addMessageListeners";
 import { openWelcomePageOnInstalled } from "./tasks/openWelcomePage";
@@ -6,9 +7,24 @@ import { watch_projectsCacheRefresh } from "./tasks/watch_projectsCacheRefresh/w
 import { watch_sectionsCacheRefresh } from "./tasks/watch_sectionsCacheRefresh/watch_sectionsCacheRefresh";
 import { watch_tasksCacheRefresh_andBadgeCountUpdates } from "./tasks/watch_tasksCacheRefresh_andBadgeCountUpdates/watch_tasksCacheRefresh_andBadgeCountUpdates";
 
+const DEPRECATED_API_VERSION = "1.1.0";
+
 export const startBackground =
   // async にすると警告が出る
   () => {
+    chrome.runtime.onInstalled.addListener(async ({ reason, previousVersion }) => {
+      if (
+        reason === chrome.runtime.OnInstalledReason.UPDATE &&
+        previousVersion !== undefined &&
+        compareVersions(previousVersion, DEPRECATED_API_VERSION) <= 0
+      ) {
+        console.info(
+          `API v2 is deprecated. Clearing local storage. version: ${previousVersion}`,
+        );
+        await chrome.storage.local.clear();
+      }
+    });
+
     openWelcomePageOnInstalled(); // async の中に入れたら動かないので注意
     addMessageListeners();
     (async () => {
