@@ -24,8 +24,32 @@ import { getSection } from "../sections/getSection";
 export const getTasksByParams = async (
   filters: TaskFilters,
 ): Promise<Api.Task[]> => {
-  const url = `${API_PATH_FOR.GET_TASKS}${await _buildTasksApiQueryString(filters)}`;
-  return await ky.fetchAndNormalize<Api.Task[]>(url);
+  // ベースとなるURLとクエリ文字列を一度だけ生成します
+  const [hasFilter, filter] = await _buildFilter(filters);
+
+  const tasks: Api.Task[] = [];
+  let nextCursor: string | null = null;
+
+  do {
+    type ReturnedType = {
+      results: Api.Task[];
+      nextCursor: string | null;
+    };
+    const result: ReturnedType = await ky.fetchAndNormalize<ReturnedType>(
+      `${hasFilter ? API_PATH_FOR.GET_TASKS_WITH_FILTER : API_PATH_FOR.GET_TASKS}?${new URLSearchParams(
+        {
+          ...(hasFilter && { query: filter }),
+          ...(typeof nextCursor === "string" && { cursor: nextCursor }),
+        },
+      )}`,
+    );
+
+    tasks.push(...result.results);
+
+    nextCursor = result.nextCursor;
+  } while (typeof nextCursor === "string"); // cursorがnullになるまで繰り返す
+
+  return tasks;
 };
 
 const getTasks = async (): Promise<Api.Task[]> => {
@@ -66,12 +90,12 @@ export const getTasksForWorker = async () => {
 /* NOTE: section_id, project_id クエリパラメータを使わない理由：
   - filter: (today|overdue) と併用できないから
 */
-export const _buildTasksApiQueryString = async ({
+export const _buildFilter = async ({
   projectId,
   filterByDueByToday,
   sectionId,
-}: TaskFilters) => {
-  const filters = [
+}: TaskFilters): Promise<[false, undefined] | [true, string]> => {
+  const filter = [
     filterByDueByToday === true && "(today | overdue)",
     ...(await Promise.all([
       projectId !== undefined && projectIdToFilter(projectId),
@@ -81,7 +105,7 @@ export const _buildTasksApiQueryString = async ({
     .filter(Boolean)
     .join(" & ");
 
-  return filters === "" ? "" : `?${new URLSearchParams({ filter: filters })}`;
+  return filter === "" ? [false, undefined] : [true, filter];
 };
 
 const projectIdToFilter = async (projectId: ProjectId) =>

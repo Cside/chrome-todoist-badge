@@ -45,35 +45,42 @@ chrome.webRequest.onBeforeRequest.addListener(
   ["requestBody"],
 );
 
-export const addCommandListener = ({
-  name,
-  commandRegExp,
-  listener,
-}: {
-  name: string;
-  commandRegExp: RegExp;
-  listener: () => Promise<unknown>;
-}) => {
-  chrome.webRequest.onCompleted.addListener(
-    async (details) => {
-      const command = cache.get(details.requestId);
-      if (command !== undefined) {
-        const matched = commandRegExp.test(command);
-        if (matched && (await isInitialized()))
-          try {
-            await listener();
-            console.info(`${label(name)} ${labelForCommand(command)}`);
-          } catch (error) {
-            console.error(
-              `${labelForCommand(command)} Failed to executer. error: `,
-              error,
-            );
-          }
-      }
-    },
-    { urls: [API_URL_MATCH_PATTERN_FOR.SYNC] },
-    ["responseHeaders"],
-  );
+export const createListener =
+  ({
+    name,
+    commandRegExp,
+    listener,
+  }: {
+    name: string;
+    commandRegExp: RegExp;
+    listener: () => Promise<unknown>;
+  }) =>
+  async (details: chrome.webRequest.WebResponseCacheDetails) => {
+    const command = cache.get(details.requestId);
+    if (command !== undefined) {
+      const matched = commandRegExp.test(command);
+      if (matched && (await isInitialized()))
+        try {
+          await listener();
+          console.info(`${label(name)} ${labelForCommand(command)}`);
+        } catch (error) {
+          console.error(
+            `${labelForCommand(command)} Failed to executer. error: `,
+            error,
+          );
+        }
+    }
+  };
+
+export const addCommandListener = (
+  listener: (details: chrome.webRequest.WebResponseCacheDetails) => Promise<void>,
+) => {
+  if (!chrome.webRequest.onCompleted.hasListener(listener))
+    chrome.webRequest.onCompleted.addListener(
+      listener,
+      { urls: [API_URL_MATCH_PATTERN_FOR.SYNC] },
+      ["responseHeaders"],
+    );
 };
 
 const labelForCommand = (name: string) =>

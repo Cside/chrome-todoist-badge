@@ -3,8 +3,10 @@ import type { Api } from "../../types";
 import { ky } from "../ky";
 // import { STORAGE_KEY_FOR } from "../../storage/storageKeys";
 
+// TODO cursor... まぁ50件以上のprojectを持っている人は少ないと思うので、ひとまずは実装しない
 export const getProjects = async () =>
-  await ky.fetchAndNormalize<Api.Project[]>(API_PATH_FOR.GET_PROJECTS);
+  (await ky.fetchAndNormalize<{ results: Api.Project[] }>(API_PATH_FOR.GET_PROJECTS))
+    .results;
 
 /* WIP
 // from BG worker

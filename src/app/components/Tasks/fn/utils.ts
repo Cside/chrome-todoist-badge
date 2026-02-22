@@ -28,13 +28,15 @@ export const groupTasksBySection = ({
   const sortedKeys = Object.keys(groupedTasks).sort((a, b) =>
     a === undefinedKey
       ? -1
-      : (sectionIdToSection.get(a)?.order ?? 0) -
-        (sectionIdToSection.get(b)?.order ?? 0),
+      : (sectionIdToSection.get(a)?.sectionOrder ?? 0) -
+        (sectionIdToSection.get(b)?.sectionOrder ?? 0),
   );
 
   return sortedKeys
     .map((key) => {
-      const tasks = (groupedTasks[key] ?? []).sort((a, b) => a.order - b.order);
+      const tasks = (groupedTasks[key] ?? []).sort(
+        (a, b) => a.childOrder - b.childOrder,
+      );
       if (key === undefinedKey) {
         return {
           section: undefined,
@@ -75,8 +77,8 @@ export const groupTasksByProject = ({
 
   const sortedKeys = Object.keys(groupedTasks).sort(
     (a, b) =>
-      (projectIdToProject.get(a)?.order ?? 0) -
-      (projectIdToProject.get(b)?.order ?? 0),
+      (projectIdToProject.get(a)?.childOrder ?? 0) -
+      (projectIdToProject.get(b)?.childOrder ?? 0),
   );
 
   return sortedKeys
@@ -89,7 +91,7 @@ export const groupTasksByProject = ({
 
       return {
         project,
-        tasks: (groupedTasks[key] ?? []).sort((a, b) => a.order - b.order),
+        tasks: (groupedTasks[key] ?? []).sort((a, b) => a.childOrder - b.childOrder),
       };
     })
     .filter(Boolean);

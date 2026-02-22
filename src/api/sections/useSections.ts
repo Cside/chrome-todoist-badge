@@ -9,7 +9,7 @@ import * as api from "./getSections";
 // from Options
 export const useSections = ({
   cache,
-}: { cache?: Api.Project[] | undefined } = {}) => {
+}: { cache?: Api.Section[] | undefined } = {}) => {
   const [projectId] = storage.useFilteringProjectId_Suspended();
   return useQuery({
     queryKey: [QUERY_KEY_FOR.API.SECTIONS, projectId],
@@ -24,7 +24,7 @@ export const useSections = ({
       return sections;
     },
     ...(cache && {
-      placeholderData: (prevData: Api.Project[] | undefined) =>
+      placeholderData: (prevData: Api.Section[] | undefined) =>
         prevData !== undefined ? undefined : cache,
     }),
     enabled: projectId !== undefined,
