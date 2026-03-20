@@ -18,7 +18,6 @@ export namespace Api {
     content: string;
     projectId: ProjectId;
     sectionId: SectionId | undefined;
-    url: string;
   };
 
   export type Section = {

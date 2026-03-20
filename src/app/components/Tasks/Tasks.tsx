@@ -8,6 +8,7 @@ import { useCachedProjects } from "../../../api/projects/useProjects";
 import { useCachedSections } from "../../../api/sections/useSections";
 import { useCachedTasks } from "../../../api/tasks/useTasks";
 import { PATH_TO } from "../../../constants/paths";
+import { WEB_APP_URL_FOR } from "../../../constants/urls";
 import type { Api } from "../../../types";
 import { useBadgeUpdate_andSetCache } from "../../hooks/useBadgeUpdate_andSetCache";
 import { Spinner } from "../Spinner";
@@ -117,7 +118,7 @@ export default function Tasks_Suspended() {
                   window.open(event.target.href);
                   return;
                 }
-                window.open(task.url);
+                window.open(WEB_APP_URL_FOR.TASK_BY(task.id));
               }}
             >
               {/* 「------------」は Markdown にしない */}

@@ -18,7 +18,6 @@ describe(`${groupTasksBySection.name}()`, () => {
   ): Api.Task => ({
     ...task,
     content: "",
-    url: "",
     projectId: "project-100",
   });
 
@@ -129,7 +128,6 @@ describe(`${groupTasksByProject.name}()`, () => {
   ): Api.Task => ({
     ...task,
     content: "",
-    url: "",
     sectionId: "section-200",
   });
 
